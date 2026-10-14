@@ -1,0 +1,17 @@
+# Runtime dependencies. Python 3.11+.
+#
+# Only two, and only one of them is a real dependency rather than a convenience:
+#
+#   playwright  drives the browser. Recording, replaying and executing all go
+#               through it. Nothing works without it.
+#   pillow      downscales evidence frames before they reach a model. Vision
+#               cost scales with pixel area, and the induction could not finish
+#               on an image-heavy request until this was implemented; the code
+#               degrades to full-resolution if it is absent, which is why it is
+#               listed as optional in spirit but installed by setup.sh.
+#   openai      only needed to run induction. Everything else -- recording,
+#               running an induced skill, replaying, scoring, and the whole
+#               benchmark -- works without it.
+playwright>=1.40
+pillow>=10.0
+openai>=1.30

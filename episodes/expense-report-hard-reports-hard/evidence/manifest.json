@@ -5,90 +5,90 @@
     {
       "index": 0,
       "path": "evidence/000001.png",
-      "frame_time_ms": 3781,
-      "captured_at_ms": 1791963715770,
+      "frame_time_ms": 2063,
+      "captured_at_ms": 1791984493038,
       "trigger": "boundary",
       "action_id": "act_expense-report-hard-reports-hard_0000",
       "action_delta_ms": 0,
       "caption": "episode start",
-      "url": "http://127.0.0.1:64503/"
+      "url": "http://127.0.0.1:57243/"
     },
     {
       "index": 1,
       "path": "evidence/000002.png",
-      "frame_time_ms": 5203,
-      "captured_at_ms": 1791963717185,
+      "frame_time_ms": 3063,
+      "captured_at_ms": 1791984494039,
       "trigger": "result",
       "action_id": "act_expense-report-hard-reports-hard_0000",
-      "action_delta_ms": 1422,
+      "action_delta_ms": 1000,
       "caption": "Open the Reports section",
-      "url": "http://127.0.0.1:64503/"
+      "url": "http://127.0.0.1:57243/"
     },
     {
       "index": 2,
       "path": "evidence/000003.png",
-      "frame_time_ms": 5717,
-      "captured_at_ms": 1791963717699,
+      "frame_time_ms": 3547,
+      "captured_at_ms": 1791984494518,
       "trigger": "result",
       "action_id": "act_expense-report-hard-reports-hard_0001",
-      "action_delta_ms": 514,
+      "action_delta_ms": 484,
       "caption": "Select period 2026-05",
-      "url": "http://127.0.0.1:64503/"
+      "url": "http://127.0.0.1:57243/"
     },
     {
       "index": 3,
-      "path": "evidence/000005.png",
-      "frame_time_ms": 7640,
-      "captured_at_ms": 1791963719623,
+      "path": "evidence/000004.png",
+      "frame_time_ms": 4483,
+      "captured_at_ms": 1791984495463,
       "trigger": "result",
       "action_id": "act_expense-report-hard-reports-hard_0002",
-      "action_delta_ms": 187,
+      "action_delta_ms": 936,
       "caption": "Download the May 2026 expense lines as CSV",
-      "url": "http://127.0.0.1:64503/"
+      "url": "http://127.0.0.1:57243/"
     },
     {
       "index": 4,
-      "path": "evidence/000006.png",
-      "frame_time_ms": 8187,
-      "captured_at_ms": 1791963720174,
+      "path": "evidence/000005.png",
+      "frame_time_ms": 4906,
+      "captured_at_ms": 1791984495882,
       "trigger": "result",
       "action_id": "act_expense-report-hard-reports-hard_0003",
-      "action_delta_ms": 547,
+      "action_delta_ms": 423,
       "caption": "Review the downloaded lines; excluding clm_3003, clm_3005, clm_3006, clm_3007, clm_3008, clm_3010",
-      "url": "http://127.0.0.1:64503/"
+      "url": "http://127.0.0.1:57243/"
     },
     {
       "index": 5,
-      "path": "evidence/000007.png",
-      "frame_time_ms": 8812,
-      "captured_at_ms": 1791963720804,
+      "path": "evidence/000006.png",
+      "frame_time_ms": 5313,
+      "captured_at_ms": 1791984496286,
       "trigger": "result",
       "action_id": "act_expense-report-hard-reports-hard_0004",
-      "action_delta_ms": 625,
+      "action_delta_ms": 407,
       "caption": "Write report.json: 3 claims, total 1002.10",
-      "url": "http://127.0.0.1:64503/"
+      "url": "http://127.0.0.1:57243/"
     },
     {
       "index": 6,
-      "path": "evidence/000008.png",
-      "frame_time_ms": 9281,
-      "captured_at_ms": 1791963721262,
+      "path": "evidence/000007.png",
+      "frame_time_ms": 5733,
+      "captured_at_ms": 1791984496706,
       "trigger": "result",
       "action_id": "act_expense-report-hard-reports-hard_0005",
-      "action_delta_ms": 469,
+      "action_delta_ms": 420,
       "caption": "Verify report.json is written and the totals agree",
-      "url": "http://127.0.0.1:64503/"
+      "url": "http://127.0.0.1:57243/"
     },
     {
       "index": 7,
-      "path": "evidence/000009.png",
-      "frame_time_ms": 9983,
-      "captured_at_ms": 1791963721964,
+      "path": "evidence/000008.png",
+      "frame_time_ms": 6422,
+      "captured_at_ms": 1791984497396,
       "trigger": "result",
       "action_id": "act_expense-report-hard-reports-hard_0006",
-      "action_delta_ms": 702,
+      "action_delta_ms": 689,
       "caption": "end of demonstration",
-      "url": "http://127.0.0.1:64503/"
+      "url": "http://127.0.0.1:57243/"
     }
   ]
 }

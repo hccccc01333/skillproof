@@ -152,6 +152,20 @@ class Recorder:
         if result_frames:
             self._last_before_image = result_frames[-1]
 
+        # The before frame must be registered too. `_before_frame` reuses a
+        # recent frame when it is fresh and *shoots a new one* when it is not --
+        # and `_shoot` writes the file while `add_image` records it in the
+        # index. Registering only the result frames leaves a freshly shot before
+        # frame on disk and absent from the manifest: an episode whose own index
+        # does not describe it.
+        #
+        # It went unnoticed until an artifact test compared the manifest's
+        # counts against the directory. Three episodes reused their before
+        # frames and were fine; the one with a settling gap longer than the
+        # freshness window had an orphan.
+        if all(img is not before for img in self.w.images):
+            self.w.add_image(before)
+
         action = Action(
             sequence_index=0,
             action_id=self.w.new_action_id(),

@@ -1,0 +1,65 @@
+name: verify
+
+# The repo's central claim is that a recording scores 100/100 on the page it was
+# recorded from and 25/100 after a UI revision -- and that those numbers are
+# asserted rather than derived, so a change in behaviour fails the check instead
+# of quietly becoming a new baseline.
+#
+# That claim is worth nothing if it is only checked when someone remembers to
+# run it. This runs it on every push.
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Published numbers reproduce
+        # No model, no API key, no credentials. If this fails, either the code
+        # changed behaviour or the published numbers were wrong, and both are
+        # worth failing a build over.
+        run: python reproduce.py --all --jobs 2
+
+      - name: Tool-surface and verifier contracts
+        run: python tests/test_tools.py
+
+      - name: Shipped artifacts are well-formed
+        run: python tests/test_artifacts.py
+
+      - name: A fresh clone installs with one command
+        # setup.sh is what the README tells a reader to run. Running it here
+        # means the documented path cannot rot without the build going red.
+        run: |
+          bash setup.sh > /tmp/setup.log 2>&1 || { tail -40 /tmp/setup.log; exit 1; }
+          tail -6 /tmp/setup.log
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Byte-compile every module
+        # Cheap and catches the class of mistake this repo has actually made:
+        # a string that lost its escaping and became a syntax error.
+        run: python -m compileall -q bench recorder induction verifier replay executor tests *.py

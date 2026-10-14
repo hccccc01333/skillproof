@@ -31,7 +31,7 @@ fi
 
 echo "==> dependencies"
 "$VENV_PY" -m pip install --quiet --upgrade pip
-"$VENV_PY" -m pip install --quiet playwright pillow
+"$VENV_PY" -m pip install --quiet -r requirements.txt
 
 echo "==> chromium (about 150 MB, once)"
 "$VENV_PY" -m playwright install chromium

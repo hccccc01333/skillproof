@@ -17,12 +17,12 @@ write a JSON object with these fields:
 
 ## Action sequence
 
-1. [0:00:03] Open the Reports section
-2. [0:00:05] Select period 2026-05 `2026-05`
-3. [0:00:07] Download the May 2026 expense lines as CSV `expense-lines-2026-05.csv`
-4. [0:00:07] Review the downloaded lines; excluding clm_3003, clm_3005, clm_3006, clm_3007, clm_3008, clm_3010
-5. [0:00:08] Write report.json: 3 claims, total 1002.10
-6. [0:00:08] Verify report.json is written and the totals agree
-7. [0:00:09] end of demonstration
+1. [0:00:02] Open the Reports section
+2. [0:00:03] Select period 2026-05 `2026-05`
+3. [0:00:03] Download the May 2026 expense lines as CSV `expense-lines-2026-05.csv`
+4. [0:00:04] Review the downloaded lines; excluding clm_3003, clm_3005, clm_3006, clm_3007, clm_3008, clm_3010
+5. [0:00:04] Write report.json: 3 claims, total 1002.10
+6. [0:00:05] Verify report.json is written and the totals agree
+7. [0:00:05] end of demonstration
 
 _Summary is derived evidence, not ground truth; reconcile it against the action trace and frames._

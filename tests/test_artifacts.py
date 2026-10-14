@@ -1,0 +1,226 @@
+"""Contract tests for the artifacts this repo ships.
+
+`tests/test_tools.py` tests the induction tool surface. This tests the *data*:
+the recorded episodes and the induced skills that are checked in, and the
+published policy document that the rubrics claim to implement.
+
+They exist because shipped artifacts rot silently. A hand-edited episode, a
+skill whose frontmatter drifted from its folder name, a verifier that stopped
+parsing, or a rubric item that no longer maps to a stated rule -- none of those
+break any code path, and all of them make the repo's claims unverifiable.
+
+    python tests/test_artifacts.py
+"""
+
+from __future__ import annotations
+
+import json
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+for p in (ROOT, ROOT / "bench"):
+    if str(p) not in sys.path:
+        sys.path.insert(0, str(p))
+
+from induction.tools import VERIFIER_KINDS  # noqa: E402
+from verifier import Assertion  # noqa: E402
+
+FAILURES: list[str] = []
+
+
+def check(name: str, condition: bool, detail: str = "") -> None:
+    status = "ok  " if condition else "FAIL"
+    print(f"  [{status}] {name}" + (f" — {detail}" if detail and not condition else ""))
+    if not condition:
+        FAILURES.append(name)
+
+
+# --------------------------------------------------------------------------
+# Episodes
+# --------------------------------------------------------------------------
+
+
+def case_episodes() -> None:
+    print("\n-- recorded episodes --")
+    episodes = sorted(p for p in (ROOT / "episodes").iterdir() if p.is_dir() and p.name != "_work")
+    check("at least one episode is checked in", bool(episodes))
+
+    for ep in episodes:
+        name = ep.name
+
+        task_path = ep / "task.json"
+        if not task_path.is_file():
+            check(f"{name}: task.json present", False)
+            continue
+
+        task = json.loads(task_path.read_text(encoding="utf-8"))
+        # The induction agent must not be able to see how it will be scored.
+        leaked = [k for k in task if k.lower() in {"grading", "rubric", "grader", "answer"}]
+        check(f"{name}: task.json carries no grading field", not leaked, str(leaked))
+        check(f"{name}: task.json states an instruction", bool(task.get("instruction")))
+
+        manifest = json.loads((ep / "episode.json").read_text(encoding="utf-8"))
+        check(f"{name}: manifest parses", manifest.get("episode_id") == name)
+
+        # Counts must match what is on disk, or the manifest is lying.
+        actions = (ep / "trace" / "actions.jsonl").read_text(encoding="utf-8").splitlines()
+        actions = [a for a in actions if a.strip()]
+        check(f"{name}: action count matches the trace",
+              manifest["counts"]["actions"] == len(actions),
+              f"manifest {manifest['counts']['actions']} vs file {len(actions)}")
+
+        images = sorted((ep / "evidence").glob("*.png"))
+        check(f"{name}: image count matches the evidence directory",
+              manifest["counts"]["images"] == len(images),
+              f"manifest {manifest['counts']['images']} vs disk {len(images)}")
+
+        # Every listed file must exist; a manifest pointing at nothing is worse
+        # than no manifest.
+        missing = [f for f in manifest.get("files", []) if not (ep / f).exists()]
+        check(f"{name}: every file the manifest lists exists", not missing, str(missing))
+
+        # And every action must be valid JSON with the paper's core fields.
+        bad = []
+        for i, line in enumerate(actions):
+            try:
+                a = json.loads(line)
+            except json.JSONDecodeError:
+                bad.append(f"line {i} is not JSON")
+                continue
+            for field in ("sequence_index", "action_id", "kind", "media_time_ms", "caption"):
+                if field not in a:
+                    bad.append(f"action {i} has no {field}")
+        check(f"{name}: every action record is well-formed", not bad, str(bad[:3]))
+
+
+# --------------------------------------------------------------------------
+# Induced skills
+# --------------------------------------------------------------------------
+
+
+def case_induced() -> None:
+    print("\n-- induced skills --")
+    manifests = sorted((ROOT / "induced").rglob("extraction-manifest.json"))
+    check("at least one induction is checked in", bool(manifests))
+
+    for mpath in manifests:
+        run_dir = mpath.parent
+        label = run_dir.parent.name
+        manifest = json.loads(mpath.read_text(encoding="utf-8"))
+
+        for entry in manifest.get("skills", []):
+            skill_dir = run_dir / Path(entry["path"]).parent
+            rel = f"{label}/{skill_dir.name}"
+
+            skill_md = skill_dir / "SKILL.md"
+            if not skill_md.is_file():
+                check(f"{rel}: SKILL.md exists", False)
+                continue
+
+            text = skill_md.read_text(encoding="utf-8")
+            m = re.match(r"^---\s*\n(.*?)\n---\s*\n(.+)$", text, re.DOTALL)
+            check(f"{rel}: has frontmatter and a body", bool(m))
+            if not m:
+                continue
+
+            front = m.group(1)
+            name_m = re.search(r"^name:\s*(.+)$", front, re.MULTILINE)
+            name = (name_m.group(1).strip() if name_m else "")
+            check(f"{rel}: name matches its folder", name == skill_dir.name,
+                  f"frontmatter {name!r} vs folder {skill_dir.name!r}")
+            check(f"{rel}: name is lowercase hyphen-case",
+                  bool(re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*", name)))
+
+            # Every shipped skill must carry a completion verifier, and every
+            # assertion in it must be one the runtime can actually evaluate.
+            vpath = skill_dir / "verify.json"
+            if not vpath.is_file():
+                check(f"{rel}: ships a completion verifier", False)
+                continue
+            data = json.loads(vpath.read_text(encoding="utf-8"))
+            assertions = [Assertion.from_dict(a) for a in data.get("assertions", [])]
+            problems: list[str] = []
+            for a in assertions:
+                problems.extend(a.problems())
+            check(f"{rel}: verifier assertions are well-formed", not problems, str(problems[:2]))
+
+            unknown = [a.kind for a in assertions if a.kind not in VERIFIER_KINDS]
+            check(f"{rel}: every assertion type is implemented", not unknown, str(unknown))
+
+            # A gap declared as a check can never pass, so the shipped verifier
+            # would be unsatisfiable. That exact mistake was made once here.
+            unfinishable = [
+                a.id for a in assertions
+                if a.kind != "unverifiable"
+                and any(m in f"{a.description or ''} {a.value or ''}".upper()
+                        for m in ("UNVERIFIED", "NOT VERIFIABLE", "CANNOT BE VERIFIED"))
+            ]
+            check(f"{rel}: no gap is written as a checkable assertion",
+                  not unfinishable, str(unfinishable))
+
+        # The manifest's own claim about the run must hold.
+        check(f"{label}: run finalized", manifest.get("skills"),
+              "manifest lists no skills")
+
+
+# --------------------------------------------------------------------------
+# The published policy and the rubrics must agree
+# --------------------------------------------------------------------------
+
+
+def case_policy_matches_rubric() -> None:
+    print("\n-- policy document matches the rubrics --")
+    policy = ROOT / "docs" / "policies" / "expense-policy.md"
+    if not policy.is_file():
+        check("policy document is published", False)
+        return
+    text = policy.read_text(encoding="utf-8")
+
+    from evaluator import REPORT_TASK_ID, evaluate, evaluate_report
+    from server import AppState
+
+    # A real state, not an empty dict: evaluate() returns early when the claim
+    # is missing, and the weight check then has nothing to sum.
+    def submit_rubric():
+        return evaluate("default", AppState("default").snapshot())
+
+    # The policy claims a mapping from every rubric item to a stated rule. If a
+    # rubric item is added and the document is not updated, the mapping table
+    # stops being true and the claim "you can check the scoring" is hollow.
+    for task, rubric in (("expense-submit", submit_rubric()),
+                         (REPORT_TASK_ID, evaluate_report("reports", {}, None))):
+        ids = [i.id for i in rubric.get("items", [])]
+        for item_id in ids:
+            # Each rubric id must appear in the policy's mapping table.
+            pattern = rf"\|\s*`?{task}`?\s*\|\s*{item_id}\b|\|\s*{item_id}\s*\|"
+            if not re.search(rf"\b{item_id}\b", text):
+                check(f"policy mentions {task}/{item_id}", False,
+                      "rubric item has no rule in the policy document")
+        if ids:
+            check(f"policy covers every {task} rubric item",
+                  all(re.search(rf"\b{i}\b", text) for i in ids),
+                  "some rubric ids are absent from the document")
+
+    # And the weights must add up, or "score 100" means nothing.
+    for task, rubric in (("expense-submit", submit_rubric()),
+                         (REPORT_TASK_ID, evaluate_report("reports", {}, None))):
+        total = sum(i.weight for i in rubric.get("items", []))
+        check(f"{task}: rubric weights sum to 100", total == 100, f"got {total}")
+
+
+def main() -> int:
+    case_episodes()
+    case_induced()
+    case_policy_matches_rubric()
+    print()
+    if FAILURES:
+        print(f"{len(FAILURES)} FAILED: {', '.join(FAILURES)}")
+        return 1
+    print("all shipped artifacts are well-formed")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

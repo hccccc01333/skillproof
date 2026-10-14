@@ -84,13 +84,19 @@ And the reason the completion check exists:
 .venv/Scripts/python.exe reproduce.py --all    # 21s, all twelve
 ```
 
-No model, no API key, no credentials. The numbers are **asserted, not derived**
-— they were published before the script existed — so a change in behaviour fails
-the check instead of quietly becoming a new baseline.
+**Playwright is the only dependency it touches** — not the model client, not
+ffmpeg. The numbers are **asserted, not derived**: they were published before
+the script existed, so a change in behaviour fails the check instead of quietly
+becoming a new baseline. CI runs it on every push.
 
 ```bash
-.venv/Scripts/python.exe tests/test_tools.py   # 24 tool-surface + verifier contracts
+.venv/Scripts/python.exe tests/test_tools.py       # tool-surface + verifier contracts
+.venv/Scripts/python.exe tests/test_artifacts.py   # the shipped episodes and skills
 ```
+
+The second one exists because shipped data rots silently. It found a real defect
+on its first run: an episode with a screenshot on disk that its own index did
+not list.
 
 ## Record your own workflow
 
@@ -198,8 +204,17 @@ can send us.
 
 ## Requirements
 
-Python 3.11+, and `ffmpeg` on PATH for video. `setup.sh` installs the rest,
-including Chromium.
+Python 3.11+, and `ffmpeg` on PATH for video. `setup.sh` (or `setup.ps1` on
+Windows without Git Bash) installs the rest from `requirements.txt`, including
+Chromium.
+
+Three dependencies, and only the first is needed to verify the claims:
+
+| | needed for |
+|---|---|
+| `playwright` | recording, replaying, running a skill, and `reproduce.py` |
+| `pillow` | downscaling evidence frames before they reach a model |
+| `openai` | induction only — nothing else imports it |
 
 ## Layout
 
