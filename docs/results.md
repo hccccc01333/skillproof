@@ -927,6 +927,84 @@ This is the strongest argument yet for the position this document has taken
 throughout: narrow what a verifier may claim. A verifier that could not name a
 path would not have been able to make this mistake.
 
+## Addendum 10: how many questions does it ask
+
+The question that decides whether this is a product or a prototype. A user will
+answer one or two questions. Nobody answers ten. Every measurement so far had
+exactly one rule that a recording could not carry, so every run asked one
+question — which says nothing about what happens when there are more.
+
+So a second non-legible rule was added to the reporting task: a claim that is
+approved, in period and in an ordinary category, and is excluded because it was
+bought on a company card and never needed reimbursing. Nothing in the export
+says so. The expected answer does not change, because the claim was never
+counted — only the number of unexplained exclusions does.
+
+### Result
+
+| task | non-legible rules | original agent | skill + verifier | questions asked |
+|---|---|---|---|---|
+| `expense-report` | 1 (meals) | 35.0 | **100.0** | **1** |
+| `expense-report-hard` | 2 (meals, already paid) | **20.0** | **100.0** | **2** |
+
+**Two answered questions take the task from 20 to 100.** The count tracks the
+number of rules the recording cannot carry, and nothing else.
+
+### But the first run asked eight
+
+Before anything was concluded, the same task was run once and asked **eight
+questions across 25 turns**. That looks like a scaling failure and is not one.
+Reading them:
+
+- **Q1** was the right question: it identified both unexplained exclusions and
+  asked about both at once.
+- **Q2 through Q8 were the same question seven times**, in seven phrasings —
+  "where in the app is that visible?", "which element shows it?", "does the UI
+  display it?", "is there a payment-method field?".
+
+The induction was looking for an **observable marker** for "already paid",
+because a rule an agent can apply needs one. There is no such marker. The
+person's answer said so without saying so — "i put that on the company card" —
+and nothing told the induction that *no marker exists* is a complete answer, so
+it kept asking.
+
+That is a missing termination condition, not a scaling problem, and it is the
+worst failure this interaction can have: seven questions that produced nothing
+the first answer had not already given.
+
+### The fix
+
+The authoring policy now says it directly: a rule an agent can use needs an
+observable test; some have none; **ask once**, and if the answer describes a
+rule but names no visible marker, write the rule into the skill as a stated
+limitation and stop.
+
+Re-run: **two questions, fourteen turns, 100/100 three times.** The skill states
+both rules, including
+
+> **Not already paid** — the claim was not already settled outside this
+> reimbursement run, for example a purchase paid on a company card.
+
+and the verifier declares the gap rather than pretending to check it:
+
+> `A7 unverifiable`: whether each excluded claim was excluded for the correct
+> reason
+
+### What this settles, and what it does not
+
+**Settled:** the interaction scales with the work a recording cannot carry. Two
+such rules cost two questions. That is inside what a person will tolerate.
+
+**Not settled:** how many such rules a real workflow has. Two is what this
+benchmark was built with. If an office workflow has eight — and the pattern of
+this task suggests it easily could — then eight questions is the cost, and
+whether that is acceptable is a question about the workflow, not about the
+mechanism.
+
+The honest summary is that the mechanism is not the bottleneck. **Finding out
+how many judgement calls a real recurring task contains is**, and that needs a
+real task rather than a designed one.
+
 ## What the corrected experiment requires
 
 The decisive comparison is unmeasured. It needs:

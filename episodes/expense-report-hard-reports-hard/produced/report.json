@@ -1,0 +1,14 @@
+{
+  "period": "2026-05",
+  "claim_ids": [
+    "clm_3001",
+    "clm_3002",
+    "clm_3004"
+  ],
+  "claim_count": 3,
+  "by_cost_center": {
+    "CC-4471": 960.0,
+    "CC-5120": 42.1
+  },
+  "grand_total": 1002.1
+}

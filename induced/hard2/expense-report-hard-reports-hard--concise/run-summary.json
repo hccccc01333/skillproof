@@ -1,0 +1,56 @@
+{
+  "episode_id": "expense-report-hard-reports-hard",
+  "model": "deepseek-v4.1-flash",
+  "prompt_variant": "concise",
+  "ok": true,
+  "iterations": 14,
+  "tool_calls": 24,
+  "wall_ms": 363750,
+  "prompt_tokens": 197665,
+  "completion_tokens": 27060,
+  "errors": [],
+  "manifest": {
+    "episode_id": "expense-report-hard-reports-hard",
+    "output_root": "D:\\Projects\\show2skill\\induced\\hard2\\expense-report-hard-reports-hard--concise",
+    "skills": [
+      {
+        "path": "expense-period-report/SKILL.md",
+        "name": "expense-period-report",
+        "bytes": 6199
+      }
+    ],
+    "skills_hashed": {
+      "expense-period-report/SKILL.md": "e5dc333f9c779744"
+    },
+    "orphaned_skill_files": [],
+    "verifiers": [
+      {
+        "path": "expense-period-report/verify.json",
+        "assertions": 6
+      }
+    ],
+    "inspected": {
+      "task_json_read": true,
+      "video_metadata": [
+        "video.mp4"
+      ],
+      "video_sampled": [
+        "video.mp4"
+      ]
+    },
+    "tool_calls": 23,
+    "warnings": [],
+    "note": "Structural validation only. This manifest confirms the agent read the task, wrote skills, read them back, and respected video ordering. It does not assert that any skill is correct."
+  },
+  "questions": [
+    {
+      "question": "In ExpenseDesk, what visible indicator or field identifies the one claim that was already paid outside this reimbursement run (the approved $249 Equipment claim that the report left out) — is there anything on the claim, its lines, or its receipts that marks it as already paid, or must that be known out of band?",
+      "answer": "oh the monitor? yeah i put that on the company card so it's already paid for. nothing to reimburse there, it just doesn't belong on the report at all."
+    },
+    {
+      "question": "For the category policy: is the rule specifically that Meals & Entertainment claims are never reimbursable (everything else under an approved claim is), or is it a different/positive list of reimbursable categories that I should apply to any export?",
+      "answer": "right, those don't go in the report. there's a whole separate thing for that. just leave them out."
+    }
+  ],
+  "transcript_turns": 14
+}

@@ -101,6 +101,45 @@ TASKS: dict[str, dict] = {
             "say which claims count, which is the whole task."
         ),
     },
+    "expense-report-hard": {
+        "application": "ExpenseDesk",
+        # Identical to expense-report except that the demonstration applies a
+        # second rule that cannot be read off any column. The point is to find
+        # out how many questions the induction asks when there is more than one
+        # thing it cannot work out.
+        "instruction": (
+            "Prepare the May 2026 expense report and save it as report.json in \n"
+            "your workspace.\n"
+            "\n"
+            "Download the period's expense lines from the Reports section, then \n"
+            "write a JSON object with these fields:\n"
+            "  \"period\"          the reporting period as \"YYYY-MM\"\n"
+            "  \"claim_ids\"       the ids of the claims counted, as a list\n"
+            "  \"claim_count\"     how many claims were counted\n"
+            "  \"by_cost_center\"  object mapping each cost center to its total\n"
+            "  \"grand_total\"     the total amount to be reimbursed"
+        ),
+        "instructions": {
+            "reports-hard": (
+                "Prepare the May 2026 expense report and save it as report.json in \n"
+                "your workspace.\n"
+                "\n"
+                "Download the period's expense lines from the Reports section, then \n"
+                "write a JSON object with these fields:\n"
+                "  \"period\"          the reporting period as \"YYYY-MM\"\n"
+                "  \"claim_ids\"       the ids of the claims counted, as a list\n"
+                "  \"claim_count\"     how many claims were counted\n"
+                "  \"by_cost_center\"  object mapping each cost center to its total\n"
+                "  \"grand_total\"     the total amount to be reimbursed"
+            ),
+        },
+        "task_inputs": {"period": "2026-05", "output": "report.json"},
+        "notes": (
+            "Two rules are not in the data. One is a category policy; the other is "
+            "a single claim that was already paid. A method that finds one and "
+            "stops will look like it worked."
+        ),
+    },
 }
 
 
@@ -118,10 +157,14 @@ TASKS: dict[str, dict] = {
 # and left the rule for the induction to state. The second induction of that
 # task found the rule and scored 100 where the first scored 70.
 
+# The demonstration names the claims it leaves out and not the reasons.
+# `clm_3010` is the second rule that is not in the data: approved, in
+# period, ordinary category, excluded because it was already paid.
 REPORT_EXCLUDED = ["clm_3003", "clm_3005", "clm_3006", "clm_3007", "clm_3008"]
+REPORT_EXCLUDED_HARD = REPORT_EXCLUDED + ["clm_3010"]
 
 
-def demo_expense_report(page, rec, workspace=None):
+def demo_expense_report(page, rec, workspace=None, excluded=None):
     """Produce the May 2026 report the way someone who knows the process would."""
     import csv as _csv
     import io as _io
@@ -150,7 +193,8 @@ def demo_expense_report(page, rec, workspace=None):
         raise AssertionError("the CSV download did not land in the workspace")
     rows = list(_csv.DictReader(_io.StringIO(csv_files[-1].read_text(encoding="utf-8"))))
 
-    included = [r for r in rows if r["claim_id"] not in REPORT_EXCLUDED]
+    excluded = excluded if excluded is not None else REPORT_EXCLUDED
+    included = [r for r in rows if r["claim_id"] not in excluded]
     included_ids = sorted({r["claim_id"] for r in included})
     by_cc: dict[str, float] = {}
     for r in included:
@@ -170,7 +214,7 @@ def demo_expense_report(page, rec, workspace=None):
     )
 
     rec.mark(
-        "Review the downloaded lines; excluding " + ", ".join(REPORT_EXCLUDED),
+        "Review the downloaded lines; excluding " + ", ".join(excluded),
         kind="observe",
     )
     rec.mark(
@@ -292,7 +336,13 @@ def demo_expense_submit(page, rec, workspace=None):
     rec.mark("Verify the claim shows Pending approval", kind="verify")
 
 
+def demo_expense_report_hard(page, rec, workspace=None):
+    """Same workflow, one more rule that is nowhere in the data."""
+    return demo_expense_report(page, rec, workspace, excluded=REPORT_EXCLUDED_HARD)
+
+
 DEMOS = {
     "expense-submit": demo_expense_submit,
     "expense-report": demo_expense_report,
+    "expense-report-hard": demo_expense_report_hard,
 }

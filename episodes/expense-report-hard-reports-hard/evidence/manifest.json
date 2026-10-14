@@ -1,0 +1,94 @@
+{
+  "episode_id": "expense-report-hard-reports-hard",
+  "count": 8,
+  "images": [
+    {
+      "index": 0,
+      "path": "evidence/000001.png",
+      "frame_time_ms": 3781,
+      "captured_at_ms": 1791963715770,
+      "trigger": "boundary",
+      "action_id": "act_expense-report-hard-reports-hard_0000",
+      "action_delta_ms": 0,
+      "caption": "episode start",
+      "url": "http://127.0.0.1:64503/"
+    },
+    {
+      "index": 1,
+      "path": "evidence/000002.png",
+      "frame_time_ms": 5203,
+      "captured_at_ms": 1791963717185,
+      "trigger": "result",
+      "action_id": "act_expense-report-hard-reports-hard_0000",
+      "action_delta_ms": 1422,
+      "caption": "Open the Reports section",
+      "url": "http://127.0.0.1:64503/"
+    },
+    {
+      "index": 2,
+      "path": "evidence/000003.png",
+      "frame_time_ms": 5717,
+      "captured_at_ms": 1791963717699,
+      "trigger": "result",
+      "action_id": "act_expense-report-hard-reports-hard_0001",
+      "action_delta_ms": 514,
+      "caption": "Select period 2026-05",
+      "url": "http://127.0.0.1:64503/"
+    },
+    {
+      "index": 3,
+      "path": "evidence/000005.png",
+      "frame_time_ms": 7640,
+      "captured_at_ms": 1791963719623,
+      "trigger": "result",
+      "action_id": "act_expense-report-hard-reports-hard_0002",
+      "action_delta_ms": 187,
+      "caption": "Download the May 2026 expense lines as CSV",
+      "url": "http://127.0.0.1:64503/"
+    },
+    {
+      "index": 4,
+      "path": "evidence/000006.png",
+      "frame_time_ms": 8187,
+      "captured_at_ms": 1791963720174,
+      "trigger": "result",
+      "action_id": "act_expense-report-hard-reports-hard_0003",
+      "action_delta_ms": 547,
+      "caption": "Review the downloaded lines; excluding clm_3003, clm_3005, clm_3006, clm_3007, clm_3008, clm_3010",
+      "url": "http://127.0.0.1:64503/"
+    },
+    {
+      "index": 5,
+      "path": "evidence/000007.png",
+      "frame_time_ms": 8812,
+      "captured_at_ms": 1791963720804,
+      "trigger": "result",
+      "action_id": "act_expense-report-hard-reports-hard_0004",
+      "action_delta_ms": 625,
+      "caption": "Write report.json: 3 claims, total 1002.10",
+      "url": "http://127.0.0.1:64503/"
+    },
+    {
+      "index": 6,
+      "path": "evidence/000008.png",
+      "frame_time_ms": 9281,
+      "captured_at_ms": 1791963721262,
+      "trigger": "result",
+      "action_id": "act_expense-report-hard-reports-hard_0005",
+      "action_delta_ms": 469,
+      "caption": "Verify report.json is written and the totals agree",
+      "url": "http://127.0.0.1:64503/"
+    },
+    {
+      "index": 7,
+      "path": "evidence/000009.png",
+      "frame_time_ms": 9983,
+      "captured_at_ms": 1791963721964,
+      "trigger": "result",
+      "action_id": "act_expense-report-hard-reports-hard_0006",
+      "action_delta_ms": 702,
+      "caption": "end of demonstration",
+      "url": "http://127.0.0.1:64503/"
+    }
+  ]
+}

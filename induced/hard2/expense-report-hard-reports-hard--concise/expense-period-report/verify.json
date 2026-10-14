@@ -1,0 +1,41 @@
+{
+  "assertions": [
+    {
+      "id": "A1",
+      "type": "file_exists",
+      "value": "report.json",
+      "description": "The report was saved as report.json in the workspace root"
+    },
+    {
+      "id": "A2",
+      "type": "json_field_equals",
+      "value": "report.json:period",
+      "expected": "2026-05",
+      "description": "The report period matches the period the task requests"
+    },
+    {
+      "id": "A3",
+      "type": "json_field_equals",
+      "value": "report.json:claim_count",
+      "expected": 3,
+      "description": "Exactly the reimbursable claims of the period were counted"
+    },
+    {
+      "id": "A4",
+      "type": "json_field_equals",
+      "value": "report.json:grand_total",
+      "expected": 1002.1,
+      "description": "The grand total is the sum of the counted claim amounts"
+    },
+    {
+      "id": "A5",
+      "type": "unverifiable",
+      "description": "The exact contents of claim_ids (a list) and of by_cost_center (a nested object) cannot be checked with these predicates, which compare only top-level scalar fields. Confirm by hand that claim_ids holds exactly the ids of the approved, non-Meals & Entertainment, not-already-paid claims, that its length equals claim_count, and that the by_cost_center values sum to grand_total."
+    },
+    {
+      "id": "A6",
+      "type": "unverifiable",
+      "description": "Whether every claim already settled outside this reimbursement run was excluded cannot be checked: ExpenseDesk records no visible payment method or reimbursement state on a claim, in the Reports view, or in the exported CSV columns. Establish this out of band."
+    }
+  ]
+}

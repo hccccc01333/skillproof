@@ -1,0 +1,8 @@
+{"image": "evidence/000001.png", "action_id": "act_expense-report-hard-reports-hard_0000", "frame_time_ms": 3781, "action_delta_ms": 0, "trigger": "boundary"}
+{"image": "evidence/000002.png", "action_id": "act_expense-report-hard-reports-hard_0000", "frame_time_ms": 5203, "action_delta_ms": 1422, "trigger": "result"}
+{"image": "evidence/000003.png", "action_id": "act_expense-report-hard-reports-hard_0001", "frame_time_ms": 5717, "action_delta_ms": 514, "trigger": "result"}
+{"image": "evidence/000005.png", "action_id": "act_expense-report-hard-reports-hard_0002", "frame_time_ms": 7640, "action_delta_ms": 187, "trigger": "result"}
+{"image": "evidence/000006.png", "action_id": "act_expense-report-hard-reports-hard_0003", "frame_time_ms": 8187, "action_delta_ms": 547, "trigger": "result"}
+{"image": "evidence/000007.png", "action_id": "act_expense-report-hard-reports-hard_0004", "frame_time_ms": 8812, "action_delta_ms": 625, "trigger": "result"}
+{"image": "evidence/000008.png", "action_id": "act_expense-report-hard-reports-hard_0005", "frame_time_ms": 9281, "action_delta_ms": 469, "trigger": "result"}
+{"image": "evidence/000009.png", "action_id": "act_expense-report-hard-reports-hard_0006", "frame_time_ms": 9983, "action_delta_ms": 702, "trigger": "result"}

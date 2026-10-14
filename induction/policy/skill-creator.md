@@ -156,6 +156,33 @@ yes that teaches nothing.
 If no person is attached, you will be told so. Then declare the gap — do not
 invent a rule to cover it, and do not silently drop the difference either.
 
+#### Some rules cannot be applied, and asking again will not change that
+
+A rule an agent can use needs an **observable test** — something visible on the
+page that decides it. Some rules have none. "This purchase was already paid" is
+a real organisational rule, and there may be nothing on screen that says so.
+
+You will be tempted to ask where the marker is, because you need one. Ask
+**once**. If the answer describes a rule but names no visible marker, then:
+
+- the rule is real and belongs in the skill as a stated **limitation**, so a
+  reader knows the procedure does not handle it;
+- there is no further question to ask. Repeating the request in different words
+  does not produce a marker, and a run of variations on one unanswerable
+  question is the worst thing this interaction can do to a person.
+
+State it in the skill like this:
+
+> Claims already settled outside this reimbursement run (for example a purchase
+> paid on a company card) must be left off. **No visible field identifies such a
+> claim.** Confirm this out of band before relying on the report.
+
+A recorded run of this harness asked the same unanswerable question seven times
+in seven phrasings — "where in the app is that visible?", "which element shows
+it?", "does the UI display it?" — before finally writing the rule as a
+limitation. The last seven questions produced nothing the first answer had not
+already given.
+
 ## The demonstration's output directory is packaging
 
 Files the demonstration saved — downloads, and any deliverable the task wrote —

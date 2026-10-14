@@ -67,7 +67,8 @@ def main() -> int:
     args = ap.parse_args()
 
     if args.variant is None:
-        args.variant = "reports" if args.task == "expense-report" else "default"
+        args.variant = {"expense-report": "reports",
+                        "expense-report-hard": "reports-hard"}.get(args.task, "default")
     task = TASKS[args.task]
     instruction = instruction_for(args.task, args.variant)
     uses_skill = args.condition in ("skill", "skill+verifier")

@@ -230,6 +230,33 @@ def _report_claim(cid, title, period, status, category, cost_center, lines) -> d
 REPORT_PERIODS = ["2026-04", "2026-05"]
 
 
+def report_hard_seed() -> dict:
+    """The reporting task with a second rule that is not in the data.
+
+    The `reports` variant has exactly one rule that cannot be read off a column:
+    meals are reimbursed elsewhere. A real workflow has several, and the
+    question that decides whether this is a product or a prototype is **how many
+    questions the induction asks** when there is more than one thing it cannot
+    work out.
+
+    So this adds a claim that is approved, in period, and in a perfectly
+    ordinary category, and is still excluded — because it was bought on a
+    company card and never needed reimbursing. Nothing in the export says so.
+    It is visible only as a third unexplained exclusion.
+
+    If the induction asks about both rules, the mechanism scales. If it finds
+    one pattern and stops, one question is all a user will ever get and the rest
+    of the workflow stays unlearned.
+    """
+    state = report_seed()
+    state["claims"].append(
+        _report_claim("clm_3010", "May 2026 monitor", "2026-05",
+                      "approved", "Equipment", "CC-5120",
+                      [("External monitor", 249.00)])
+    )
+    return state
+
+
 def variant_seed(variant: str) -> dict:
     """Return a perturbed seed. Used for the Week-3 'changed page' condition."""
     state = copy.deepcopy(SEED)
@@ -237,6 +264,8 @@ def variant_seed(variant: str) -> dict:
         return state
     if variant == "reports":
         return report_seed()
+    if variant == "reports-hard":
+        return report_hard_seed()
     if variant in ("jitter", "jitter-nostid", "jitter-remap", "relayout", "relayout-nostid"):
         # Same application, changed entities / parameters / constraints.
         state["user"]["cost_center"] = "CC-5120"

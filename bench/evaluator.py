@@ -158,6 +158,7 @@ def evaluate(variant: str, state: dict) -> dict:
 # not state which rows count; that is what the demonstration carries.
 
 REPORT_TASK_ID = "expense-report"
+REPORT_HARD_TASK_ID = "expense-report-hard"
 REPORT_PERIOD = "2026-05"
 REPORT_PATH = "report.json"
 
@@ -168,6 +169,19 @@ _REPORT_MEALS = ("clm_3003", "clm_3006")
 # Excluded for other reasons: unapproved, or the wrong period.
 _REPORT_UNAPPROVED = ("clm_3005", "clm_3008")
 _REPORT_WRONG_PERIOD = ("clm_3007",)
+
+# The `reports-hard` variant adds a claim that is approved, in period and in an
+# ordinary category, and is still excluded because it was already paid. That is
+# a second rule nowhere in the data, so the expected answer is unchanged -- the
+# claim was never counted -- while the set of exclusions grows. A method that
+# finds the meals rule and stops produces exactly the same wrong answer as one
+# that finds neither, which is the point of measuring it.
+_REPORT_ALREADY_PAID = ("clm_3010",)
+
+
+def _report_exclusions(variant: str) -> tuple[str, ...]:
+    base = _REPORT_MEALS + _REPORT_UNAPPROVED + _REPORT_WRONG_PERIOD
+    return base + _REPORT_ALREADY_PAID if variant == "reports-hard" else base
 
 
 def evaluate_report(variant: str, state: dict, workspace: Path | None) -> dict:
@@ -232,11 +246,11 @@ def evaluate_report(variant: str, state: dict, workspace: Path | None) -> dict:
         RubricItem("R5", 20, "Meals claims excluded (reimbursed separately)",
                    got_ids is not None and not (set(_REPORT_MEALS) & set(got_ids)),
                    f"meal claims present: {sorted(set(_REPORT_MEALS) & set(got_ids or []))}"),
-        RubricItem("R6", 15, "Unapproved and out-of-period claims excluded",
+        RubricItem("R6", 15, "Unapproved, out-of-period and already-paid claims excluded",
                    got_ids is not None
-                   and not (set(_REPORT_UNAPPROVED + _REPORT_WRONG_PERIOD) & set(got_ids)),
+                   and not (set(_report_exclusions(variant)) & set(got_ids)),
                    "excluded claims present: "
-                   f"{sorted(set(_REPORT_UNAPPROVED + _REPORT_WRONG_PERIOD) & set(got_ids or []))}"),
+                   f"{sorted(set(_report_exclusions(variant)) & set(got_ids or []))}"),
     ]
 
     total_weight = sum(i.weight for i in items)
@@ -253,7 +267,7 @@ def evaluate_report(variant: str, state: dict, workspace: Path | None) -> dict:
 
 def evaluate_any(task: str, variant: str, state: dict, workspace: Path | None = None) -> dict:
     """Dispatch to the rubric for `task`."""
-    if task == REPORT_TASK_ID:
+    if task in (REPORT_TASK_ID, REPORT_HARD_TASK_ID):
         return evaluate_report(variant, state, workspace)
     return evaluate(variant, state)
 

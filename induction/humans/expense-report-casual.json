@@ -2,6 +2,10 @@
   "_comment": "A demonstrator answering the way a person actually talks. No precise rule statements, no category names quoted back, no structure -- just what someone who knows the process would say off the top of their head. Used to test whether an induction can use a loose answer, which is the only kind it will get from a real user.",
   "rules": [
     {
+      "match": ["clm_3010", "monitor", "equipment", "already paid", "company card", "corporate card", "prepaid", "pre-paid"],
+      "answer": "oh the monitor? yeah i put that on the company card so it's already paid for. nothing to reimburse there, it just doesn't belong on the report at all."
+    },
+    {
       "match": ["clm_3003", "clm_3005", "clm_3006", "clm_3007", "clm_3008", "left out", "excluded", "not included", "dropped", "why"],
       "answer": "oh, a few different reasons there. the ones that aren't approved yet obviously don't count, we don't count anything until it's actually approved. the april one's just a different month, it'll be in its own report. and the food ones... yeah we never put those in the period report, they get handled somewhere else entirely. has been like that for as long as i've been here."
     },

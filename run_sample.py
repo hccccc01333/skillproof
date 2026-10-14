@@ -69,7 +69,8 @@ def main() -> int:
     # in the others. Defaulting the variant per task keeps the invocation short
     # without letting a mismatched pair through silently.
     if args.variant is None:
-        args.variant = "reports" if args.task == "expense-report" else "default"
+        args.variant = {"expense-report": "reports",
+                        "expense-report-hard": "reports-hard"}.get(args.task, "default")
 
     port = args.port or free_port()
     base_url = f"http://127.0.0.1:{port}"
