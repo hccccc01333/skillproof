@@ -1,0 +1,28 @@
+{
+  "name": "dsh-show2skill",
+  "version": "0.1.0",
+  "description": "Record a GUI demonstration once, induce a reusable skill and its completion verifier, and install it into the harness's skill directory.",
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "dsh-plugin",
+    "skill-induction",
+    "gui-agent",
+    "demonstration"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-tools": "*"
+  }
+}
