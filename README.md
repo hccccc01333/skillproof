@@ -4,7 +4,7 @@
 says what it could not verify.**
 
 ```bash
-git clone <this repo> && cd skillproof
+git clone https://github.com/YOUR-NAME/skillproof && cd skillproof
 python -m venv .venv && .venv/Scripts/python.exe -m pip install playwright pillow
 .venv/Scripts/python.exe -m playwright install chromium
 
