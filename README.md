@@ -114,9 +114,38 @@ episode is written.
 own words — a rambling spoken sentence works exactly as well as a written one;
 we tested both and got identical scores.
 
+## Run it
+
+```bash
+.venv/Scripts/python.exe run_skill.py \
+    --skill induced/monthly-report \
+    --url https://your-intranet/reports \
+    --instruction "Prepare the May 2026 expense report and save it as report.json" \
+    --workspace ./work
+```
+
+Any page. The instruction is the goal — the skill supplies the procedure, this
+supplies the target and the values. The skill's own verifier runs at the end and
+its declared gaps are printed beside its checks:
+
+```
+verifier: PASSED (2 runs, 0 completion attempts refused)
+  [PASS] A1: The report was saved as report.json in the workspace root
+  [PASS] A3: Exactly the reimbursable claims of the period were counted
+  [GAP ] A6: whether every claim already settled outside this reimbursement run
+             was excluded cannot be checked
+```
+
+A gap is not a failure. It is the part of the task the skill is telling you it
+could not confirm — which is the difference between an automation you can rely
+on and one that reports success it cannot support.
+
+There is no score here, deliberately: there is no rubric for your workflow, and
+inventing one would be guessing at what you meant.
+
 Induction needs a model endpoint (`S2S_INDUCT_BASE_URL`, `S2S_INDUCT_API_KEY`,
-`S2S_INDUCT_MODEL`). **Everything else — recording, replaying, scoring, and the
-whole benchmark — runs without one.**
+`S2S_INDUCT_MODEL`). **Everything else — recording, running, replaying, scoring,
+and the whole benchmark — runs without one.**
 
 ## How it works
 
@@ -185,6 +214,7 @@ executor/        the downstream web agent, for every agent condition
 docs/            results, the format spec, the published policy, a roadmap critique
 reproduce.py     the 11-second verification
 record_session.py    record a workflow you drive yourself
+run_skill.py     run an induced skill against any page
 ```
 
 ## Relationship to Work2Skill

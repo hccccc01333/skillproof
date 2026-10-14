@@ -52,6 +52,7 @@ Ready.
 
   record a workflow    .venv/Scripts/python.exe record_session.py --url <page> --episode <name>
   induce a skill       .venv/Scripts/python.exe run_induct.py --episode <name> --interactive
+  run that skill       .venv/Scripts/python.exe run_skill.py --skill <dir> --url <page>                            --instruction "<the goal>"
   score a replay       .venv/Scripts/python.exe run_macro.py --variant default
 
 Induction needs a model endpoint:

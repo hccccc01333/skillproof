@@ -290,6 +290,8 @@ def execute(
     model: str | None = None,
     max_steps: int = 30,
     workspace: Path | None = None,
+    reset: bool = True,
+    capture_state: bool = True,
     headed: bool = False,
     verbose: bool = False,
 ) -> ExecRun:
@@ -337,8 +339,12 @@ def execute(
 
             page.on("download", _on_download)
         page.goto(base_url, wait_until="networkidle")
-        page.request.post(f"{base_url}/api/reset")
-        page.reload(wait_until="networkidle")
+        if reset:
+            # The benchmark's app exposes a reset endpoint so every condition
+            # starts from an identical state. An arbitrary page has no such
+            # thing, and asking for it would be an error rather than a no-op.
+            page.request.post(f"{base_url}/api/reset")
+            page.reload(wait_until="networkidle")
         page.wait_for_timeout(250)
 
         messages: list[dict] = [
@@ -453,7 +459,11 @@ def execute(
             messages.append({"role": "tool", "tool_call_id": call.id, "content": result})
 
         page.wait_for_timeout(300)
-        run.final_state = page.request.get(f"{base_url}/api/state").json()
+        if capture_state:
+            try:
+                run.final_state = page.request.get(f"{base_url}/api/state").json()
+            except Exception:  # noqa: BLE001
+                run.final_state = None
         context.close()
         browser.close()
 
