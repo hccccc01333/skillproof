@@ -1,0 +1,50 @@
+{
+  "assertions": [
+    {
+      "id": "A1",
+      "type": "file_exists",
+      "value": "report.json",
+      "description": "The period expense report was saved as report.json in the workspace"
+    },
+    {
+      "id": "A2",
+      "type": "json_field_equals",
+      "value": "report.json:period",
+      "expected": "2026-05",
+      "description": "The report covers the requested period (May 2026) in the application's YYYY-MM form"
+    },
+    {
+      "id": "A3",
+      "type": "json_field_equals",
+      "value": "report.json:claim_ids",
+      "expected": ["clm_3001", "clm_3002", "clm_3004"],
+      "description": "Only approved claims outside the Meals & Entertainment category in the requested period are included: the pending-approval claim (clm_3008) and the approved meals claims (clm_3003 client dinner, clm_3006 team coffee) are excluded"
+    },
+    {
+      "id": "A4",
+      "type": "json_field_equals",
+      "value": "report.json:claim_count",
+      "expected": 3,
+      "description": "The claim count equals the number of distinct claims included, after excluding unapproved and meals claims"
+    },
+    {
+      "id": "A5",
+      "type": "json_field_equals",
+      "value": "report.json:by_cost_center",
+      "expected": {"CC-4471": 960.0, "CC-5120": 42.1},
+      "description": "Cost-center subtotals sum only the included lines (620.00 + 340.00 for CC-4471; 42.10 for CC-5120), with no meals or unapproved amounts folded in"
+    },
+    {
+      "id": "A6",
+      "type": "json_field_equals",
+      "value": "report.json:grand_total",
+      "expected": 1002.1,
+      "description": "The grand total equals the sum of the included line amounts and matches the sum of the cost-center subtotals"
+    },
+    {
+      "id": "A7",
+      "type": "unverifiable",
+      "description": "Whether the execution agent's report was produced from the ExpenseDesk Reports page and its period CSV export (rather than from unauthorised sources) cannot be checked from the saved file; only the resulting values are asserted here."
+    }
+  ]
+}

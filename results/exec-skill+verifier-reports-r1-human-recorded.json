@@ -1,0 +1,267 @@
+{
+  "condition": "skill+verifier",
+  "variant": "reports",
+  "task": "expense-report",
+  "instruction": "Prepare the May 2026 expense report and save it as report.json in your \nworkspace.\n\nDownload the period's expense lines from the Reports section, then write a \nJSON object with these fields:\n  \"period\"          the reporting period as \"YYYY-MM\"\n  \"claim_ids\"       the ids of the claims counted, as a list\n  \"claim_count\"     how many claims were counted\n  \"by_cost_center\"  object mapping each cost center to its total\n  \"grand_total\"     the total amount to be reimbursed",
+  "workspace": "D:\\Projects\\show2skill\\results\\_work\\fixed-1",
+  "rep": 1,
+  "skill_root": "D:/Projects/show2skill/induced/human-recorded/_selftest--concise",
+  "verifier_assertions": [
+    {
+      "id": "A1",
+      "type": "file_exists",
+      "description": "The period expense report was saved as report.json in the workspace",
+      "value": "report.json",
+      "count": null,
+      "role": null,
+      "expected": null
+    },
+    {
+      "id": "A2",
+      "type": "json_field_equals",
+      "description": "The report covers the requested period (May 2026) in the application's YYYY-MM form",
+      "value": "report.json:period",
+      "count": null,
+      "role": null,
+      "expected": "2026-05"
+    },
+    {
+      "id": "A3",
+      "type": "json_field_equals",
+      "description": "Only approved claims outside the Meals & Entertainment category in the requested period are included: the pending-approval claim (clm_3008) and the approved meals claims (clm_3003 client dinner, clm_3006 team coffee) are excluded",
+      "value": "report.json:claim_ids",
+      "count": null,
+      "role": null,
+      "expected": [
+        "clm_3001",
+        "clm_3002",
+        "clm_3004"
+      ]
+    },
+    {
+      "id": "A4",
+      "type": "json_field_equals",
+      "description": "The claim count equals the number of distinct claims included, after excluding unapproved and meals claims",
+      "value": "report.json:claim_count",
+      "count": null,
+      "role": null,
+      "expected": 3
+    },
+    {
+      "id": "A5",
+      "type": "json_field_equals",
+      "description": "Cost-center subtotals sum only the included lines (620.00 + 340.00 for CC-4471; 42.10 for CC-5120), with no meals or unapproved amounts folded in",
+      "value": "report.json:by_cost_center",
+      "count": null,
+      "role": null,
+      "expected": {
+        "CC-4471": 960.0,
+        "CC-5120": 42.1
+      }
+    },
+    {
+      "id": "A6",
+      "type": "json_field_equals",
+      "description": "The grand total equals the sum of the included line amounts and matches the sum of the cost-center subtotals",
+      "value": "report.json:grand_total",
+      "count": null,
+      "role": null,
+      "expected": 1002.1
+    },
+    {
+      "id": "A7",
+      "type": "unverifiable",
+      "description": "Whether the execution agent's report was produced from the ExpenseDesk Reports page and its period CSV export (rather than from unauthorised sources) cannot be checked from the saved file; only the resulting values are asserted here.",
+      "value": null,
+      "count": null,
+      "role": null,
+      "expected": null
+    }
+  ],
+  "score": 100.0,
+  "sr": 100,
+  "passed": true,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 10,
+      "requirement": "report.json exists and parses as JSON",
+      "satisfied": true,
+      "detail": "parsed"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Report names the requested period",
+      "satisfied": true,
+      "detail": "got '2026-05', expected '2026-05'"
+    },
+    {
+      "id": "R3",
+      "weight": 25,
+      "requirement": "Grand total matches the included claims",
+      "satisfied": true,
+      "detail": "got 1002.1, expected 1002.10"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "Per-cost-center breakdown is correct",
+      "satisfied": true,
+      "detail": "got {'CC-4471': 960.0, 'CC-5120': 42.1}, expected {'CC-4471': 960.0, 'CC-5120': 42.1}"
+    },
+    {
+      "id": "R5",
+      "weight": 20,
+      "requirement": "Meals claims excluded (reimbursed separately)",
+      "satisfied": true,
+      "detail": "meal claims present: []"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Unapproved and out-of-period claims excluded",
+      "satisfied": true,
+      "detail": "excluded claims present: []"
+    }
+  ],
+  "run": {
+    "condition": "skill+verifier",
+    "episode_id": "",
+    "variant": "reports",
+    "model": "deepseek-v4.1-flash",
+    "finished": true,
+    "finish_note": "Created report.json for May 2026 from the Reports period CSV (expense-lines-2026-05.csv). Kept only approved, non-Meals & Entertainment lines, yielding 3 claims (clm_3001, clm_3002, clm_3004), cost center totals CC-4471=960.0 and CC-5120=42.1, grand_total 1002.1. Verifier passed.",
+    "steps": 7,
+    "wall_ms": 22875,
+    "prompt_tokens": 41226,
+    "completion_tokens": 831,
+    "errors": [],
+    "verifier_present": true,
+    "verifier_runs": 2,
+    "done_rejections": 0,
+    "verifier_at_finish": {
+      "passed": true,
+      "results": [
+        {
+          "id": "A1",
+          "ok": true,
+          "description": "The period expense report was saved as report.json in the workspace",
+          "type": "file_exists",
+          "detail": "report.json exists"
+        },
+        {
+          "id": "A2",
+          "ok": true,
+          "description": "The report covers the requested period (May 2026) in the application's YYYY-MM form",
+          "type": "json_field_equals",
+          "detail": "period is '2026-05', expected '2026-05'"
+        },
+        {
+          "id": "A3",
+          "ok": true,
+          "description": "Only approved claims outside the Meals & Entertainment category in the requested period are included: the pending-approval claim (clm_3008) and the approved meals claims (clm_3003 client dinner, clm_3006 team coffee) are excluded",
+          "type": "json_field_equals",
+          "detail": "claim_ids is ['clm_3001', 'clm_3002', 'clm_3004'], expected ['clm_3001', 'clm_3002', 'clm_3004']"
+        },
+        {
+          "id": "A4",
+          "ok": true,
+          "description": "The claim count equals the number of distinct claims included, after excluding unapproved and meals claims",
+          "type": "json_field_equals",
+          "detail": "claim_count is 3, expected 3"
+        },
+        {
+          "id": "A5",
+          "ok": true,
+          "description": "Cost-center subtotals sum only the included lines (620.00 + 340.00 for CC-4471; 42.10 for CC-5120), with no meals or unapproved amounts folded in",
+          "type": "json_field_equals",
+          "detail": "by_cost_center is {'CC-4471': 960.0, 'CC-5120': 42.1}, expected {'CC-4471': 960.0, 'CC-5120': 42.1}"
+        },
+        {
+          "id": "A6",
+          "ok": true,
+          "description": "The grand total equals the sum of the included line amounts and matches the sum of the cost-center subtotals",
+          "type": "json_field_equals",
+          "detail": "grand_total is 1002.1, expected 1002.1"
+        },
+        {
+          "id": "A7",
+          "ok": true,
+          "description": "Whether the execution agent's report was produced from the ExpenseDesk Reports page and its period CSV export (rather than from unauthorised sources) cannot be checked from the saved file; only the resulting values are asserted here.",
+          "type": "unverifiable",
+          "detail": "declared gap: Whether the execution agent's report was produced from the ExpenseDesk Reports page and its period CSV export (rather than from unauthorised sources) cannot be checked from the saved file; only the resulting values are asserted here."
+        }
+      ],
+      "gaps": [
+        "Whether the execution agent's report was produced from the ExpenseDesk Reports page and its period CSV export (rather than from unauthorised sources) cannot be checked from the saved file; only the resulting values are asserted here."
+      ]
+    },
+    "workspace": "D:\\Projects\\show2skill\\results\\_work\\fixed-1",
+    "downloads": [
+      "expense-lines-2026-05.csv"
+    ],
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "click",
+        "args": {
+          "index": 1
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:64120/"
+      },
+      {
+        "step": 1,
+        "tool": "click",
+        "args": {
+          "index": 3
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:64120/"
+      },
+      {
+        "step": 2,
+        "tool": "list_files",
+        "args": {},
+        "result": "expense-lines-2026-05.csv  656 B",
+        "url": "http://127.0.0.1:64120/"
+      },
+      {
+        "step": 3,
+        "tool": "read_file",
+        "args": {
+          "path": "expense-lines-2026-05.csv"
+        },
+        "result": "1\tclaim_id,claim_title,period,status,category,cost_center,line_description,amount\n2\tclm_3001,May 2026 travel reimbursement,2026-05,approved,Travel - International,CC-4471,Flight SFO-KIX,620.00\n3\tclm_3",
+        "url": "http://127.0.0.1:64120/"
+      },
+      {
+        "step": 4,
+        "tool": "write_file",
+        "args": {
+          "path": "report.json",
+          "content": "{\n  \"period\": \"2026-05\",\n  \"claim_ids\": [\"clm_3001\", \"clm_3002\", \"clm_3004\"],\n  …"
+        },
+        "result": "wrote report.json (193 characters)",
+        "url": "http://127.0.0.1:64120/"
+      },
+      {
+        "step": 5,
+        "tool": "run_verifier",
+        "args": {},
+        "result": "VERIFIER PASSED. All completion checks hold.",
+        "url": "http://127.0.0.1:64120/"
+      },
+      {
+        "step": 6,
+        "tool": "done",
+        "args": {
+          "note": "Created report.json for May 2026 from the Reports period CSV (expense-lines-2026…"
+        },
+        "result": "declared done",
+        "url": "http://127.0.0.1:64120/"
+      }
+    ]
+  }
+}

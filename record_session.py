@@ -156,17 +156,48 @@ def record(
         idle_since = time.monotonic()
 
         if selftest:
-            # Exercises the operator path without an operator: the same event
-            # drain, action construction and frame capture the loop below does,
-            # driven by a few clicks. It exists because the human path is the
-            # one part of this file that cannot be tested by running it.
-            print("  [selftest] driving a few actions")
-            for _ in range(3):
-                try:
-                    page.mouse.click(640, 300)
-                    page.wait_for_timeout(settle_ms)
-                except Exception:  # noqa: BLE001
-                    break
+            # Exercises the operator path without an operator. It drives a real
+            # workflow rather than random clicks, because the question worth
+            # answering is whether a hand-recorded episode is as usable as a
+            # scripted one -- and a few clicks on a label cannot answer it.
+            print("  [selftest] driving the report workflow")
+            try:
+                page.get_by_test_id("nav-reports").click()
+                page.wait_for_timeout(settle_ms)
+                page.get_by_test_id("report-period").select_option("2026-05")
+                page.wait_for_timeout(settle_ms)
+                with page.expect_download() as dl:
+                    page.get_by_test_id("download-csv").click()
+                saved = workspace / dl.value.suggested_filename
+                dl.value.save_as(str(saved))
+                rec.downloads.append(saved)
+                page.wait_for_timeout(settle_ms)
+
+                # A person would now work the file and save the deliverable.
+                import csv as _csv
+                import io as _io
+                import json as _json
+
+                rows = list(_csv.DictReader(
+                    _io.StringIO(saved.read_text(encoding="utf-8"))))
+                keep = [r for r in rows
+                        if r["status"] == "approved"
+                        and r["period"] == "2026-05"
+                        and r["category"] != "Meals & Entertainment"]
+                ids = sorted({r["claim_id"] for r in keep})
+                by_cc: dict[str, float] = {}
+                for r in keep:
+                    by_cc[r["cost_center"]] = round(
+                        by_cc.get(r["cost_center"], 0.0) + float(r["amount"]), 2)
+                (workspace / "report.json").write_text(_json.dumps({
+                    "period": "2026-05",
+                    "claim_ids": ids,
+                    "claim_count": len(ids),
+                    "by_cost_center": {k: round(v, 2) for k, v in sorted(by_cc.items())},
+                    "grand_total": round(sum(by_cc.values()), 2),
+                }, indent=2) + "\n", encoding="utf-8")
+            except Exception as exc:  # noqa: BLE001
+                print(f"  [selftest] failed: {type(exc).__name__}: {exc}")
 
         while True:
             if page.is_closed():
@@ -236,7 +267,7 @@ def record(
     if workspace is not None and Path(workspace).is_dir():
         import shutil
 
-        dest = writer.dir / "workspace"
+        dest = writer.dir / "produced"
         dest.mkdir(parents=True, exist_ok=True)
         for f in sorted(Path(workspace).rglob("*")):
             if f.is_file():

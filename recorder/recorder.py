@@ -359,7 +359,7 @@ def record_demo(
     if workspace is not None:
         ws = Path(workspace)
         if ws.is_dir():
-            dest = writer.dir / "workspace"
+            dest = writer.dir / "produced"
             dest.mkdir(parents=True, exist_ok=True)
             for f in sorted(ws.rglob("*")):
                 if f.is_file():

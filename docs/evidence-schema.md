@@ -27,6 +27,21 @@ under new keys; a paper-compatible reader can ignore them.
 
 A real recording is checked in at `episodes/expense-submit-default/`.
 
+`produced/` holds the files the demonstration saved — downloads it made, and
+any deliverable the task was supposed to write. **Its paths are relative to the
+task's own output root, and the directory name is packaging, not part of the
+path.** A task that writes `report.json` produces an episode containing
+`produced/report.json`; the deliverable is still `report.json`.
+
+This is called out because it was got wrong: an induction read
+`produced/report.json`, concluded the deliverable path was
+`produced/report.json`, and generated a completion verifier asserting that
+path. The execution agent, being obedient, wrote the file there *as well as*
+where the task asked. It scored full marks and the verifier passed — but only
+because the agent happened to write both. An agent that had written only the
+path the verifier named would have failed the task while satisfying its own
+completion check, which is the worst outcome the verifier exists to prevent.
+
 ## File contracts
 
 ### task.json

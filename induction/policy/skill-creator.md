@@ -156,6 +156,18 @@ yes that teaches nothing.
 If no person is attached, you will be told so. Then declare the gap — do not
 invent a rule to cover it, and do not silently drop the difference either.
 
+## The demonstration's output directory is packaging
+
+Files the demonstration saved — downloads, and any deliverable the task wrote —
+are exposed under `produced/`. **That prefix is the episode's packaging, not
+part of the task's path.** A task that writes `report.json` shows up as
+`produced/report.json`, and the deliverable is still `report.json`.
+
+Never carry `produced/` into a skill, a verifier path, or an instruction. An
+execution agent obeys the verifier it is given, so a verifier naming the wrong
+path makes the agent write the wrong file — and if it writes *only* that file,
+the task fails while the completion check passes.
+
 ## Emit a completion verifier
 
 Alongside `SKILL.md`, write `<skill-name>/verify.json`: machine-checkable

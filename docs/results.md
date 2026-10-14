@@ -878,6 +878,55 @@ What is known is that it asks. Whether it then declares the gap honestly or
 invents a rule to cover it is the open question, and it is the one that matters
 most for a plugin that will often run unattended.
 
+## Addendum 9: the verifier that made the agent write the wrong file
+
+The plugin's flow was validated end to end for the first time — record by hand,
+induce, install, run — and it worked, scoring 100/100 three times. It worked for
+a reason that should not have been true.
+
+The generated verifier asserted `file_exists` on **`workspace/report.json`**.
+The task asks for `report.json`. The execution agent, being obedient, wrote the
+file in **both** places: the path the task named and the path the verifier
+named. It scored full marks and the verifier passed.
+
+Had it written only the path the verifier named, the task would have failed
+**while its own completion check reported success** — the exact inversion of the
+problem the verifier exists to prevent, and strictly worse than having no
+verifier at all.
+
+### Where the prefix came from
+
+`workspace/` was the directory the recorder packages a demonstration's saved
+files into. It is a *packaging* detail of the episode. The induction read
+`workspace/report.json`, concluded that was the deliverable path, and wrote it
+into the verifier.
+
+The name was the whole problem. Renamed to `produced/`, with the distinction
+stated in the episode schema and in the authoring policy:
+
+> That prefix is the episode's packaging, not part of the task's path. A task
+> that writes `report.json` shows up as `produced/report.json`, and the
+> deliverable is still `report.json`.
+
+Re-recorded, re-induced, re-run: the verifier now names `report.json`, the agent
+writes only `report.json`, and the three runs are unchanged at 100/100.
+
+### Why this one is worth recording separately
+
+The previous seven harness faults produced *wrong numbers*. This one produced
+**right numbers from a wrong reason**, and it is the only one that could have
+made a task fail while every check said it passed.
+
+That is the failure mode a completion verifier is supposed to eliminate, and it
+was introduced by the verifier itself. The lesson is not "be careful with paths"
+— it is that **an execution agent obeys the verifier it is given**, so a
+verifier is not a passive check. It is an instruction. Anything wrong in it
+becomes part of the task, and the agent will bend its work to satisfy it.
+
+This is the strongest argument yet for the position this document has taken
+throughout: narrow what a verifier may claim. A verifier that could not name a
+path would not have been able to make this mistake.
+
 ## What the corrected experiment requires
 
 The decisive comparison is unmeasured. It needs:

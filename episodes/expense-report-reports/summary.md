@@ -18,11 +18,11 @@ JSON object with these fields:
 ## Action sequence
 
 1. [0:00:01] Open the Reports section
-2. [0:00:01] Select period 2026-05 `2026-05`
+2. [0:00:02] Select period 2026-05 `2026-05`
 3. [0:00:02] Download the May 2026 expense lines as CSV `expense-lines-2026-05.csv`
-4. [0:00:02] Review the downloaded lines; excluding clm_3003, clm_3005, clm_3006, clm_3007, clm_3008
+4. [0:00:03] Review the downloaded lines; excluding clm_3003, clm_3005, clm_3006, clm_3007, clm_3008
 5. [0:00:03] Write report.json: 3 claims, total 1002.10
 6. [0:00:03] Verify report.json is written and the totals agree
-7. [0:00:03] end of demonstration
+7. [0:00:04] end of demonstration
 
 _Summary is derived evidence, not ground truth; reconcile it against the action trace and frames._

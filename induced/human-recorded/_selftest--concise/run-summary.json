@@ -1,0 +1,52 @@
+{
+  "episode_id": "_selftest",
+  "model": "deepseek-v4.1-flash",
+  "prompt_variant": "concise",
+  "ok": true,
+  "iterations": 13,
+  "tool_calls": 23,
+  "wall_ms": 272467,
+  "prompt_tokens": 153917,
+  "completion_tokens": 12667,
+  "errors": [],
+  "manifest": {
+    "episode_id": "_selftest",
+    "output_root": "D:\\Projects\\show2skill\\induced\\human-recorded\\_selftest--concise",
+    "skills": [
+      {
+        "path": "expense-period-report/SKILL.md",
+        "name": "expense-period-report",
+        "bytes": 5900
+      }
+    ],
+    "skills_hashed": {
+      "expense-period-report/SKILL.md": "8698f65f56fd4226"
+    },
+    "orphaned_skill_files": [],
+    "verifiers": [
+      {
+        "path": "expense-period-report/verify.json",
+        "assertions": 7
+      }
+    ],
+    "inspected": {
+      "task_json_read": true,
+      "video_metadata": [
+        "video.mp4"
+      ],
+      "video_sampled": [
+        "video.mp4"
+      ]
+    },
+    "tool_calls": 22,
+    "warnings": [],
+    "note": "Structural validation only. This manifest confirms the agent read the task, wrote skills, read them back, and respected video ordering. It does not assert that any skill is correct."
+  },
+  "questions": [
+    {
+      "question": "The saved report keeps the approved Travel, Lodging and Office Supplies claims but omits the two approved Meals & Entertainment claims (client dinner 96.40 and team coffee 18.75). What rule produces that omission — is the entire Meals & Entertainment category non-reimbursable (and are there any other categories that must be excluded), or does some other criterion (e.g. a category cap or a receipt requirement) applied line by line decide it?",
+      "answer": "oh, a few different reasons there. the ones that aren't approved yet obviously don't count, we don't count anything until it's actually approved. the april one's just a different month, it'll be in its own report. and the food ones... yeah we never put those in the period report, they get handled somewhere else entirely. has been like that for as long as i've been here."
+    }
+  ],
+  "transcript_turns": 13
+}

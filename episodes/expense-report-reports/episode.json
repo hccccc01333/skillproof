@@ -4,15 +4,15 @@
   "task_id": "expense-report-reports",
   "application": "ExpenseDesk",
   "recording": {
-    "duration_ms": 4421,
-    "started_at": "2026-10-14T02:02:32.676953+00:00",
-    "finished_at": "2026-10-14T02:02:37.094179+00:00",
+    "duration_ms": 4625,
+    "started_at": "2026-10-14T06:43:03.098648+00:00",
+    "finished_at": "2026-10-14T06:43:07.732198+00:00",
     "viewport": {
       "width": 1280,
       "height": 860
     },
     "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
-    "target_url": "http://127.0.0.1:53073",
+    "target_url": "http://127.0.0.1:61593",
     "capture_config": {
       "before_frame_freshness_ms": 1500,
       "settle_timeout_ms": 2500,
