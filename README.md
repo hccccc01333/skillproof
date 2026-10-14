@@ -10,6 +10,36 @@ Reusable Agent Skill Induction** (arXiv:[2610.12984v1](https://arxiv.org/abs/261
 [Relationship to Work2Skill](#relationship-to-work2skill) for exactly what is
 reproduced and what is new — that split is deliberate and load-bearing.
 
+## Verify the headline yourself, in 11 seconds
+
+No model, no API key, no credentials:
+
+```bash
+git clone <this repo> && cd show2skill
+python -m venv .venv
+.venv/Scripts/python.exe -m pip install playwright pillow
+.venv/Scripts/python.exe -m playwright install chromium
+
+.venv/Scripts/python.exe reproduce.py          # 11s, four decisive cells
+.venv/Scripts/python.exe reproduce.py --all    # 21s, all twelve
+```
+
+The claim it checks:
+
+> Replaying a recorded demonstration scores **100/100** on the page it was
+> recorded from. After a UI revision that also drops the test hooks, the same
+> recording scores **25/100**.
+
+Macro replay is deterministic, which is why this needs nothing but Python. The
+numbers are **asserted rather than derived** — they were published before the
+script existed — so a change in behaviour fails the check instead of quietly
+becoming a new baseline.
+
+The rest of the project's results do need a model and do depend on trusting a
+task design, a rubric and a model choice. Those are the ones worth arguing with,
+and [docs/policies/expense-policy.md](docs/policies/expense-policy.md) exists so
+that the rubrics can be checked rather than believed.
+
 ## Status
 
 Five days executed end to end: demonstration recorded, skill induced, agents
