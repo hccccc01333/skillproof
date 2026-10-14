@@ -10,6 +10,33 @@ Reusable Agent Skill Induction** (arXiv:[2610.12984v1](https://arxiv.org/abs/261
 [Relationship to Work2Skill](#relationship-to-work2skill) for exactly what is
 reproduced and what is new — that split is deliberate and load-bearing.
 
+## This repo, and the plugin
+
+This is the **research repo**: the pipeline, the benchmark, the baselines and
+the results.
+
+The **plugin** lives separately, because it is a distribution artifact with its
+own audience and its own release cycle:
+
+> **[dsh-show2skill](https://github.com/<you>/dsh-show2skill)** — a Cordis bundle
+> for the DeepSeek Harness that records a workflow, induces a skill from it, and
+> asks the user about the part induction could not learn.
+
+The split is deliberate. The benchmark's scripted demonstrations exist to make
+method comparison fair; the plugin needs the opposite — a person demonstrating
+their *own* workflow. That path is here, as `record_session.py`:
+
+```bash
+.venv/Scripts/python.exe record_session.py \
+    --url https://your-intranet/reports --episode monthly-report \
+    --instruction "Prepare the monthly expense report and save it as report.json"
+```
+
+A browser opens with the evidence hook installed. You do the task at your own
+pace and close the window; the episode is written with the same schema the
+benchmark uses, so the induction cannot tell a hand-recorded episode from a
+scripted one.
+
 ## Verify the headline yourself, in 11 seconds
 
 No model, no API key, no credentials:
