@@ -1,84 +1,45 @@
+<div align="center">
+
 # skillproof
 
-**Turn a demonstration into a reusable agent skill — and a completion check that
-says what it could not verify.**
+### Turn a demonstration into an agent skill that survives the page changing.
+
+**Do a repetitive browser task once, by hand. Get back a skill an agent can run — and a completion check that says what it could not verify.**
 
 ```bash
-git clone https://github.com/hccccc01333/skillproof && cd skillproof
-python -m venv .venv && .venv/Scripts/python.exe -m pip install playwright pillow
-.venv/Scripts/python.exe -m playwright install chromium
-
-.venv/Scripts/python.exe reproduce.py        # 11 seconds, no model, no credentials
+git clone https://github.com/hccccc01333/skillproof && cd skillproof && bash setup.sh
 ```
+
+[![License](https://img.shields.io/badge/license-MIT-f4c430?style=flat-square)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776ab?style=flat-square&logo=python&logoColor=white)](#requirements)
+[![Verify](https://img.shields.io/badge/verify-11s%20%C2%B7%20no%20model%20%C2%B7%20no%20credentials-2f5fd0?style=flat-square)](#verify-it-yourself)
+
+[What you get](#what-you-get) · [Why you can trust it](#why-you-can-trust-it) · [Verify it yourself](#verify-it-yourself) · [Record your own](#record-your-own-workflow) · [What it does not claim](#what-this-does-not-claim)
+
+</div>
+
+![ExpenseDesk, the target application](docs/assets/app.png)
 
 ---
 
-## The finding this started from
+You have a task you do in a web app every week. Export from three systems,
+cross-check, build a table, send it on. Two hours, and only you know how.
 
-Everyone measures a new agent method against **doing nothing**. Nobody measures
-it against the cheap alternative: **replaying the demonstration**.
+Show it once. `skillproof` watches what you did, works out the procedure, and
+writes a skill an agent can run — including the rules you never wrote down,
+because it asks you about the ones it cannot work out for itself.
 
-So we measured it. A recording replayed verbatim, no model involved:
+## What you get
 
-| | the page it was recorded from | after a UI revision that also drops the test hooks |
-|---|---|---|
-| **a recording** | **100 / 100** | **25 / 100** |
+**A `SKILL.md`.** A written procedure an agent can follow, parameterised over
+the parts that change — which month, which rows, which amounts — instead of the
+values from the day you recorded it.
 
-Two things follow, and both shape everything else here.
+**A `verify.json`.** Machine-checkable assertions that decide whether the task
+actually succeeded. The executor's `done` is refused while they fail.
 
-**On the demonstrated page, a recording is perfect.** Nothing that learns from it
-can beat it there — at best it ties, at more cost. Any claim of the form "our
-method beats doing nothing" is measuring against the wrong opponent.
-
-**A recording is worth 75 points less the moment the page moves.** That is the
-gap a skill has to close, and it is the only gap worth closing.
-
-## Results
-
-Every number below is measured on this repo's benchmark, three to six runs per
-cell, and the recording half reproduces in 11 seconds without a model.
-
-| task | original agent | recording | skill + verifier |
-|---|---|---|---|
-| claim submission | 56.7 | **100** (demo page) / 25 (revised) | **100 · SR 100** |
-| period report | 35.0 | — | **100 · SR 100** |
-| period report, two non-legible rules | 20.0 | — | **100 · SR 100** |
-
-## What actually makes it work
-
-This is the part we got wrong first and had to correct, so it is worth stating
-plainly.
-
-Some rules a workflow depends on are **not in the data**. In the reporting task,
-one claim is excluded because it was already paid on a company card. Nothing in
-the export says so. It is visible only as a **difference between what the
-demonstration consumed and what it produced**.
-
-An induction that reads the evidence and writes a skill scored **35/100** on
-that task — exactly what an agent with no skill scored. Identical wrong output.
-
-**What fixed it was not a better model. It was forcing the induction to
-reconcile the two artifacts**: read the produced output as carefully as the
-input, find what was dropped, identify what distinguishes it, and account for
-the *whole* difference. With that one instruction and no human in the loop, the
-same model scores **100/100**.
-
-The induction may also ask the person who gave the demonstration
-(`ask_human`), and on a task with two such rules it asks **two questions** — one
-per rule — and goes from 20 to 100. But the question is a fallback for rules
-that are not visible even in the input/output difference. The reconciliation
-step is the load-bearing part.
-
-## Why a completion check, and why it declares gaps
-
-We measured 6 agent runs that declared the task finished. **4 of them were
-wrong.** All four said "successfully submitted" while scoring 70–85.
-
-So a skill ships a `verify.json` of machine-checkable assertions, and the
-execution agent's `done` is **rejected** while it fails. The gate is real.
-
-The harder half is honesty. A verifier must declare what it *cannot* check
-rather than approximate it. From a generated one, unedited:
+**A declared gap.** Whatever the skill cannot check is stated, not approximated.
+From a generated verifier, unedited:
 
 ```
 A1  file_exists        report.json
@@ -87,8 +48,34 @@ A3  json_field_equals  report.json:claim_count
 A4  unverifiable       whether each excluded claim was excluded for the correct reason
 ```
 
-`A4` is the point. A verifier that reports a clean pass it cannot support is
-worse than no verifier, because an agent obeys the verifier it is given.
+`A4` is the point.
+
+## Why you can trust it
+
+Because the numbers include the baseline nobody runs.
+
+Everyone measures a new agent method against **doing nothing**. Nobody measures
+it against the cheap alternative: **replaying the demonstration**. So we did. A
+recording replayed verbatim, no model involved:
+
+| | the page it was recorded from | after a UI revision that also drops the test hooks |
+|---|---|---|
+| **a recording** | **100 / 100** | **25 / 100** |
+| **a skill + its verifier** | 100 / 100 | **100 / 100** |
+
+A recording is perfect until the page moves, and then it is worth 75 points
+less. That is the gap a skill has to close, and it is the only gap worth closing.
+
+And the reason the completion check exists:
+
+> We measured 6 agent runs that declared the task finished. **4 of them were
+> wrong.** All four said "successfully submitted" while scoring 70–85.
+
+| task | original agent | recording | skill + verifier |
+|---|---|---|---|
+| claim submission | 56.7 | 100 (demo page) / 25 (revised) | **100 · SR 100** |
+| period report | 35.0 | — | **100 · SR 100** |
+| period report, two non-legible rules | 20.0 | — | **100 · SR 100** |
 
 ## Verify it yourself
 
@@ -97,15 +84,15 @@ worse than no verifier, because an agent obeys the verifier it is given.
 .venv/Scripts/python.exe reproduce.py --all    # 21s, all twelve
 ```
 
-The numbers are **asserted, not derived** — they were published before the
-script existed — so a change in behaviour fails the check instead of quietly
-becoming a new baseline.
+No model, no API key, no credentials. The numbers are **asserted, not derived**
+— they were published before the script existed — so a change in behaviour fails
+the check instead of quietly becoming a new baseline.
 
 ```bash
 .venv/Scripts/python.exe tests/test_tools.py   # 24 tool-surface + verifier contracts
 ```
 
-## Recording your own workflow
+## Record your own workflow
 
 ```bash
 .venv/Scripts/python.exe record_session.py \
@@ -117,7 +104,7 @@ becoming a new baseline.
 
 A browser opens with the evidence hook installed. Do the task once, at your own
 pace, saving whatever the task is supposed to produce. Close the window; the
-episode is written. Then:
+episode is written.
 
 ```bash
 .venv/Scripts/python.exe run_induct.py --episode monthly-report --interactive
@@ -126,6 +113,26 @@ episode is written. Then:
 `--interactive` puts the induction's questions to you on stdin. Answer in your
 own words — a rambling spoken sentence works exactly as well as a written one;
 we tested both and got identical scores.
+
+Induction needs a model endpoint (`S2S_INDUCT_BASE_URL`, `S2S_INDUCT_API_KEY`,
+`S2S_INDUCT_MODEL`). **Everything else — recording, replaying, scoring, and the
+whole benchmark — runs without one.**
+
+## How it works
+
+The recording captures more than clicks. Each action is resolved to the UI
+element it landed on, by role and accessible name, alongside the frames before
+and after — which is what lets a skill name a control semantically instead of
+remembering where it was.
+
+The induction then does the part that turned out to matter most: it reconciles
+**what the demonstration consumed against what it produced**. Rules that appear
+in no data field are often visible as a difference between those two artifacts,
+and an induction that only reads the evidence misses them.
+
+A recorded run of this repo's benchmark scored **35/100** that way — identical to
+no skill at all. With the reconciliation step, no human involved, the same model
+scored **100/100**.
 
 ## What this does not claim
 
@@ -139,21 +146,31 @@ we tested both and got identical scores.
   re-running this will get different numbers.
 - **That the verifier is mature.** It failed in four distinct ways during
   development, two of them silently, including one that made an agent write the
-  wrong file. All four are documented; the assertion language is deliberately
-  small as a result.
+  wrong file.
 
 ## The part we would want you to attack
 
-`docs/results.md` is 900 lines and most of it is what went wrong: **eight harness
-faults** that produced plausible-looking numbers, **four verifier failure modes**,
-and twelve runs quarantined as invalid with their reasons in the filenames.
+[docs/results.md](docs/results.md) is 900 lines and most of it is what went
+wrong: **eight harness faults** that produced plausible-looking numbers, **four
+verifier failure modes**, and twelve runs quarantined as invalid with their
+reasons in the filenames.
 
 Two runs scored **100/100 while being unable to finish**, because their verifier
 gated completion on something already false. A results table without a `finished`
 column would have reported them as successes.
 
+It also records a conclusion we published and then had to correct, and why the
+correction happened — we had drawn a conclusion about the mechanism from a
+comparison that changed two things at once, which is the same confound this
+document criticises the paper for.
+
 If you re-run this and get different numbers, that is the most useful thing you
 can send us.
+
+## Requirements
+
+Python 3.11+, and `ffmpeg` on PATH for video. `setup.sh` installs the rest,
+including Chromium.
 
 ## Layout
 
@@ -175,12 +192,10 @@ record_session.py    record a workflow you drive yourself
 An independent reimplementation and extension of
 [Work2Skill](https://arxiv.org/abs/2610.12984) (arXiv:2610.12984), on a web
 target instead of a desktop one. The episode schema follows the paper's
-Appendix B so a reader written for it can read these episodes.
+Appendix B, so a reader written for it can read these episodes.
 
 The contribution here is the baseline the paper does not run, and the
-measurement discipline around it. See
-[docs/results.md](docs/results.md) for what was reproduced, what was extended,
-and what was deliberately not attempted.
+measurement discipline around it.
 
 ## License
 
