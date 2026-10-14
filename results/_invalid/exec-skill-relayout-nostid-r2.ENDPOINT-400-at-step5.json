@@ -1,0 +1,125 @@
+{
+  "condition": "skill",
+  "variant": "relayout-nostid",
+  "task": "expense-submit",
+  "instruction": "Get my April 2026 travel reimbursement claim into the approval queue.",
+  "rep": 2,
+  "skill_root": "D:\\Projects\\show2skill\\induced\\run3\\expense-submit-default--concise",
+  "score": 20.0,
+  "sr": 0,
+  "passed": false,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 15,
+      "requirement": "Claim reached the approval queue",
+      "satisfied": false,
+      "detail": "status='draft'"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Category is a travel category",
+      "satisfied": false,
+      "detail": "category=None"
+    },
+    {
+      "id": "R3",
+      "weight": 15,
+      "requirement": "Cost center matches the user's own cost center",
+      "satisfied": false,
+      "detail": "got None, expected 'CC-5120'"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "All three trip receipts attached",
+      "satisfied": true,
+      "detail": "attached=['rcp_3310', 'rcp_3311', 'rcp_3312', 'rcp_3313']"
+    },
+    {
+      "id": "R5",
+      "weight": 15,
+      "requirement": "No non-trip receipt attached",
+      "satisfied": false,
+      "detail": "offending=['rcp_3313']"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Line total equals the sum of the trip receipts",
+      "satisfied": false,
+      "detail": "got 0.00, expected 837.90"
+    },
+    {
+      "id": "R7",
+      "weight": 10,
+      "requirement": "Claim total exceeds the cost-center threshold",
+      "satisfied": false,
+      "detail": "total 0.00 vs threshold 500.00"
+    }
+  ],
+  "run": {
+    "condition": "skill",
+    "episode_id": "",
+    "variant": "relayout-nostid",
+    "model": "deepseek-v4.1-flash",
+    "finished": false,
+    "finish_note": "",
+    "steps": 5,
+    "wall_ms": 29563,
+    "prompt_tokens": 19222,
+    "completion_tokens": 1288,
+    "errors": [
+      "endpoint error: BadRequestError: Error code: 400 - {'error': {'param': '', 'type': 'invalid_request_error', 'code': 'invalid_request_error', 'message': \"Upstream request failed: [invalid_request_error] An assistant message with 'tool"
+    ],
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "click",
+        "args": {
+          "index": 1
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:64790/"
+      },
+      {
+        "step": 1,
+        "tool": "click",
+        "args": {
+          "index": 1
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:64790/"
+      },
+      {
+        "step": 2,
+        "tool": "click",
+        "args": {
+          "index": 1
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:64790/"
+      },
+      {
+        "step": 3,
+        "tool": "click",
+        "args": {
+          "index": 1
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:64790/"
+      },
+      {
+        "step": 4,
+        "tool": "type",
+        "args": {
+          "index": 2,
+          "text": "Pacific Air SFO-KIX"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:64790/"
+      }
+    ]
+  }
+}

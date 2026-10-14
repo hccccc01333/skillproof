@@ -1,0 +1,383 @@
+{
+  "condition": "skill+verifier",
+  "variant": "default",
+  "task": "expense-submit",
+  "instruction": "Get my March 2026 travel reimbursement claim into the approval queue.",
+  "rep": 3,
+  "skill_root": "D:/Projects/show2skill/induced/v3/expense-submit-default--concise",
+  "verifier_assertions": [
+    {
+      "id": "A1",
+      "type": "text_present",
+      "description": "The claim for the requested period now shows the Pending approval status, i.e. it is in the approval queue rather than Draft.",
+      "value": "Pending approval",
+      "count": null,
+      "role": null
+    },
+    {
+      "id": "A2",
+      "type": "text_present",
+      "description": "The claim detail shows the routing footer naming the approver and the submitted total, which only appears for a submitted claim.",
+      "value": "Submitted to",
+      "count": null,
+      "role": null
+    },
+    {
+      "id": "A3",
+      "type": "text_absent",
+      "description": "No outstanding validation blocker remains on the claim form.",
+      "value": "This claim cannot be submitted yet",
+      "count": null,
+      "role": null
+    },
+    {
+      "id": "A4",
+      "type": "text_absent",
+      "description": "No unconfirmed submission dialog is left open; the submission was actually confirmed.",
+      "value": "Confirm submission",
+      "count": null,
+      "role": null
+    },
+    {
+      "id": "A5",
+      "type": "unverifiable",
+      "description": "That the attached receipts and expense lines are exactly the business-travel receipts belonging to the requested claim period (no personal or non-travel receipt such as a personal hotel charge or a team dinner attached or entered as a line) cannot be checked by substring assertions; confirm it by reading the RECEIPT INBOX statuses and the EXPENSE LINES table in the rendered page.",
+      "value": null,
+      "count": null,
+      "role": null
+    },
+    {
+      "id": "A6",
+      "type": "unverifiable",
+      "description": "That the displayed Total equals the sum of the attached receipts' amounts and that each attached receipt has exactly one expense line with a matching amount cannot be checked by substring assertions; confirm by comparing the EXPENSE LINES table and Total against the receipt amounts in the rendered page.",
+      "value": null,
+      "count": null,
+      "role": null
+    },
+    {
+      "id": "A7",
+      "type": "unverifiable",
+      "description": "That the cost center entered matches the signed-in user's account line in the page header cannot be checked by substring assertions, since the value is task-input dependent; confirm by comparing the Cost center field with the header account line.",
+      "value": null,
+      "count": null,
+      "role": null
+    }
+  ],
+  "score": 100.0,
+  "sr": 100,
+  "passed": true,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 15,
+      "requirement": "Claim reached the approval queue",
+      "satisfied": true,
+      "detail": "status='pending_approval'"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Category is a travel category",
+      "satisfied": true,
+      "detail": "category='Travel - International'"
+    },
+    {
+      "id": "R3",
+      "weight": 15,
+      "requirement": "Cost center matches the user's own cost center",
+      "satisfied": true,
+      "detail": "got 'CC-4471', expected 'CC-4471'"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "All three trip receipts attached",
+      "satisfied": true,
+      "detail": "attached=['rcp_3310', 'rcp_3311', 'rcp_3312']"
+    },
+    {
+      "id": "R5",
+      "weight": 15,
+      "requirement": "No non-trip receipt attached",
+      "satisfied": true,
+      "detail": "offending=[]"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Line total equals the sum of the trip receipts",
+      "satisfied": true,
+      "detail": "got 712.50, expected 712.50"
+    },
+    {
+      "id": "R7",
+      "weight": 10,
+      "requirement": "Claim total exceeds the cost-center threshold",
+      "satisfied": true,
+      "detail": "total 712.50 vs threshold 500.00"
+    }
+  ],
+  "run": {
+    "condition": "skill+verifier",
+    "episode_id": "",
+    "variant": "default",
+    "model": "deepseek-v4.1-flash",
+    "finished": true,
+    "finish_note": "Submitted the March 2026 travel reimbursement claim into the approval queue. Attached the three in-period travel receipts (Pacific Air SFO-KIX $412.80, Kyoto Ryokan 3 nights $268.50, Airport express rail $31.20), excluding the Team dinner and Personal hotel upgrade. Added one expense line per receipt with Total $712.50, set Category to Travel - International, entered Cost center CC-4471, then submitted and confirmed. The claim now shows Pending approval with footer \"Submitted to M. Okonkwo · total $712.50\" and the verifier passed.",
+    "steps": 20,
+    "wall_ms": 150561,
+    "prompt_tokens": 244920,
+    "completion_tokens": 1766,
+    "errors": [],
+    "verifier_present": true,
+    "verifier_runs": 2,
+    "done_rejections": 0,
+    "verifier_at_finish": {
+      "passed": true,
+      "results": [
+        {
+          "id": "A1",
+          "ok": true,
+          "description": "The claim for the requested period now shows the Pending approval status, i.e. it is in the approval queue rather than Draft.",
+          "type": "text_present",
+          "detail": "searched visible text for 'Pending approval': found"
+        },
+        {
+          "id": "A2",
+          "ok": true,
+          "description": "The claim detail shows the routing footer naming the approver and the submitted total, which only appears for a submitted claim.",
+          "type": "text_present",
+          "detail": "searched visible text for 'Submitted to': found"
+        },
+        {
+          "id": "A3",
+          "ok": true,
+          "description": "No outstanding validation blocker remains on the claim form.",
+          "type": "text_absent",
+          "detail": "'This claim cannot be submitted yet' absent"
+        },
+        {
+          "id": "A4",
+          "ok": true,
+          "description": "No unconfirmed submission dialog is left open; the submission was actually confirmed.",
+          "type": "text_absent",
+          "detail": "'Confirm submission' absent"
+        },
+        {
+          "id": "A5",
+          "ok": true,
+          "description": "That the attached receipts and expense lines are exactly the business-travel receipts belonging to the requested claim period (no personal or non-travel receipt such as a personal hotel charge or a team dinner attached or entered as a line) cannot be checked by substring assertions; confirm it by reading the RECEIPT INBOX statuses and the EXPENSE LINES table in the rendered page.",
+          "type": "unverifiable",
+          "detail": "declared gap: That the attached receipts and expense lines are exactly the business-travel receipts belonging to the requested claim period (no personal or non-travel receipt such as a personal hotel charge or a team dinner attached or entered as a line) cannot be checked by substring assertions; confirm it by reading the RECEIPT INBOX statuses and the EXPENSE LINES table in the rendered page."
+        },
+        {
+          "id": "A6",
+          "ok": true,
+          "description": "That the displayed Total equals the sum of the attached receipts' amounts and that each attached receipt has exactly one expense line with a matching amount cannot be checked by substring assertions; confirm by comparing the EXPENSE LINES table and Total against the receipt amounts in the rendered page.",
+          "type": "unverifiable",
+          "detail": "declared gap: That the displayed Total equals the sum of the attached receipts' amounts and that each attached receipt has exactly one expense line with a matching amount cannot be checked by substring assertions; confirm by comparing the EXPENSE LINES table and Total against the receipt amounts in the rendered page."
+        },
+        {
+          "id": "A7",
+          "ok": true,
+          "description": "That the cost center entered matches the signed-in user's account line in the page header cannot be checked by substring assertions, since the value is task-input dependent; confirm by comparing the Cost center field with the header account line.",
+          "type": "unverifiable",
+          "detail": "declared gap: That the cost center entered matches the signed-in user's account line in the page header cannot be checked by substring assertions, since the value is task-input dependent; confirm by comparing the Cost center field with the header account line."
+        }
+      ],
+      "gaps": [
+        "That the attached receipts and expense lines are exactly the business-travel receipts belonging to the requested claim period (no personal or non-travel receipt such as a personal hotel charge or a team dinner attached or entered as a line) cannot be checked by substring assertions; confirm it by reading the RECEIPT INBOX statuses and the EXPENSE LINES table in the rendered page.",
+        "That the displayed Total equals the sum of the attached receipts' amounts and that each attached receipt has exactly one expense line with a matching amount cannot be checked by substring assertions; confirm by comparing the EXPENSE LINES table and Total against the receipt amounts in the rendered page.",
+        "That the cost center entered matches the signed-in user's account line in the page header cannot be checked by substring assertions, since the value is task-input dependent; confirm by comparing the Cost center field with the header account line."
+      ]
+    },
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 1,
+        "tool": "click",
+        "args": {
+          "index": 7
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 2,
+        "tool": "click",
+        "args": {
+          "index": 7
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 3,
+        "tool": "click",
+        "args": {
+          "index": 7
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 4,
+        "tool": "type",
+        "args": {
+          "index": 4,
+          "text": "Pacific Air SFO-KIX"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 5,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "412.80"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 6,
+        "tool": "click",
+        "args": {
+          "index": 6
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 7,
+        "tool": "type",
+        "args": {
+          "index": 4,
+          "text": "Kyoto Ryokan 3 nights"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 8,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "268.50"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 9,
+        "tool": "click",
+        "args": {
+          "index": 6
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 10,
+        "tool": "type",
+        "args": {
+          "index": 4,
+          "text": "Airport express rail"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 11,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "31.20"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 12,
+        "tool": "click",
+        "args": {
+          "index": 6
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 13,
+        "tool": "select_option",
+        "args": {
+          "index": 1,
+          "option": "Travel - International"
+        },
+        "result": "selected Travel - International",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 14,
+        "tool": "type",
+        "args": {
+          "index": 2,
+          "text": "CC-4471"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 15,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 16,
+        "tool": "click",
+        "args": {
+          "index": 9
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 17,
+        "tool": "click",
+        "args": {
+          "index": 11
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 18,
+        "tool": "run_verifier",
+        "args": {},
+        "result": "VERIFIER PASSED. All completion checks hold.",
+        "url": "http://127.0.0.1:59160/"
+      },
+      {
+        "step": 20,
+        "tool": "done",
+        "args": {
+          "note": "Submitted the March 2026 travel reimbursement claim into the approval queue. Att…"
+        },
+        "result": "declared done",
+        "url": "http://127.0.0.1:59160/"
+      }
+    ]
+  }
+}

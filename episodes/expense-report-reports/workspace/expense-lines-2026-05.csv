@@ -1,0 +1,7 @@
+claim_id,claim_title,period,status,category,cost_center,line_description,amount
+clm_3001,May 2026 travel reimbursement,2026-05,approved,Travel - International,CC-4471,Flight SFO-KIX,620.00
+clm_3002,May 2026 hotel,2026-05,approved,Lodging,CC-4471,Kyoto Ryokan 3 nights,340.00
+clm_3003,May 2026 client dinner,2026-05,approved,Meals & Entertainment,CC-4471,Client dinner,96.40
+clm_3004,May 2026 desk supplies,2026-05,approved,Office Supplies,CC-5120,USB-C cables,42.10
+clm_3006,May 2026 team coffee,2026-05,approved,Meals & Entertainment,CC-4471,Team coffee,18.75
+clm_3008,May 2026 rail pass,2026-05,pending_approval,Travel - Domestic,CC-5120,Rail pass,88.00

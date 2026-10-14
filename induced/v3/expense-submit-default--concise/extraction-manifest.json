@@ -1,0 +1,33 @@
+{
+  "episode_id": "expense-submit-default",
+  "output_root": "D:\\Projects\\show2skill\\induced\\v3\\expense-submit-default--concise",
+  "skills": [
+    {
+      "path": "expensedesk-submit-travel-claim/SKILL.md",
+      "name": "expensedesk-submit-travel-claim",
+      "bytes": 6712
+    }
+  ],
+  "skills_hashed": {
+    "expensedesk-submit-travel-claim/SKILL.md": "16ddf68adfd5f21f"
+  },
+  "orphaned_skill_files": [],
+  "verifiers": [
+    {
+      "path": "expensedesk-submit-travel-claim/verify.json",
+      "assertions": 7
+    }
+  ],
+  "inspected": {
+    "task_json_read": true,
+    "video_metadata": [
+      "video.mp4"
+    ],
+    "video_sampled": [
+      "video.mp4"
+    ]
+  },
+  "tool_calls": 18,
+  "warnings": [],
+  "note": "Structural validation only. This manifest confirms the agent read the task, wrote skills, read them back, and respected video ordering. It does not assert that any skill is correct."
+}

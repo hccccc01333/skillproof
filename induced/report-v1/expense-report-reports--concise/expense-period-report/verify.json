@@ -1,0 +1,21 @@
+{
+  "assertions": [
+    {
+      "id": "A1",
+      "type": "text_present",
+      "value": "Expense reports",
+      "description": "The Reports section holding the period-scoped expense-line export is open, not the Claims view"
+    },
+    {
+      "id": "A2",
+      "type": "element_present",
+      "value": "Download CSV",
+      "description": "The period-scoped expense-line export control the task requires is present and usable"
+    },
+    {
+      "id": "A3",
+      "type": "unverifiable",
+      "description": "The written report file has exactly the required keys with correct values: period equal to the requested YYYY-MM; claim_ids and claim_count covering exactly the approved claims of that period (drafts and unapproved claims excluded, every line of a counted claim included); by_cost_center holding each counted cost center's summed line amount; and grand_total equal to the sum of the counted line amounts and to the sum of the by_cost_center values. Page-text predicates cannot read a workspace file, so the deliverable itself cannot be checked with this assertion language."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "episode_id": "expense-report-reports",
+  "output_root": "D:\\Projects\\show2skill\\induced\\report-casual\\expense-report-reports--concise",
+  "skills": [
+    {
+      "path": "expense-period-report-json/SKILL.md",
+      "name": "expense-period-report-json",
+      "bytes": 6059
+    }
+  ],
+  "skills_hashed": {
+    "expense-period-report-json/SKILL.md": "91b54b345ed6b0bc"
+  },
+  "orphaned_skill_files": [],
+  "verifiers": [
+    {
+      "path": "expense-period-report-json/verify.json",
+      "assertions": 5
+    }
+  ],
+  "inspected": {
+    "task_json_read": true,
+    "video_metadata": [
+      "video.mp4"
+    ],
+    "video_sampled": [
+      "video.mp4"
+    ]
+  },
+  "tool_calls": 20,
+  "warnings": [],
+  "note": "Structural validation only. This manifest confirms the agent read the task, wrote skills, read them back, and respected video ordering. It does not assert that any skill is correct."
+}

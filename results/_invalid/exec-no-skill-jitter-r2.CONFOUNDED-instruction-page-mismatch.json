@@ -1,0 +1,316 @@
+{
+  "condition": "no-skill",
+  "variant": "jitter",
+  "task": "expense-submit",
+  "rep": 2,
+  "skill_root": null,
+  "score": 40.0,
+  "sr": 0,
+  "passed": false,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 15,
+      "requirement": "Claim reached the approval queue",
+      "satisfied": true,
+      "detail": "status='pending_approval'"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Category is a travel category",
+      "satisfied": true,
+      "detail": "category='Travel - International'"
+    },
+    {
+      "id": "R3",
+      "weight": 15,
+      "requirement": "Cost center matches the user's own cost center",
+      "satisfied": true,
+      "detail": "got 'CC-5120', expected 'CC-5120'"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "All three trip receipts attached",
+      "satisfied": false,
+      "detail": "attached=['rcp_3311', 'rcp_3314']"
+    },
+    {
+      "id": "R5",
+      "weight": 15,
+      "requirement": "No non-trip receipt attached",
+      "satisfied": false,
+      "detail": "offending=['rcp_3314']"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Line total equals the sum of the trip receipts",
+      "satisfied": false,
+      "detail": "got 408.50, expected 837.90"
+    },
+    {
+      "id": "R7",
+      "weight": 10,
+      "requirement": "Claim total exceeds the cost-center threshold",
+      "satisfied": false,
+      "detail": "total 408.50 vs threshold 500.00"
+    }
+  ],
+  "run": {
+    "condition": "no-skill",
+    "episode_id": "",
+    "variant": "jitter",
+    "model": "doubao-seed-2-0-code-preview-260215",
+    "finished": true,
+    "finish_note": "The March 2026 travel reimbursement claim (with attached receipts and expense lines) has been submitted and is now pending approval in the queue.",
+    "steps": 26,
+    "wall_ms": 281780,
+    "prompt_tokens": 324610,
+    "completion_tokens": 6691,
+    "errors": [],
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 2,
+        "tool": "scroll",
+        "args": {
+          "direction": "up"
+        },
+        "result": "scrolled up",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 3,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 4,
+        "tool": "scroll",
+        "args": {
+          "direction": "up"
+        },
+        "result": "scrolled up",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 5,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 6,
+        "tool": "scroll",
+        "args": {
+          "direction": "up"
+        },
+        "result": "scrolled up",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 7,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 8,
+        "tool": "scroll",
+        "args": {
+          "direction": "up"
+        },
+        "result": "scrolled up",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 9,
+        "tool": "select_option",
+        "args": {
+          "index": 1,
+          "option": "Travel"
+        },
+        "result": "selected Travel - International",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 10,
+        "tool": "click",
+        "args": {
+          "index": 11
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 11,
+        "tool": "type",
+        "args": {
+          "index": 4,
+          "text": "Personal hotel upgrade"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 12,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "140.00"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 13,
+        "tool": "click",
+        "args": {
+          "index": 6
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 14,
+        "tool": "type",
+        "args": {
+          "index": 2,
+          "text": "CC-5120"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 15,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 16,
+        "tool": "scroll",
+        "args": {
+          "direction": "up"
+        },
+        "result": "scrolled up",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 17,
+        "tool": "click",
+        "args": {
+          "index": 8
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 18,
+        "tool": "type",
+        "args": {
+          "index": 4,
+          "text": "Kyoto Ryokan 3 nights"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 19,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "268.50"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 20,
+        "tool": "click",
+        "args": {
+          "index": 6
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 21,
+        "tool": "scroll",
+        "args": {
+          "direction": "up"
+        },
+        "result": "scrolled up",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 22,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 23,
+        "tool": "click",
+        "args": {
+          "index": 10
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 24,
+        "tool": "click",
+        "args": {
+          "index": 12
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 25,
+        "tool": "scroll",
+        "args": {
+          "direction": "up"
+        },
+        "result": "scrolled up",
+        "url": "http://127.0.0.1:49775/"
+      },
+      {
+        "step": 26,
+        "tool": "done",
+        "args": {
+          "note": "The March 2026 travel reimbursement claim (with attached receipts and expense li…"
+        },
+        "result": "declared done",
+        "url": "http://127.0.0.1:49775/"
+      }
+    ]
+  }
+}

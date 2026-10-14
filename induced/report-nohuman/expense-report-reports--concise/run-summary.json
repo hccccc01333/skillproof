@@ -1,0 +1,52 @@
+{
+  "episode_id": "expense-report-reports",
+  "model": "deepseek-v4.1-flash",
+  "prompt_variant": "concise",
+  "ok": true,
+  "iterations": 12,
+  "tool_calls": 23,
+  "wall_ms": 1491545,
+  "prompt_tokens": 154157,
+  "completion_tokens": 24499,
+  "errors": [],
+  "manifest": {
+    "episode_id": "expense-report-reports",
+    "output_root": "D:\\Projects\\show2skill\\induced\\report-nohuman\\expense-report-reports--concise",
+    "skills": [
+      {
+        "path": "expense-period-report/SKILL.md",
+        "name": "expense-period-report",
+        "bytes": 6310
+      }
+    ],
+    "skills_hashed": {
+      "expense-period-report/SKILL.md": "05e919d5c23b698e"
+    },
+    "orphaned_skill_files": [],
+    "verifiers": [
+      {
+        "path": "expense-period-report/verify.json",
+        "assertions": 6
+      }
+    ],
+    "inspected": {
+      "task_json_read": true,
+      "video_metadata": [
+        "video.mp4"
+      ],
+      "video_sampled": [
+        "video.mp4"
+      ]
+    },
+    "tool_calls": 22,
+    "warnings": [],
+    "note": "Structural validation only. This manifest confirms the agent read the task, wrote skills, read them back, and respected video ordering. It does not assert that any skill is correct."
+  },
+  "questions": [
+    {
+      "question": "In the demonstration, report.json counted only clm_3001, clm_3002 and clm_3004. The two excluded claims clm_3003 (client dinner, 96.40) and clm_3006 (team coffee, 18.75) are both \"approved\" and in the same period as the counted ones — the only thing that separates them from the counted claims is their category \"Meals & Entertainment\". What is the reusable rule for which claims count: is the Meals & Entertainment category itself non-reimbursable, or is the criterion something else (e.g. an allow-list of reimbursable categories, a meals cap/limit, or a field I should be reading instead)?",
+      "answer": null
+    }
+  ],
+  "transcript_turns": 12
+}

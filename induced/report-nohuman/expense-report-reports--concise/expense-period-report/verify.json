@@ -1,0 +1,46 @@
+{
+  "assertions": [
+    {
+      "id": "A1",
+      "type": "file_exists",
+      "value": "report.json",
+      "description": "The deliverable report.json is saved in the workspace root"
+    },
+    {
+      "id": "A2",
+      "type": "json_field_equals",
+      "value": "report.json:period",
+      "expected": "2026-05",
+      "description": "The period field is the requested reporting period (May 2026 as YYYY-MM)"
+    },
+    {
+      "id": "A3",
+      "type": "json_field_equals",
+      "value": "report.json:claim_count",
+      "expected": 3,
+      "description": "Exactly the reimbursable claims of the period were counted (status approved, category not Meals & Entertainment, at least one exported line)"
+    },
+    {
+      "id": "A4",
+      "type": "json_field_equals",
+      "value": "report.json:grand_total",
+      "expected": 1002.1,
+      "description": "Grand total equals the sum of the counted claim amounts only (620.00 + 340.00 + 42.10); including the excluded Meals & Entertainment or pending claims would raise it"
+    },
+    {
+      "id": "A5",
+      "type": "json_field_equals",
+      "value": "report.json:by_cost_center",
+      "expected": {
+        "CC-4471": 960.0,
+        "CC-5120": 42.1
+      },
+      "description": "Per cost center totals cover only counted claims: CC-4471 excludes its Meals & Entertainment claims and CC-5120 excludes its pending-approval claim"
+    },
+    {
+      "id": "A6",
+      "type": "unverifiable",
+      "description": "Whether the correct rule is 'exclude the Meals & Entertainment category' rather than some other category-level rule (an allow-list of reimbursable categories, a meals cap, or a field not present in the export) cannot be checked: neither the task instruction nor the ExpenseDesk Reports page or export states which categories are reimbursable. Only the numeric consequences of the exclusion are verifiable (A3-A5); the rule itself is a declared gap."
+    }
+  ]
+}

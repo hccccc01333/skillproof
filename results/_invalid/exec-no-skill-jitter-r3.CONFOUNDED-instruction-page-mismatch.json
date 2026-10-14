@@ -1,0 +1,206 @@
+{
+  "condition": "no-skill",
+  "variant": "jitter",
+  "task": "expense-submit",
+  "rep": 3,
+  "skill_root": null,
+  "score": 40.0,
+  "sr": 0,
+  "passed": false,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 15,
+      "requirement": "Claim reached the approval queue",
+      "satisfied": true,
+      "detail": "status='pending_approval'"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Category is a travel category",
+      "satisfied": true,
+      "detail": "category='Travel - International'"
+    },
+    {
+      "id": "R3",
+      "weight": 15,
+      "requirement": "Cost center matches the user's own cost center",
+      "satisfied": true,
+      "detail": "got 'CC-5120', expected 'CC-5120'"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "All three trip receipts attached",
+      "satisfied": false,
+      "detail": "attached=['rcp_3314']"
+    },
+    {
+      "id": "R5",
+      "weight": 15,
+      "requirement": "No non-trip receipt attached",
+      "satisfied": false,
+      "detail": "offending=['rcp_3314']"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Line total equals the sum of the trip receipts",
+      "satisfied": false,
+      "detail": "got 140.00, expected 837.90"
+    },
+    {
+      "id": "R7",
+      "weight": 10,
+      "requirement": "Claim total exceeds the cost-center threshold",
+      "satisfied": false,
+      "detail": "total 140.00 vs threshold 500.00"
+    }
+  ],
+  "run": {
+    "condition": "no-skill",
+    "episode_id": "",
+    "variant": "jitter",
+    "model": "doubao-seed-2-0-code-preview-260215",
+    "finished": true,
+    "finish_note": "Submitted the March 2026 travel reimbursement claim (with the March 13 hotel upgrade receipt, $140 expense line, and required details) to the approval queue; the claim now shows \"Pending approval\" status.",
+    "steps": 14,
+    "wall_ms": 206062,
+    "prompt_tokens": 97054,
+    "completion_tokens": 5080,
+    "errors": [],
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 1,
+        "tool": "scroll",
+        "args": {
+          "direction": "up"
+        },
+        "result": "scrolled up",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 2,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 3,
+        "tool": "scroll",
+        "args": {
+          "direction": "up"
+        },
+        "result": "scrolled up",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 4,
+        "tool": "click",
+        "args": {
+          "index": 11
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 5,
+        "tool": "type",
+        "args": {
+          "index": 4,
+          "text": "March 2026 travel - hotel upgrade"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 6,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "140.00"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 7,
+        "tool": "click",
+        "args": {
+          "index": 6
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 8,
+        "tool": "select_option",
+        "args": {
+          "index": 1,
+          "option": "Travel"
+        },
+        "result": "selected Travel - International",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 9,
+        "tool": "type",
+        "args": {
+          "index": 2,
+          "text": "CC-5120"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 10,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 11,
+        "tool": "click",
+        "args": {
+          "index": 11
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 12,
+        "tool": "click",
+        "args": {
+          "index": 13
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:51347/"
+      },
+      {
+        "step": 13,
+        "tool": "done",
+        "args": {
+          "note": "Submitted the March 2026 travel reimbursement claim (with the March 13 hotel upg…"
+        },
+        "result": "declared done",
+        "url": "http://127.0.0.1:51347/"
+      }
+    ]
+  }
+}

@@ -1,0 +1,324 @@
+{
+  "condition": "macro-reparam",
+  "episode_id": "expense-submit-default",
+  "variant": "jitter-remap",
+  "reparam": true,
+  "score": 65.0,
+  "sr": 0,
+  "passed": false,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 15,
+      "requirement": "Claim reached the approval queue",
+      "satisfied": false,
+      "detail": "status='draft'"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Category is a travel category",
+      "satisfied": true,
+      "detail": "category='Travel - International'"
+    },
+    {
+      "id": "R3",
+      "weight": 15,
+      "requirement": "Cost center matches the user's own cost center",
+      "satisfied": true,
+      "detail": "got 'CC-5120', expected 'CC-5120'"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "All three trip receipts attached",
+      "satisfied": false,
+      "detail": "attached=[]"
+    },
+    {
+      "id": "R5",
+      "weight": 15,
+      "requirement": "No non-trip receipt attached",
+      "satisfied": true,
+      "detail": "offending=[]"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Line total equals the sum of the trip receipts",
+      "satisfied": true,
+      "detail": "got 837.90, expected 837.90"
+    },
+    {
+      "id": "R7",
+      "weight": 10,
+      "requirement": "Claim total exceeds the cost-center threshold",
+      "satisfied": true,
+      "detail": "total 837.90 vs threshold 500.00"
+    }
+  ],
+  "replay": {
+    "steps": 23,
+    "failed_steps": 3,
+    "resolution_histogram": {
+      "css": 1,
+      "failed": 3,
+      "skipped": 4,
+      "role+name": 15
+    },
+    "reparam_histogram": {
+      "recorded": 12,
+      "page": 4
+    },
+    "wall_ms": 9312,
+    "failures": [
+      {
+        "step": 1,
+        "caption": "Attach receipt rcp_3310 (Pacific Air SFO-KIX) to the claim",
+        "error": "target could not be resolved on the current page"
+      },
+      {
+        "step": 2,
+        "caption": "Attach receipt rcp_3311 (Kyoto Ryokan 3 nights) to the claim",
+        "error": "target could not be resolved on the current page"
+      },
+      {
+        "step": 3,
+        "caption": "Attach receipt rcp_3312 (Airport express rail) to the claim",
+        "error": "target could not be resolved on the current page"
+      }
+    ],
+    "values_used": [
+      {
+        "step": 0,
+        "kind": "click",
+        "source": "recorded",
+        "value": "None",
+        "caption": "Open the draft travel reimbursement claim"
+      },
+      {
+        "step": 5,
+        "kind": "type",
+        "source": "recorded",
+        "value": "Pacific Air SFO-KIX",
+        "caption": "Type expense description \"Pacific Air SFO-KIX\""
+      },
+      {
+        "step": 6,
+        "kind": "type",
+        "source": "page",
+        "value": "538.20",
+        "caption": "Type amount \"412.80\" for Pacific Air SFO-KIX"
+      },
+      {
+        "step": 7,
+        "kind": "click",
+        "source": "recorded",
+        "value": "None",
+        "caption": "Add the Pacific Air SFO-KIX line"
+      },
+      {
+        "step": 8,
+        "kind": "type",
+        "source": "recorded",
+        "value": "Kyoto Ryokan 3 nights",
+        "caption": "Type expense description \"Kyoto Ryokan 3 nights\""
+      },
+      {
+        "step": 9,
+        "kind": "type",
+        "source": "page",
+        "value": "268.50",
+        "caption": "Type amount \"268.50\" for Kyoto Ryokan 3 nights"
+      },
+      {
+        "step": 10,
+        "kind": "click",
+        "source": "recorded",
+        "value": "None",
+        "caption": "Add the Kyoto Ryokan 3 nights line"
+      },
+      {
+        "step": 11,
+        "kind": "type",
+        "source": "recorded",
+        "value": "Airport express rail",
+        "caption": "Type expense description \"Airport express rail\""
+      },
+      {
+        "step": 12,
+        "kind": "type",
+        "source": "page",
+        "value": "31.20",
+        "caption": "Type amount \"31.20\" for Airport express rail"
+      },
+      {
+        "step": 13,
+        "kind": "click",
+        "source": "recorded",
+        "value": "None",
+        "caption": "Add the Airport express rail line"
+      },
+      {
+        "step": 14,
+        "kind": "select",
+        "source": "recorded",
+        "value": "Travel - International",
+        "caption": "Set category to Travel - International"
+      },
+      {
+        "step": 15,
+        "kind": "click",
+        "source": "recorded",
+        "value": "None",
+        "caption": "Click Submit for approval"
+      },
+      {
+        "step": 16,
+        "kind": "click",
+        "source": "recorded",
+        "value": "None",
+        "caption": "Confirm the submission"
+      },
+      {
+        "step": 18,
+        "kind": "type",
+        "source": "page",
+        "value": "CC-5120",
+        "caption": "Enter cost center CC-4471"
+      },
+      {
+        "step": 19,
+        "kind": "click",
+        "source": "recorded",
+        "value": "None",
+        "caption": "Click Submit for approval again"
+      },
+      {
+        "step": 20,
+        "kind": "click",
+        "source": "recorded",
+        "value": "None",
+        "caption": "Confirm the submission"
+      }
+    ]
+  },
+  "final_state": {
+    "user": {
+      "id": "u_1042",
+      "name": "Dana Whitfield",
+      "role": "employee",
+      "department": "Field Operations",
+      "cost_center": "CC-5120"
+    },
+    "categories": [
+      "Travel - International",
+      "Travel - Domestic",
+      "Client Entertainment",
+      "Lodging",
+      "Equipment"
+    ],
+    "receipts": [
+      {
+        "id": "rcpt-0001",
+        "label": "Pacific Air SFO-KIX",
+        "vendor": "Pacific Air",
+        "amount": 538.2,
+        "date": "2026-04-08",
+        "available": true
+      },
+      {
+        "id": "rcpt-0002",
+        "label": "Kyoto Ryokan 3 nights",
+        "vendor": "Kyoto Ryokan",
+        "amount": 268.5,
+        "date": "2026-04-09",
+        "available": true
+      },
+      {
+        "id": "rcpt-0003",
+        "label": "Airport express rail",
+        "vendor": "Haruka Rail",
+        "amount": 31.2,
+        "date": "2026-04-08",
+        "available": true
+      },
+      {
+        "id": "rcpt-0004",
+        "label": "Team dinner",
+        "vendor": "Nishiki Grill",
+        "amount": 96.4,
+        "date": "2026-04-10",
+        "available": true
+      },
+      {
+        "id": "rcpt-0005",
+        "label": "Personal hotel upgrade",
+        "vendor": "Kyoto Ryokan",
+        "amount": 140.0,
+        "date": "2026-03-13",
+        "available": true
+      }
+    ],
+    "claims": [
+      {
+        "id": "clm_2001",
+        "title": "April 2026 travel reimbursement",
+        "status": "draft",
+        "category": "Travel - International",
+        "cost_center": "CC-5120",
+        "lines": [
+          {
+            "id": "ln_01",
+            "description": "Pacific Air SFO-KIX",
+            "amount": 538.2,
+            "receipt_id": null
+          },
+          {
+            "id": "ln_02",
+            "description": "Kyoto Ryokan 3 nights",
+            "amount": 268.5,
+            "receipt_id": null
+          },
+          {
+            "id": "ln_03",
+            "description": "Airport express rail",
+            "amount": 31.2,
+            "receipt_id": null
+          }
+        ],
+        "receipts": [],
+        "note": "",
+        "submitted_at": null,
+        "validation_errors": [
+          "Attach at least one receipt before submitting."
+        ]
+      }
+    ],
+    "expose_testids": true,
+    "layout": "default",
+    "layout_spec": {
+      "labels": {
+        "attach": "Attach",
+        "add_line": "Add line",
+        "submit": "Submit for approval",
+        "confirm": "Confirm submission"
+      },
+      "section_order": [
+        "details",
+        "lines",
+        "receipts"
+      ],
+      "field_order": [
+        "category",
+        "cost_center",
+        "note"
+      ],
+      "titles": {
+        "details": "Claim details",
+        "lines": "Expense lines",
+        "receipts": "Receipt inbox"
+      }
+    }
+  }
+}

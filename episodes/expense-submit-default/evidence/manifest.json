@@ -1,0 +1,270 @@
+{
+  "episode_id": "expense-submit-default",
+  "count": 24,
+  "images": [
+    {
+      "index": 0,
+      "path": "evidence/000001.png",
+      "frame_time_ms": 1766,
+      "captured_at_ms": 1791890949281,
+      "trigger": "boundary",
+      "action_id": "act_expense-submit-default_0000",
+      "action_delta_ms": 0,
+      "caption": "episode start",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 1,
+      "path": "evidence/000002.png",
+      "frame_time_ms": 2358,
+      "captured_at_ms": 1791890949872,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0000",
+      "action_delta_ms": 592,
+      "caption": "Open the draft travel reimbursement claim",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 2,
+      "path": "evidence/000003.png",
+      "frame_time_ms": 2891,
+      "captured_at_ms": 1791890950408,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0001",
+      "action_delta_ms": 533,
+      "caption": "Attach receipt rcp_3310 (Pacific Air SFO-KIX) to the claim",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 3,
+      "path": "evidence/000004.png",
+      "frame_time_ms": 3375,
+      "captured_at_ms": 1791890950889,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0002",
+      "action_delta_ms": 484,
+      "caption": "Attach receipt rcp_3311 (Kyoto Ryokan 3 nights) to the claim",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 4,
+      "path": "evidence/000005.png",
+      "frame_time_ms": 3983,
+      "captured_at_ms": 1791890951502,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0003",
+      "action_delta_ms": 608,
+      "caption": "Attach receipt rcp_3312 (Airport express rail) to the claim",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 5,
+      "path": "evidence/000006.png",
+      "frame_time_ms": 4375,
+      "captured_at_ms": 1791890951896,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0004",
+      "action_delta_ms": 392,
+      "caption": "Receipt inbox reviewed; non-travel receipts left unattached: rcp_3313, rcp_3314",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 6,
+      "path": "evidence/000007.png",
+      "frame_time_ms": 4843,
+      "captured_at_ms": 1791890952361,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0005",
+      "action_delta_ms": 468,
+      "caption": "Type expense description \"Pacific Air SFO-KIX\"",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 7,
+      "path": "evidence/000008.png",
+      "frame_time_ms": 5297,
+      "captured_at_ms": 1791890952809,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0006",
+      "action_delta_ms": 454,
+      "caption": "Type amount \"412.80\" for Pacific Air SFO-KIX",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 8,
+      "path": "evidence/000009.png",
+      "frame_time_ms": 5766,
+      "captured_at_ms": 1791890953286,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0007",
+      "action_delta_ms": 469,
+      "caption": "Add the Pacific Air SFO-KIX line",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 9,
+      "path": "evidence/000010.png",
+      "frame_time_ms": 6218,
+      "captured_at_ms": 1791890953743,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0008",
+      "action_delta_ms": 452,
+      "caption": "Type expense description \"Kyoto Ryokan 3 nights\"",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 10,
+      "path": "evidence/000011.png",
+      "frame_time_ms": 6718,
+      "captured_at_ms": 1791890954229,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0009",
+      "action_delta_ms": 500,
+      "caption": "Type amount \"268.50\" for Kyoto Ryokan 3 nights",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 11,
+      "path": "evidence/000012.png",
+      "frame_time_ms": 7202,
+      "captured_at_ms": 1791890954720,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0010",
+      "action_delta_ms": 484,
+      "caption": "Add the Kyoto Ryokan 3 nights line",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 12,
+      "path": "evidence/000013.png",
+      "frame_time_ms": 7702,
+      "captured_at_ms": 1791890955221,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0011",
+      "action_delta_ms": 500,
+      "caption": "Type expense description \"Airport express rail\"",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 13,
+      "path": "evidence/000014.png",
+      "frame_time_ms": 8186,
+      "captured_at_ms": 1791890955708,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0012",
+      "action_delta_ms": 484,
+      "caption": "Type amount \"31.20\" for Airport express rail",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 14,
+      "path": "evidence/000015.png",
+      "frame_time_ms": 8750,
+      "captured_at_ms": 1791890956268,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0013",
+      "action_delta_ms": 564,
+      "caption": "Add the Airport express rail line",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 15,
+      "path": "evidence/000016.png",
+      "frame_time_ms": 9250,
+      "captured_at_ms": 1791890956770,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0014",
+      "action_delta_ms": 500,
+      "caption": "Set category to Travel - International",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 16,
+      "path": "evidence/000017.png",
+      "frame_time_ms": 9797,
+      "captured_at_ms": 1791890957310,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0015",
+      "action_delta_ms": 547,
+      "caption": "Click Submit for approval",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 17,
+      "path": "evidence/000018.png",
+      "frame_time_ms": 10327,
+      "captured_at_ms": 1791890957853,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0016",
+      "action_delta_ms": 530,
+      "caption": "Confirm the submission",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 18,
+      "path": "evidence/000019.png",
+      "frame_time_ms": 10750,
+      "captured_at_ms": 1791890958275,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0017",
+      "action_delta_ms": 423,
+      "caption": "Submission rejected: cost center required above the threshold",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 19,
+      "path": "evidence/000020.png",
+      "frame_time_ms": 11266,
+      "captured_at_ms": 1791890958788,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0018",
+      "action_delta_ms": 516,
+      "caption": "Enter cost center CC-4471",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 20,
+      "path": "evidence/000021.png",
+      "frame_time_ms": 11827,
+      "captured_at_ms": 1791890959338,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0019",
+      "action_delta_ms": 561,
+      "caption": "Click Submit for approval again",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 21,
+      "path": "evidence/000022.png",
+      "frame_time_ms": 12375,
+      "captured_at_ms": 1791890959892,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0020",
+      "action_delta_ms": 548,
+      "caption": "Confirm the submission",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 22,
+      "path": "evidence/000023.png",
+      "frame_time_ms": 12827,
+      "captured_at_ms": 1791890960350,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0021",
+      "action_delta_ms": 452,
+      "caption": "Verify the claim shows Pending approval",
+      "url": "http://127.0.0.1:60065/"
+    },
+    {
+      "index": 23,
+      "path": "evidence/000024.png",
+      "frame_time_ms": 13547,
+      "captured_at_ms": 1791890961063,
+      "trigger": "result",
+      "action_id": "act_expense-submit-default_0022",
+      "action_delta_ms": 720,
+      "caption": "end of demonstration",
+      "url": "http://127.0.0.1:60065/"
+    }
+  ]
+}

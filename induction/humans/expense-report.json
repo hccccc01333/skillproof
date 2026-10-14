@@ -1,0 +1,29 @@
+{
+  "_comment": "What the demonstrator knows about ExpenseDesk period reports. Used as the scripted stand-in for a human when testing whether an induction can use a rule it is told. The first matching rule wins and nothing else is volunteered.",
+  "rules": [
+    {
+      "match": ["clm_3003", "clm_3005", "clm_3006", "clm_3007", "clm_3008", "left out", "excluded", "not included", "dropped"],
+      "answer": "Different reasons, and they matter separately. clm_3005 and clm_3008 are not approved yet, so they are not spend. clm_3007 is approved but belongs to a different period. clm_3003 and clm_3006 are approved and in period, but meals and entertainment are reimbursed through a separate system and never appear in a period expense report."
+    },
+    {
+      "match": ["meal", "meals", "dinner", "coffee", "entertainment", "food", "restaurant", "catering"],
+      "answer": "Meals and entertainment are reimbursed through a separate system, so they are never included in a period expense report even when the claim is approved. That is why the dinner and the team coffee were left out."
+    },
+    {
+      "match": ["period", "month", "april", "march", "out of period", "different month"],
+      "answer": "A report covers exactly one period. An approved claim from another period is excluded, because it will have been reported in its own month."
+    },
+    {
+      "match": ["status", "approved", "approve", "draft", "pending", "unapproved"],
+      "answer": "Only approved claims are reimbursed. Drafts and claims still awaiting approval are not yet spend and are excluded."
+    },
+    {
+      "match": ["receipt", "attach", "missing receipt"],
+      "answer": "A missing receipt does not remove a line from an approved claim. Receipts matter at approval time, not at reporting time."
+    },
+    {
+      "match": ["cost center", "cost centre", "group", "breakdown", "aggregate"],
+      "answer": "Totals are grouped by the cost center recorded on the claim itself, not by the submitting user's own cost center."
+    }
+  ]
+}

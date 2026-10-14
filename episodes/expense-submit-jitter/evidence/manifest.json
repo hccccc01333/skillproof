@@ -1,0 +1,270 @@
+{
+  "episode_id": "expense-submit-jitter",
+  "count": 24,
+  "images": [
+    {
+      "index": 0,
+      "path": "evidence/000001.png",
+      "frame_time_ms": 1842,
+      "captured_at_ms": 1791870384627,
+      "trigger": "boundary",
+      "action_id": "act_expense-submit-jitter_0000",
+      "action_delta_ms": 0,
+      "caption": "episode start",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 1,
+      "path": "evidence/000002.png",
+      "frame_time_ms": 2437,
+      "captured_at_ms": 1791870385228,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0000",
+      "action_delta_ms": 595,
+      "caption": "Open the draft travel reimbursement claim",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 2,
+      "path": "evidence/000003.png",
+      "frame_time_ms": 2967,
+      "captured_at_ms": 1791870385755,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0001",
+      "action_delta_ms": 530,
+      "caption": "Attach receipt rcp_3310 (Pacific Air SFO-KIX) to the claim",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 3,
+      "path": "evidence/000004.png",
+      "frame_time_ms": 3437,
+      "captured_at_ms": 1791870386225,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0002",
+      "action_delta_ms": 470,
+      "caption": "Attach receipt rcp_3311 (Kyoto Ryokan 3 nights) to the claim",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 4,
+      "path": "evidence/000005.png",
+      "frame_time_ms": 4000,
+      "captured_at_ms": 1791870386783,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0003",
+      "action_delta_ms": 563,
+      "caption": "Attach receipt rcp_3312 (Airport express rail) to the claim",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 5,
+      "path": "evidence/000006.png",
+      "frame_time_ms": 4405,
+      "captured_at_ms": 1791870387191,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0004",
+      "action_delta_ms": 405,
+      "caption": "Receipt inbox reviewed; non-travel receipts left unattached: rcp_3313, rcp_3314",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 6,
+      "path": "evidence/000007.png",
+      "frame_time_ms": 4875,
+      "captured_at_ms": 1791870387659,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0005",
+      "action_delta_ms": 470,
+      "caption": "Type expense description \"Pacific Air SFO-KIX\"",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 7,
+      "path": "evidence/000008.png",
+      "frame_time_ms": 5328,
+      "captured_at_ms": 1791870388106,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0006",
+      "action_delta_ms": 453,
+      "caption": "Type amount \"538.20\" for Pacific Air SFO-KIX",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 8,
+      "path": "evidence/000009.png",
+      "frame_time_ms": 5812,
+      "captured_at_ms": 1791870388588,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0007",
+      "action_delta_ms": 484,
+      "caption": "Add the Pacific Air SFO-KIX line",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 9,
+      "path": "evidence/000010.png",
+      "frame_time_ms": 6250,
+      "captured_at_ms": 1791870389040,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0008",
+      "action_delta_ms": 438,
+      "caption": "Type expense description \"Kyoto Ryokan 3 nights\"",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 10,
+      "path": "evidence/000011.png",
+      "frame_time_ms": 6765,
+      "captured_at_ms": 1791870389544,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0009",
+      "action_delta_ms": 515,
+      "caption": "Type amount \"268.50\" for Kyoto Ryokan 3 nights",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 11,
+      "path": "evidence/000012.png",
+      "frame_time_ms": 7250,
+      "captured_at_ms": 1791870390027,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0010",
+      "action_delta_ms": 485,
+      "caption": "Add the Kyoto Ryokan 3 nights line",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 12,
+      "path": "evidence/000013.png",
+      "frame_time_ms": 7703,
+      "captured_at_ms": 1791870390492,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0011",
+      "action_delta_ms": 453,
+      "caption": "Type expense description \"Airport express rail\"",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 13,
+      "path": "evidence/000014.png",
+      "frame_time_ms": 8171,
+      "captured_at_ms": 1791870390960,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0012",
+      "action_delta_ms": 468,
+      "caption": "Type amount \"31.20\" for Airport express rail",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 14,
+      "path": "evidence/000015.png",
+      "frame_time_ms": 8687,
+      "captured_at_ms": 1791870391470,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0013",
+      "action_delta_ms": 516,
+      "caption": "Add the Airport express rail line",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 15,
+      "path": "evidence/000016.png",
+      "frame_time_ms": 9203,
+      "captured_at_ms": 1791870391993,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0014",
+      "action_delta_ms": 516,
+      "caption": "Set category to Travel - International",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 16,
+      "path": "evidence/000017.png",
+      "frame_time_ms": 9733,
+      "captured_at_ms": 1791870392524,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0015",
+      "action_delta_ms": 530,
+      "caption": "Click Submit for approval",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 17,
+      "path": "evidence/000018.png",
+      "frame_time_ms": 10250,
+      "captured_at_ms": 1791870393038,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0016",
+      "action_delta_ms": 517,
+      "caption": "Confirm the submission",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 18,
+      "path": "evidence/000019.png",
+      "frame_time_ms": 10655,
+      "captured_at_ms": 1791870393442,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0017",
+      "action_delta_ms": 405,
+      "caption": "Submission rejected: cost center required above the threshold",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 19,
+      "path": "evidence/000020.png",
+      "frame_time_ms": 11155,
+      "captured_at_ms": 1791870393939,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0018",
+      "action_delta_ms": 500,
+      "caption": "Enter cost center CC-5120",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 20,
+      "path": "evidence/000021.png",
+      "frame_time_ms": 11703,
+      "captured_at_ms": 1791870394480,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0019",
+      "action_delta_ms": 548,
+      "caption": "Click Submit for approval again",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 21,
+      "path": "evidence/000022.png",
+      "frame_time_ms": 12233,
+      "captured_at_ms": 1791870395013,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0020",
+      "action_delta_ms": 530,
+      "caption": "Confirm the submission",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 22,
+      "path": "evidence/000023.png",
+      "frame_time_ms": 12640,
+      "captured_at_ms": 1791870395419,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0021",
+      "action_delta_ms": 407,
+      "caption": "Verify the claim shows Pending approval",
+      "url": "http://127.0.0.1:60099/"
+    },
+    {
+      "index": 23,
+      "path": "evidence/000024.png",
+      "frame_time_ms": 13328,
+      "captured_at_ms": 1791870396105,
+      "trigger": "result",
+      "action_id": "act_expense-submit-jitter_0022",
+      "action_delta_ms": 688,
+      "caption": "end of demonstration",
+      "url": "http://127.0.0.1:60099/"
+    }
+  ]
+}

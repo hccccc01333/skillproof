@@ -1,0 +1,52 @@
+{
+  "episode_id": "expense-report-reports",
+  "model": "deepseek-v4.1-flash",
+  "prompt_variant": "concise",
+  "ok": true,
+  "iterations": 13,
+  "tool_calls": 21,
+  "wall_ms": 311703,
+  "prompt_tokens": 184723,
+  "completion_tokens": 24478,
+  "errors": [],
+  "manifest": {
+    "episode_id": "expense-report-reports",
+    "output_root": "D:\\Projects\\show2skill\\induced\\report-casual\\expense-report-reports--concise",
+    "skills": [
+      {
+        "path": "expense-period-report-json/SKILL.md",
+        "name": "expense-period-report-json",
+        "bytes": 6059
+      }
+    ],
+    "skills_hashed": {
+      "expense-period-report-json/SKILL.md": "91b54b345ed6b0bc"
+    },
+    "orphaned_skill_files": [],
+    "verifiers": [
+      {
+        "path": "expense-period-report-json/verify.json",
+        "assertions": 5
+      }
+    ],
+    "inspected": {
+      "task_json_read": true,
+      "video_metadata": [
+        "video.mp4"
+      ],
+      "video_sampled": [
+        "video.mp4"
+      ]
+    },
+    "tool_calls": 20,
+    "warnings": [],
+    "note": "Structural validation only. This manifest confirms the agent read the task, wrote skills, read them back, and respected video ordering. It does not assert that any skill is correct."
+  },
+  "questions": [
+    {
+      "question": "The demonstrated report counted clm_3001, clm_3002 and clm_3004, and excluded the two approved claims whose category is \"Meals & Entertainment\" (the export also carried an approved pending_approval/other-status row). What rule excludes a category — is there a fixed set of non-reimbursable categories (with Meals & Entertainment as the only one in this period), or is the category filter decided some other way (a per-category cap, a claim title, an approval field not in the export)?",
+      "answer": "oh, a few different reasons there. the ones that aren't approved yet obviously don't count, we don't count anything until it's actually approved. the april one's just a different month, it'll be in its own report. and the food ones... yeah we never put those in the period report, they get handled somewhere else entirely. has been like that for as long as i've been here."
+    }
+  ],
+  "transcript_turns": 13
+}

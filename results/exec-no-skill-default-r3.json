@@ -1,0 +1,163 @@
+{
+  "condition": "no-skill",
+  "variant": "default",
+  "task": "expense-submit",
+  "instruction": "Get my March 2026 travel reimbursement claim into the approval queue.",
+  "rep": 3,
+  "skill_root": null,
+  "score": 45.0,
+  "sr": 0,
+  "passed": false,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 15,
+      "requirement": "Claim reached the approval queue",
+      "satisfied": true,
+      "detail": "status='pending_approval'"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Category is a travel category",
+      "satisfied": true,
+      "detail": "category='Travel - Domestic'"
+    },
+    {
+      "id": "R3",
+      "weight": 15,
+      "requirement": "Cost center matches the user's own cost center",
+      "satisfied": false,
+      "detail": "got None, expected 'CC-4471'"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "All three trip receipts attached",
+      "satisfied": true,
+      "detail": "attached=['rcp_3310', 'rcp_3311', 'rcp_3312', 'rcp_3313']"
+    },
+    {
+      "id": "R5",
+      "weight": 15,
+      "requirement": "No non-trip receipt attached",
+      "satisfied": false,
+      "detail": "offending=['rcp_3313']"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Line total equals the sum of the trip receipts",
+      "satisfied": false,
+      "detail": "got 0.00, expected 712.50"
+    },
+    {
+      "id": "R7",
+      "weight": 10,
+      "requirement": "Claim total exceeds the cost-center threshold",
+      "satisfied": false,
+      "detail": "total 0.00 vs threshold 500.00"
+    }
+  ],
+  "run": {
+    "condition": "no-skill",
+    "episode_id": "",
+    "variant": "default",
+    "model": "deepseek-v4.1-flash",
+    "finished": true,
+    "finish_note": "The March 2026 travel reimbursement claim was submitted for approval. I selected the \"Travel - Domestic\" category, attached the four relevant travel receipts (Pacific Air flight, Kyoto Ryokan lodging, Airport express rail, and Team dinner), and submitted the claim. Its status changed from Draft to \"Pending approval\", and a confirmation \"Submitted to M. Okonkwo\" was displayed, confirming it is now in the approval queue.",
+    "steps": 9,
+    "wall_ms": 53436,
+    "prompt_tokens": 44537,
+    "completion_tokens": 3603,
+    "errors": [],
+    "verifier_present": false,
+    "verifier_runs": 0,
+    "done_rejections": 0,
+    "verifier_at_finish": null,
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "click",
+        "args": {
+          "index": 1
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:61020/"
+      },
+      {
+        "step": 1,
+        "tool": "select_option",
+        "args": {
+          "index": 1,
+          "option": "Travel"
+        },
+        "result": "selected Travel - Domestic",
+        "url": "http://127.0.0.1:61020/"
+      },
+      {
+        "step": 2,
+        "tool": "click",
+        "args": {
+          "index": 7
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:61020/"
+      },
+      {
+        "step": 3,
+        "tool": "click",
+        "args": {
+          "index": 8
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:61020/"
+      },
+      {
+        "step": 4,
+        "tool": "click",
+        "args": {
+          "index": 8
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:61020/"
+      },
+      {
+        "step": 5,
+        "tool": "click",
+        "args": {
+          "index": 7
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:61020/"
+      },
+      {
+        "step": 6,
+        "tool": "click",
+        "args": {
+          "index": 8
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:61020/"
+      },
+      {
+        "step": 7,
+        "tool": "click",
+        "args": {
+          "index": 10
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:61020/"
+      },
+      {
+        "step": 8,
+        "tool": "done",
+        "args": {
+          "note": "The March 2026 travel reimbursement claim was submitted for approval. I selected…"
+        },
+        "result": "declared done",
+        "url": "http://127.0.0.1:61020/"
+      }
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "condition": "skill",
+  "variant": "jitter-remap",
+  "task": "expense-submit",
+  "rep": 1,
+  "skill_root": "D:\\Projects\\show2skill\\induced\\run3\\expense-submit-default--concise",
+  "score": 15.0,
+  "sr": 0,
+  "passed": false,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 15,
+      "requirement": "Claim reached the approval queue",
+      "satisfied": false,
+      "detail": "status='draft'"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Category is a travel category",
+      "satisfied": false,
+      "detail": "category=None"
+    },
+    {
+      "id": "R3",
+      "weight": 15,
+      "requirement": "Cost center matches the user's own cost center",
+      "satisfied": false,
+      "detail": "got None, expected 'CC-5120'"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "All three trip receipts attached",
+      "satisfied": false,
+      "detail": "attached=[]"
+    },
+    {
+      "id": "R5",
+      "weight": 15,
+      "requirement": "No non-trip receipt attached",
+      "satisfied": true,
+      "detail": "offending=[]"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Line total equals the sum of the trip receipts",
+      "satisfied": false,
+      "detail": "got 0.00, expected 837.90"
+    },
+    {
+      "id": "R7",
+      "weight": 10,
+      "requirement": "Claim total exceeds the cost-center threshold",
+      "satisfied": false,
+      "detail": "total 0.00 vs threshold 500.00"
+    }
+  ],
+  "run": {
+    "condition": "skill",
+    "episode_id": "",
+    "variant": "jitter-remap",
+    "model": "doubao-seed-2-0-code-preview-260215",
+    "finished": false,
+    "finish_note": "",
+    "steps": 2,
+    "wall_ms": 126546,
+    "prompt_tokens": 5010,
+    "completion_tokens": 526,
+    "errors": [
+      "endpoint error: PermissionDeniedError: Error code: 403 - {'error': {'code': 'AccountOverdueError', 'message': 'The request failed because your account has an overdue balance. Request id: 0217918859387133647035231fcb4973e197cb3940e176887001"
+    ],
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:62610/"
+      },
+      {
+        "step": 1,
+        "tool": "scroll",
+        "args": {
+          "direction": "up"
+        },
+        "result": "scrolled up",
+        "url": "http://127.0.0.1:62610/"
+      }
+    ]
+  }
+}

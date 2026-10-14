@@ -1,0 +1,29 @@
+{
+  "_comment": "A demonstrator answering the way a person actually talks. No precise rule statements, no category names quoted back, no structure -- just what someone who knows the process would say off the top of their head. Used to test whether an induction can use a loose answer, which is the only kind it will get from a real user.",
+  "rules": [
+    {
+      "match": ["clm_3003", "clm_3005", "clm_3006", "clm_3007", "clm_3008", "left out", "excluded", "not included", "dropped", "why"],
+      "answer": "oh, a few different reasons there. the ones that aren't approved yet obviously don't count, we don't count anything until it's actually approved. the april one's just a different month, it'll be in its own report. and the food ones... yeah we never put those in the period report, they get handled somewhere else entirely. has been like that for as long as i've been here."
+    },
+    {
+      "match": ["meal", "meals", "dinner", "coffee", "food", "restaurant", "entertainment"],
+      "answer": "right, those don't go in the report. there's a whole separate thing for that. just leave them out."
+    },
+    {
+      "match": ["period", "month", "april", "different month"],
+      "answer": "each report's just one month. april stuff belongs in april's report, not this one."
+    },
+    {
+      "match": ["status", "approved", "draft", "pending"],
+      "answer": "if it's not approved it's not spend yet, so it doesn't go in. drafts and the ones still waiting, both out."
+    },
+    {
+      "match": ["receipt", "missing receipt"],
+      "answer": "receipts don't matter for this. it's already approved by that point."
+    },
+    {
+      "match": ["cost center", "group", "breakdown", "aggregate"],
+      "answer": "just use whatever cost center is on the claim itself."
+    }
+  ]
+}

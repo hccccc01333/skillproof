@@ -1,0 +1,77 @@
+{
+  "condition": "skill",
+  "variant": "jitter-remap",
+  "task": "expense-submit",
+  "rep": 3,
+  "skill_root": "D:\\Projects\\show2skill\\induced\\run3\\expense-submit-default--concise",
+  "score": 15.0,
+  "sr": 0,
+  "passed": false,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 15,
+      "requirement": "Claim reached the approval queue",
+      "satisfied": false,
+      "detail": "status='draft'"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Category is a travel category",
+      "satisfied": false,
+      "detail": "category=None"
+    },
+    {
+      "id": "R3",
+      "weight": 15,
+      "requirement": "Cost center matches the user's own cost center",
+      "satisfied": false,
+      "detail": "got None, expected 'CC-5120'"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "All three trip receipts attached",
+      "satisfied": false,
+      "detail": "attached=[]"
+    },
+    {
+      "id": "R5",
+      "weight": 15,
+      "requirement": "No non-trip receipt attached",
+      "satisfied": true,
+      "detail": "offending=[]"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Line total equals the sum of the trip receipts",
+      "satisfied": false,
+      "detail": "got 0.00, expected 837.90"
+    },
+    {
+      "id": "R7",
+      "weight": 10,
+      "requirement": "Claim total exceeds the cost-center threshold",
+      "satisfied": false,
+      "detail": "total 0.00 vs threshold 500.00"
+    }
+  ],
+  "run": {
+    "condition": "skill",
+    "episode_id": "",
+    "variant": "jitter-remap",
+    "model": "doubao-seed-2-0-code-preview-260215",
+    "finished": false,
+    "finish_note": "",
+    "steps": 0,
+    "wall_ms": 5812,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "errors": [
+      "endpoint error: PermissionDeniedError: Error code: 403 - {'error': {'code': 'AccountOverdueError', 'message': 'The request failed because your account has an overdue balance. Request id: 021791885956257d28416ab7b3d3ce89f7e2f5da5e32b7242e06"
+    ],
+    "trajectory": []
+  }
+}

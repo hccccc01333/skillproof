@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ExpenseDesk</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">ExpenseDesk</div>
+  <nav class="topnav" aria-label="Sections">
+    <button type="button" data-testid="nav-claims" class="topnav-link" aria-current="true">Claims</button>
+    <button type="button" data-testid="nav-reports" class="topnav-link">Reports</button>
+  </nav>
+  <div class="who">
+    <span id="user-name" class="who-name"></span>
+    <span id="user-meta" class="who-meta"></span>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Claims">
+    <h2 class="sidebar-title">My claims</h2>
+    <ul id="claim-list" class="claim-list"></ul>
+  </nav>
+
+  <main class="main" id="main" aria-live="polite">
+    <!-- claim detail is rendered here -->
+  </main>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

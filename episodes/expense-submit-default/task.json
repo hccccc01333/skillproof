@@ -1,0 +1,18 @@
+{
+  "application": "ExpenseDesk",
+  "instruction": "Get my March 2026 travel reimbursement claim into the approval queue.",
+  "instructions": {
+    "default": "Get my March 2026 travel reimbursement claim into the approval queue.",
+    "jitter": "Get my April 2026 travel reimbursement claim into the approval queue.",
+    "jitter-nostid": "Get my April 2026 travel reimbursement claim into the approval queue.",
+    "jitter-remap": "Get my April 2026 travel reimbursement claim into the approval queue.",
+    "relayout": "Get my April 2026 travel reimbursement claim into the approval queue.",
+    "relayout-nostid": "Get my April 2026 travel reimbursement claim into the approval queue."
+  },
+  "task_inputs": {
+    "claim_id": "clm_2001",
+    "period": "2026-03"
+  },
+  "notes": "The instruction states the goal only. It does not name the cost center, the receipts that belong on the claim, the category, or the confirmation step.",
+  "task_id": "expense-submit-default"
+}

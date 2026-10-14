@@ -1,0 +1,49 @@
+{
+  "schema_version": "s2s-episode/1.0",
+  "episode_id": "expense-submit-default",
+  "task_id": "expense-submit-default",
+  "application": "ExpenseDesk",
+  "recording": {
+    "duration_ms": 13547,
+    "started_at": "2026-10-13T11:29:07.523676+00:00",
+    "finished_at": "2026-10-13T11:29:21.084215+00:00",
+    "viewport": {
+      "width": 1280,
+      "height": 860
+    },
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+    "target_url": "http://127.0.0.1:60065",
+    "capture_config": {
+      "before_frame_freshness_ms": 1500,
+      "settle_timeout_ms": 2500,
+      "settle_quiet_ms": 260,
+      "max_result_frames_per_action": 1,
+      "viewport": {
+        "width": 1280,
+        "height": 860
+      }
+    },
+    "input_source": "scripted"
+  },
+  "counts": {
+    "actions": 23,
+    "keylog_events": 64,
+    "images": 24,
+    "keyframes": 24
+  },
+  "files": [
+    "task.json",
+    "episode.json",
+    "trace/actions.jsonl",
+    "trace/keylog.jsonl",
+    "video.mp4",
+    "summary.md",
+    "evidence/manifest.json",
+    "evidence/image_actions.jsonl"
+  ],
+  "evidence_roots": {
+    "input": ".",
+    "output": "output/"
+  },
+  "source": "local:default"
+}

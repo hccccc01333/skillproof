@@ -1,0 +1,36 @@
+{
+  "assertions": [
+    {
+      "id": "A1",
+      "type": "file_exists",
+      "value": "report.json",
+      "description": "The period expense report was written to report.json in the workspace"
+    },
+    {
+      "id": "A2",
+      "type": "json_field_equals",
+      "value": "report.json:period",
+      "expected": "2026-05",
+      "description": "report.json reports the requested period as YYYY-MM"
+    },
+    {
+      "id": "A3",
+      "type": "json_field_equals",
+      "value": "report.json:claim_count",
+      "expected": 3,
+      "description": "Exactly the claims passing all three inclusion rules (requested period, approved status, not Meals & Entertainment) were counted"
+    },
+    {
+      "id": "A4",
+      "type": "json_field_equals",
+      "value": "report.json:grand_total",
+      "expected": 1002.1,
+      "description": "grand_total is the sum of the counted claim-line amounts to be reimbursed"
+    },
+    {
+      "id": "A5",
+      "type": "unverifiable",
+      "description": "That claim_ids names exactly the exported claims of the requested period whose status is approved and whose category is not Meals & Entertainment (no extra id, no omitted id), and that every by_cost_center value is the sum of that cost center's counted line amounts and reconciles with grand_total, cannot be checked with the available assertion types: claim_ids and by_cost_center are data-derived lists/objects rather than fixed scalar values. Verify these by re-reading report.json against the downloaded CSV."
+    }
+  ]
+}

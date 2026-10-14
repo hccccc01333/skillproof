@@ -1,0 +1,43 @@
+{
+  "assertions": [
+    {
+      "id": "A1",
+      "type": "text_present",
+      "value": "Pending approval",
+      "description": "The claim for the requested period now shows the Pending approval status, i.e. it is in the approval queue rather than Draft."
+    },
+    {
+      "id": "A2",
+      "type": "text_present",
+      "value": "Submitted to",
+      "description": "The claim detail shows the routing footer naming the approver and the submitted total, which only appears for a submitted claim."
+    },
+    {
+      "id": "A3",
+      "type": "text_absent",
+      "value": "This claim cannot be submitted yet",
+      "description": "No outstanding validation blocker remains on the claim form."
+    },
+    {
+      "id": "A4",
+      "type": "text_absent",
+      "value": "Confirm submission",
+      "description": "No unconfirmed submission dialog is left open; the submission was actually confirmed."
+    },
+    {
+      "id": "A5",
+      "type": "unverifiable",
+      "description": "That the attached receipts and expense lines are exactly the business-travel receipts belonging to the requested claim period (no personal or non-travel receipt such as a personal hotel charge or a team dinner attached or entered as a line) cannot be checked by substring assertions; confirm it by reading the RECEIPT INBOX statuses and the EXPENSE LINES table in the rendered page."
+    },
+    {
+      "id": "A6",
+      "type": "unverifiable",
+      "description": "That the displayed Total equals the sum of the attached receipts' amounts and that each attached receipt has exactly one expense line with a matching amount cannot be checked by substring assertions; confirm by comparing the EXPENSE LINES table and Total against the receipt amounts in the rendered page."
+    },
+    {
+      "id": "A7",
+      "type": "unverifiable",
+      "description": "That the cost center entered matches the signed-in user's account line in the page header cannot be checked by substring assertions, since the value is task-input dependent; confirm by comparing the Cost center field with the header account line."
+    }
+  ]
+}

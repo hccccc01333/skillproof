@@ -1,0 +1,177 @@
+{
+  "condition": "no-skill",
+  "variant": "relayout-nostid",
+  "task": "expense-submit",
+  "instruction": "Get my April 2026 travel reimbursement claim into the approval queue.",
+  "rep": 1,
+  "skill_root": null,
+  "score": 45.0,
+  "sr": 0,
+  "passed": false,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 15,
+      "requirement": "Claim reached the approval queue",
+      "satisfied": true,
+      "detail": "status='pending_approval'"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Category is a travel category",
+      "satisfied": true,
+      "detail": "category='Travel - International'"
+    },
+    {
+      "id": "R3",
+      "weight": 15,
+      "requirement": "Cost center matches the user's own cost center",
+      "satisfied": false,
+      "detail": "got None, expected 'CC-5120'"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "All three trip receipts attached",
+      "satisfied": true,
+      "detail": "attached=['rcp_3310', 'rcp_3311', 'rcp_3312', 'rcp_3313']"
+    },
+    {
+      "id": "R5",
+      "weight": 15,
+      "requirement": "No non-trip receipt attached",
+      "satisfied": false,
+      "detail": "offending=['rcp_3313']"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Line total equals the sum of the trip receipts",
+      "satisfied": false,
+      "detail": "got 0.00, expected 837.90"
+    },
+    {
+      "id": "R7",
+      "weight": 10,
+      "requirement": "Claim total exceeds the cost-center threshold",
+      "satisfied": false,
+      "detail": "total 0.00 vs threshold 500.00"
+    }
+  ],
+  "run": {
+    "condition": "no-skill",
+    "episode_id": "",
+    "variant": "relayout-nostid",
+    "model": "deepseek-v4.1-flash",
+    "finished": true,
+    "finish_note": "The April 2026 travel reimbursement claim is now in the approval queue. Status changed from Draft to Pending approval. Attached the four April 2026 travel receipts (Pacific Air SFO-KIX $538.20, Kyoto Ryokan 3 nights $268.50, Airport express rail $31.20, Team dinner $96.40) and set the Category to Travel - International, then submitted for approval. The personal hotel upgrade (March, personal) was intentionally left off.",
+    "steps": 11,
+    "wall_ms": 62671,
+    "prompt_tokens": 63619,
+    "completion_tokens": 3569,
+    "errors": [],
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:65231/"
+      },
+      {
+        "step": 1,
+        "tool": "click",
+        "args": {
+          "index": 1
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:65231/"
+      },
+      {
+        "step": 2,
+        "tool": "click",
+        "args": {
+          "index": 1
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:65231/"
+      },
+      {
+        "step": 3,
+        "tool": "click",
+        "args": {
+          "index": 1
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:65231/"
+      },
+      {
+        "step": 4,
+        "tool": "click",
+        "args": {
+          "index": 1
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:65231/"
+      },
+      {
+        "step": 5,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:65231/"
+      },
+      {
+        "step": 6,
+        "tool": "select_option",
+        "args": {
+          "index": 6,
+          "option": "Travel"
+        },
+        "result": "selected Travel - International",
+        "url": "http://127.0.0.1:65231/"
+      },
+      {
+        "step": 7,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:65231/"
+      },
+      {
+        "step": 8,
+        "tool": "click",
+        "args": {
+          "index": 8
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:65231/"
+      },
+      {
+        "step": 9,
+        "tool": "click",
+        "args": {
+          "index": 10
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:65231/"
+      },
+      {
+        "step": 10,
+        "tool": "done",
+        "args": {
+          "note": "The April 2026 travel reimbursement claim is now in the approval queue. Status c…"
+        },
+        "result": "declared done",
+        "url": "http://127.0.0.1:65231/"
+      }
+    ]
+  }
+}

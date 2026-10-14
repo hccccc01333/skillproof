@@ -1,0 +1,16 @@
+# Episode bookkeeping. Recordings are regenerable; the paper text is a
+# local reference copy and is not redistributed.
+_ref/
+episodes/*/_video/
+
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Scratch directories: working space for a single run, not an artifact.
+episodes/_work/
+results/_work/
+induced/*/.frames/
