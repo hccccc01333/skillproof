@@ -14,3 +14,5 @@ __pycache__/
 episodes/_work/
 results/_work/
 induced/*/.frames/
+induced/*/.frames/
+results/_prevmodel/
