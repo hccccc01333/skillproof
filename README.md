@@ -2,9 +2,7 @@
 
 # skillproof
 
-### Turn a demonstration into an agent skill that survives the page changing.
-
-**Do a repetitive browser task once, by hand. Get back a skill an agent can run — and a completion check that says what it could not verify.**
+### Record a browser task once. Get back a skill an agent can run — and a completion check that says what it could not verify.
 
 ```bash
 git clone https://github.com/hccccc01333/skillproof && cd skillproof && bash setup.sh
@@ -14,41 +12,42 @@ git clone https://github.com/hccccc01333/skillproof && cd skillproof && bash set
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776ab?style=flat-square&logo=python&logoColor=white)](#requirements)
 [![Verify](https://img.shields.io/badge/verify-11s%20%C2%B7%20no%20model%20%C2%B7%20no%20credentials-2f5fd0?style=flat-square)](#verify-it-yourself)
 
-[What you get](#what-you-get) · [Why you can trust it](#why-you-can-trust-it) · [Verify it yourself](#verify-it-yourself) · [Record your own](#record-your-own-workflow) · [What it does not claim](#what-this-does-not-claim)
+[How it works](#how-it-works) · [What you need](#what-you-need) · [Why you can trust it](#why-you-can-trust-it) · [Verify it yourself](#verify-it-yourself) · [What this does not claim](#what-this-does-not-claim)
 
 </div>
 
-![ExpenseDesk, the target application](docs/assets/app.png)
-
 ---
 
-You have a task you do in a web app every week. Export from three systems,
-cross-check, build a table, send it on. Two hours, and only you know how.
+## How it works
 
-Show it once. `skillproof` watches what you did, works out the procedure, and
-writes a skill an agent can run — including the rules you never wrote down,
-because it asks you about the ones it cannot work out for itself.
-
-## What you get
-
-**A `SKILL.md`.** A written procedure an agent can follow, parameterised over
-the parts that change — which month, which rows, which amounts — instead of the
-values from the day you recorded it.
-
-**A `verify.json`.** Machine-checkable assertions that decide whether the task
-actually succeeded. The executor's `done` is refused while they fail.
-
-**A declared gap.** Whatever the skill cannot check is stated, not approximated.
-From a generated verifier, unedited:
-
-```
-A1  file_exists        report.json
-A2  json_field_equals  report.json:period
-A3  json_field_equals  report.json:claim_count
-A4  unverifiable       whether each excluded claim was excluded for the correct reason
+```mermaid
+flowchart LR
+    A["You do the task once<br/><sub>a browser opens; you drive it</sub>"] --> B["It works out the procedure<br/><sub>and asks you about anything<br/>it cannot work out itself</sub>"]
+    B --> C["You get a skill<br/><sub>SKILL.md + verify.json</sub>"]
+    C --> D["An agent runs it<br/><sub>on the page, any time after</sub>"]
 ```
 
-`A4` is the point.
+The recording captures more than clicks. Every action is resolved to the UI
+element it landed on — by role and accessible name — alongside the frames before
+and after. That is what lets the skill name a control semantically instead of
+remembering where it was on the day you recorded.
+
+## What you need
+
+| | |
+|---|---|
+| **Python 3.11+** | `setup.sh` handles the rest, including Chromium |
+| **A model endpoint** | any OpenAI-compatible one, for the induction step only |
+
+```bash
+export S2S_INDUCT_BASE_URL=https://api.example.com/v1
+export S2S_INDUCT_API_KEY=...
+export S2S_INDUCT_MODEL=...
+```
+
+**Recording, running an induced skill, replaying, and the entire benchmark work
+without one.** So does verifying every claim on this page — `reproduce.py`
+touches Playwright and nothing else.
 
 ## Why you can trust it
 
@@ -77,6 +76,10 @@ And the reason the completion check exists:
 | period report | 35.0 | — | **100 · SR 100** |
 | period report, two non-legible rules | 20.0 | — | **100 · SR 100** |
 
+Those tasks run against **ExpenseDesk**, a small resettable web app in this repo
+([`bench/site`](bench/site)) built so every condition starts from an identical
+state. It is a test harness, not the product.
+
 ## Verify it yourself
 
 ```bash
@@ -87,7 +90,7 @@ And the reason the completion check exists:
 **Playwright is the only dependency it touches** — not the model client, not
 ffmpeg. The numbers are **asserted, not derived**: they were published before
 the script existed, so a change in behaviour fails the check instead of quietly
-becoming a new baseline. CI runs it on every push.
+becoming a new baseline.
 
 ```bash
 .venv/Scripts/python.exe tests/test_tools.py       # tool-surface + verifier contracts
@@ -98,7 +101,7 @@ The second one exists because shipped data rots silently. It found a real defect
 on its first run: an episode with a screenshot on disk that its own index did
 not list.
 
-## Record your own workflow
+## Record a task
 
 ```bash
 .venv/Scripts/python.exe record_session.py \
@@ -109,8 +112,8 @@ not list.
 ```
 
 A browser opens with the evidence hook installed. Do the task once, at your own
-pace, saving whatever the task is supposed to produce. Close the window; the
-episode is written.
+pace, saving whatever it is supposed to produce. Close the window; the episode
+is written.
 
 ```bash
 .venv/Scripts/python.exe run_induct.py --episode monthly-report --interactive
@@ -118,9 +121,10 @@ episode is written.
 
 `--interactive` puts the induction's questions to you on stdin. Answer in your
 own words — a rambling spoken sentence works exactly as well as a written one;
-we tested both and got identical scores.
+we tested both and got identical scores. Expect one question per rule the
+recording cannot carry: a two-rule task asked two.
 
-## Run it
+## Run the skill
 
 ```bash
 .venv/Scripts/python.exe run_skill.py \
@@ -132,7 +136,7 @@ we tested both and got identical scores.
 
 Any page. The instruction is the goal — the skill supplies the procedure, this
 supplies the target and the values. The skill's own verifier runs at the end and
-its declared gaps are printed beside its checks:
+its declared gaps print beside its checks:
 
 ```
 verifier: PASSED (2 runs, 0 completion attempts refused)
@@ -149,26 +153,6 @@ on and one that reports success it cannot support.
 There is no score here, deliberately: there is no rubric for your workflow, and
 inventing one would be guessing at what you meant.
 
-Induction needs a model endpoint (`S2S_INDUCT_BASE_URL`, `S2S_INDUCT_API_KEY`,
-`S2S_INDUCT_MODEL`). **Everything else — recording, running, replaying, scoring,
-and the whole benchmark — runs without one.**
-
-## How it works
-
-The recording captures more than clicks. Each action is resolved to the UI
-element it landed on, by role and accessible name, alongside the frames before
-and after — which is what lets a skill name a control semantically instead of
-remembering where it was.
-
-The induction then does the part that turned out to matter most: it reconciles
-**what the demonstration consumed against what it produced**. Rules that appear
-in no data field are often visible as a difference between those two artifacts,
-and an induction that only reads the evidence misses them.
-
-A recorded run of this repo's benchmark scored **35/100** that way — identical to
-no skill at all. With the reconciliation step, no human involved, the same model
-scored **100/100**.
-
 ## What this does not claim
 
 - **Unattended automation of anything.** A recording beats everything on the page
@@ -177,38 +161,61 @@ scored **100/100**.
   method. That is the standard credibility hole for a benchmark like this, and
   the mitigation is that the rules are [written down](docs/policies/expense-policy.md)
   with a rubric mapping, so the scoring can be checked rather than believed.
-- **That it generalises.** Two tasks, one model, 3–6 runs per cell. Someone
-  re-running this will get different numbers.
+- **That it generalises.** Two tasks, one model, 3–6 runs per cell, and every
+  number was measured on the benchmark app in this repo. Someone re-running this
+  will get different numbers, and nobody has yet run it against a real site.
 - **That the verifier is mature.** It failed in four distinct ways during
   development, two of them silently, including one that made an agent write the
   wrong file.
 
 ## The part we would want you to attack
 
-[docs/results.md](docs/results.md) is 900 lines and most of it is what went
-wrong: **eight harness faults** that produced plausible-looking numbers, **four
-verifier failure modes**, and twelve runs quarantined as invalid with their
-reasons in the filenames.
+[docs/results.md](docs/results.md) is mostly what went wrong: **eight harness
+faults** that produced plausible-looking numbers, **four verifier failure
+modes**, and twelve runs quarantined as invalid with their reasons in the
+filenames.
 
 Two runs scored **100/100 while being unable to finish**, because their verifier
 gated completion on something already false. A results table without a `finished`
 column would have reported them as successes.
 
-It also records a conclusion we published and then had to correct, and why the
-correction happened — we had drawn a conclusion about the mechanism from a
-comparison that changed two things at once, which is the same confound this
-document criticises the paper for.
+It also records a conclusion we published and then had to correct, and why — we
+had drawn a conclusion about the mechanism from a comparison that changed two
+things at once, which is the same confound that document criticises the paper
+for.
 
 If you re-run this and get different numbers, that is the most useful thing you
 can send us.
 
+## Entry points
+
+| | |
+|---|---|
+| `setup.sh` · `setup.ps1` | install, then verify the published numbers |
+| `reproduce.py` | check every claim on this page — no model, no credentials |
+| `record_session.py` | record a task you drive yourself |
+| `run_induct.py` | turn a recording into a skill; `--interactive` to answer its questions |
+| `run_skill.py` | run an induced skill against any page |
+| `run_macro.py` · `run_exec.py` · `run_sample.py` | the benchmark: baselines and agent conditions |
+| `run_verifier_gen.py` | generate a completion verifier for an existing skill |
+
+## Layout
+
+```
+bench/site/          ExpenseDesk, the resettable app the benchmark runs against
+bench/evaluator.py   rubrics, scored from server state (no LLM judge)
+recorder/            evidence capture, producing the episode schema
+induction/           the tool surface, the authoring policy, and the loop
+verifier/            completion assertions and the runtime that gates on them
+replay/              the macro baseline, verbatim and re-parameterised
+executor/            the downstream web agent, for every agent condition
+docs/                results, the format spec, the published policy
+```
+
 ## Requirements
 
 Python 3.11+, and `ffmpeg` on PATH for video. `setup.sh` (or `setup.ps1` on
-Windows without Git Bash) installs the rest from `requirements.txt`, including
-Chromium.
-
-Three dependencies, and only the first is needed to verify the claims:
+Windows without Git Bash) installs the rest from `requirements.txt`.
 
 | | needed for |
 |---|---|
@@ -216,32 +223,12 @@ Three dependencies, and only the first is needed to verify the claims:
 | `pillow` | downscaling evidence frames before they reach a model |
 | `openai` | induction only — nothing else imports it |
 
-## Layout
-
-```
-bench/site/      ExpenseDesk, the target web app — resettable, variant-perturbed
-bench/evaluator.py   rubrics, scored from server state (no LLM judge)
-recorder/        evidence capture producing the paper-aligned episode schema
-induction/       the tool surface, the authoring policy, and the loop
-verifier/        completion assertions and the runtime that gates on them
-replay/          the macro baseline, verbatim and re-parameterised
-executor/        the downstream web agent, for every agent condition
-docs/            results, the format spec, the published policy, a roadmap critique
-reproduce.py     the 11-second verification
-record_session.py    record a workflow you drive yourself
-run_skill.py     run an induced skill against any page
-```
-
-## Relationship to Work2Skill
-
-An independent reimplementation and extension of
-[Work2Skill](https://arxiv.org/abs/2610.12984) (arXiv:2610.12984), on a web
-target instead of a desktop one. The episode schema follows the paper's
-Appendix B, so a reader written for it can read these episodes.
-
-The contribution here is the baseline the paper does not run, and the
-measurement discipline around it.
-
 ## License
 
 MIT.
+
+The episode schema, the evidence-exploration tool surface and the skill-authoring
+policy follow the format described in the Work2Skill paper, so that work written
+against that format reads these episodes unchanged. Everything else — the
+benchmark, the perturbation ladder, the macro baselines, the completion verifier
+and every result in this repo — is this project's own.

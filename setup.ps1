@@ -24,8 +24,11 @@ Write-Host '==> dependencies'
 & $venvPy -m pip install --quiet --upgrade pip
 & $venvPy -m pip install --quiet -r requirements.txt
 
-Write-Host '==> chromium (about 150 MB, once)'
-& $venvPy -m playwright install chromium
+Write-Host '==> chromium, headed and headless shell (about 250 MB, once)'
+# Both targets: the headed browser for record_session.py, and the headless shell
+# that launch(headless=True) uses everywhere else. Naming only `chromium`
+# omits the shell and reproduce.py then fails.
+& $venvPy -m playwright install chromium chromium-headless-shell
 
 if (-not (Get-Command ffmpeg -ErrorAction SilentlyContinue)) {
     Write-Host ''

@@ -1,11 +1,36 @@
-# Results: 5-day validation
+# Results
 
-**Verdict: the pipeline works end to end, and the headline claim does not
-survive contact with a cheap baseline.** A recorded macro scores a perfect 100
-on the demonstrated task, which is the only condition where the induced skill
-was actually measured. The experiment that would decide the question — a
-correctly perturbed page — was not completed, for two reasons, one of which is
-a design bug I introduced.
+Every measurement this project made, in the order it was made — including two
+conclusions that were published and later corrected, and why.
+
+## Where this ended up
+
+**A recording replayed verbatim scores 100/100 on the page it was recorded from
+and 25/100 after a UI revision that also drops the test hooks. A skill with a
+completion verifier scores 100/100 on both.**
+
+That gap is the whole argument. It is also the correction to this document's
+first verdict, which was that induction loses to a cheap baseline — true on the
+demonstrated page, and overturned once the perturbed page was measured.
+
+The other correction is in [Addendum 11](#addendum-11-a-correction-to-addendum-6-and-7):
+this document concluded that induction cannot learn a rule which is not legible
+as a data field, and that the answer is to ask the person. A later run showed
+the induction derives such rules by itself when it is required to reconcile the
+demonstration's output against its input. The question is a fallback.
+
+**Read the addenda as a record, not as a paper.** They are chronological, they
+contradict each other where the evidence changed, and the corrections are left
+in place rather than edited away, because the sequence is the finding.
+
+## What is in here
+
+Most of it is what went wrong: **eight harness faults** that produced
+plausible-looking numbers, **four verifier failure modes**, and twelve runs
+quarantined as invalid with their reasons in the filenames. Two runs scored
+100/100 while being unable to finish, because their verifier gated completion on
+something already false. A table without a `finished` column would have called
+them successes.
 
 Everything below distinguishes what was measured from what was not.
 

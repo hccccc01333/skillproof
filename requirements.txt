@@ -12,6 +12,9 @@
 #   openai      only needed to run induction. Everything else -- recording,
 #               running an induced skill, replaying, scoring, and the whole
 #               benchmark -- works without it.
-playwright>=1.40
+# >=1.50 is a floor, not a preference: the `chromium-headless-shell`
+# install target that setup.sh names does not exist in older releases, and
+# `launch(headless=True)` uses that shell rather than the full browser.
+playwright>=1.50
 pillow>=10.0
 openai>=1.30

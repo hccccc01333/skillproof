@@ -33,8 +33,18 @@ echo "==> dependencies"
 "$VENV_PY" -m pip install --quiet --upgrade pip
 "$VENV_PY" -m pip install --quiet -r requirements.txt
 
-echo "==> chromium (about 150 MB, once)"
-"$VENV_PY" -m playwright install chromium
+echo "==> chromium, headed and headless shell (about 250 MB, once)"
+# Both targets, not just `chromium`:
+#
+#   chromium                 the headed browser record_session.py needs
+#   chromium-headless-shell  what `launch(headless=True)` uses for every other
+#                            entry point, including reproduce.py
+#
+# Naming only `chromium` fetches the headed browser and silently omits the
+# shell, so `reproduce.py` fails with "Executable doesn't exist at
+# ...chromium_headless_shell-...". Naming no target at all fetches Firefox and
+# WebKit too, which nothing here uses.
+"$VENV_PY" -m playwright install chromium chromium-headless-shell
 
 if ! command -v ffmpeg >/dev/null 2>&1; then
   echo

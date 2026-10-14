@@ -1,8 +1,7 @@
 # Recording data format
 
 This document specifies the on-disk format a skillproof episode. It is a
-web-adapted version of the Work2Skill evidence schema (arXiv:2610.12984v1,
-Appendix B), and it is the Week-1 deliverable of the roadmap: everything
+web-adapted version of the Work2Skill evidence schema (Appendix B). Everything
 downstream — skill induction, macro replay, evaluation — reads this and
 nothing else.
 
@@ -200,7 +199,7 @@ Called out so they are not mistaken for done:
 1. **`input_source` is `scripted`, not human.** The demonstration is driven by
    `recorder/tasks.py` rather than by a person. The capture, settling, frame
    selection, action grouping, and packaging layers are the same code a human
-   session would use; only the input source differs. Week-1 scope; a
+   session would use; only the input source differs. Out of scope so far; a
    human-in-the-loop path needs an operator-driven browser.
 2. **No accessibility-tree snapshot stream.** On the web the DOM *is* the tree,
    so `target` descriptors are read directly at action time. The paper attaches

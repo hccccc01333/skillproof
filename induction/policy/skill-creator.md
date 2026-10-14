@@ -295,6 +295,6 @@ again. Do not finish with an ordinary text response.
 ---
 
 *Adapted from the skill-creator authoring policy reproduced in Work2Skill
-Appendix D.4 (arXiv:2610.12984v1). Web adaptations: "benchmark evidence" is
+Appendix D.4. Web adaptations: "benchmark evidence" is
 replaced with the episode's exposed evidence roots, and UI targets are DOM
 role/accessible-name based rather than AT-SPI based.*
