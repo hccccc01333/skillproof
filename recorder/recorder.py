@@ -1,4 +1,4 @@
-"""Playwright-driven recorder producing show2skill episodes.
+"""Playwright-driven recorder producing skillproof episodes.
 
 Design notes
 ------------

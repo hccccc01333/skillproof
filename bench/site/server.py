@@ -1,6 +1,6 @@
 """ExpenseDesk: a deterministic, resettable mock web application.
 
-This is the target application for show2skill recordings. It exists so that
+This is the target application for skillproof recordings. It exists so that
 demonstrations, induced skills, and changed-page perturbations all run against
 a byte-identical starting state, which is what makes Week-3 comparisons fair.
 

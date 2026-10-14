@@ -1,4 +1,4 @@
-"""Episode schema for show2skill recordings.
+"""Episode schema for skillproof recordings.
 
 Field names follow Work2Skill Appendix B (arXiv:2610.12984v1) so that an
 induction agent written against the paper's schema can read our episodes

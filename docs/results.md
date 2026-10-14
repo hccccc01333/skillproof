@@ -1005,6 +1005,57 @@ The honest summary is that the mechanism is not the bottleneck. **Finding out
 how many judgement calls a real recurring task contains is**, and that needs a
 real task rather than a designed one.
 
+## Addendum 11: a correction to Addendum 6 and 7
+
+Those addenda concluded that **induction cannot learn a rule that is not legible
+as a column**, and that the answer is to ask the person who gave the
+demonstration. The first half is too strong and the second half is not the
+mechanism.
+
+The evidence that forced the correction: a later run of the same reporting task,
+with the reconciliation policy in place and **no person attached**, scored
+**100/100 three times**. It derived the meals rule itself, and its own words say
+how:
+
+> Status alone is not enough to reproduce the report: in the recorded period,
+> two approved, in-period, in-cost-center claims were dropped solely because of
+> their category, while an approved claim of another category at the same cost
+> center was counted.
+
+That is reasoning from the difference between what the demonstration consumed
+and what it produced — which is exactly what the reconciliation step asks for.
+The rule was never in the data as a field, but it *was* in the data as a
+difference, and that is enough.
+
+### The corrected account
+
+| condition | score |
+|---|---|
+| no reconciliation step, no human | 35 (identical to no skill) |
+| reconciliation step, no human | **100** |
+| reconciliation step, human answers | **100** |
+
+**The reconciliation step is load-bearing. The question is a fallback.**
+
+`ask_human` is for rules that are not visible even in the input/output
+difference — where the demonstration applies something that leaves no trace in
+either artifact. On the two-rule task the induction asks two questions and goes
+from 20 to 100, and it is not yet measured whether reconciliation alone would
+have sufficed there too. **That cell is pending**, and the honest statement is
+that the fallback's necessity is unproven rather than demonstrated.
+
+### Why this correction is worth keeping visible
+
+Addenda 6 and 7 are left above as written. They are wrong, and the sequence from
+"induction cannot do this" to "induction does this when asked properly" is the
+actual finding — arrived at by noticing that a later run contradicted an earlier
+conclusion and then measuring which one was right.
+
+The failure was not the wrong conclusion. It was drawing a conclusion about the
+*mechanism* from a comparison that changed two things at once: the reconciliation
+policy and the presence of a human. That is the same confound this document
+criticised the paper for, committed here.
+
 ## What the corrected experiment requires
 
 The decisive comparison is unmeasured. It needs:
