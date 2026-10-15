@@ -210,10 +210,110 @@ def case_policy_matches_rubric() -> None:
         check(f"{task}: rubric weights sum to 100", total == 100, f"got {total}")
 
 
+# --------------------------------------------------------------------------
+# The documentation and the code must agree
+# --------------------------------------------------------------------------
+
+
+def case_readme_matches_code() -> None:
+    """Every command the README shows must be a command that exists.
+
+    A reader who copies an example and gets `unrecognized arguments` does not
+    file an issue, they leave. Nothing checked this, and it is the same class as
+    the policy-versus-rubric mismatch above: two artifacts describing one thing,
+    drifting apart silently.
+    """
+    print("\n-- the README's commands exist --")
+    import re
+    import subprocess
+
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+    # Entry points, from the table that exists to list them.
+    block = re.search(r"## Entry points(.*?)^## ", readme, re.M | re.S)
+    check("the README has an entry-points table", bool(block))
+    if block:
+        names = sorted(set(re.findall(r"`([a-z_]+[.](?:py|sh|ps1))`", block.group(1))))
+        check("it names more than one", len(names) > 1, str(names))
+        for name in names:
+            path = ROOT / name
+            if not path.is_file():
+                check(f"{name} exists", False, "named in the README, absent from the repo")
+                continue
+            if not name.endswith(".py"):
+                check(f"{name} exists", True)
+                continue
+            proc = subprocess.run(
+                [sys.executable, str(path), "--help"],
+                capture_output=True, text=True, timeout=60,
+            )
+            check(f"{name} runs --help", proc.returncode == 0 and
+                  "usage" in (proc.stdout + proc.stderr).lower())
+
+        # And every flag the README's examples pass must be a flag that script
+        # has. The examples are what a reader copies.
+        documented = _documented_flags(readme)
+        # A check that examined nothing must say so. This one did not, once.
+        check("the examples contain flags worth checking",
+              sum(len(f) for f in documented.values()) > 0,
+              "no flags were parsed; the check is not checking anything")
+
+        for script, flags in documented.items():
+            # Not every documented script sits at the root -- bench/external
+            # does too -- and looking only there skips the rest in silence,
+            # which is the same failure this check was written to stop making.
+            found = sorted(
+                p for p in ROOT.rglob(script)
+                if ".venv" not in p.parts and "_ref" not in p.parts
+            )
+            if not found:
+                check(f"{script} exists somewhere", False,
+                      "named in a README example, absent from the repo")
+                continue
+            path = found[0]
+            proc = subprocess.run(
+                [sys.executable, str(path), "--help"],
+                capture_output=True, text=True, timeout=60,
+            )
+            helptext = proc.stdout + proc.stderr
+            for flag in sorted(flags):
+                check(f"{script} accepts {flag}", flag in helptext,
+                      "shown in a README example but absent from its --help")
+
+
+def _documented_flags(readme: str) -> dict[str, set[str]]:
+    """Flags passed to a script inside the README's bash examples.
+
+    Continuation lines are joined first, and the join has to tolerate either
+    line ending: this checkout is CRLF on Windows and LF elsewhere, and a
+    `replace` that assumes one matches nothing on the other.
+
+    That is not hypothetical. The first version of this scanned line by line, so
+    it found the script name on one line and the flags on the next and paired
+    neither, and the second version's join assumed LF and matched nothing on
+    CRLF. Both returned an empty dict and both made the caller pass -- a check
+    for vacuous checks that was itself vacuous, twice.
+    """
+    joined = re.sub(r"\\\r?\n", " ", readme)
+    script_re = re.compile(r"([a-z_]+[.]py)")
+    flag_re = re.compile(r"(?<![\w-])(--[a-z][a-z-]+)")
+
+    out: dict[str, set[str]] = {}
+    for line in joined.splitlines():
+        m = script_re.search(line)
+        if not m:
+            continue
+        flags = set(flag_re.findall(line))
+        if flags:
+            out.setdefault(m.group(1), set()).update(flags)
+    return out
+
+
 def main() -> int:
     case_episodes()
     case_induced()
     case_policy_matches_rubric()
+    case_readme_matches_code()
     print()
     if FAILURES:
         print(f"{len(FAILURES)} FAILED: {', '.join(FAILURES)}")
