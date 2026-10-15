@@ -226,8 +226,13 @@ modes**, and twelve runs quarantined as invalid with their reasons in the
 filenames.
 
 Two runs scored **100/100 while being unable to finish**, because their verifier
-gated completion on something already false. A results table without a `finished`
-column would have reported them as successes.
+gated completion on the confirmation toast, which is true for 3.2 seconds and
+false forever after. A results table without a `finished` column would have
+reported them as successes. Those two run files were never committed and are
+gone, so [the mechanism is demonstrated instead](tests/test_verifiers.py): the
+test submits a claim through the UI, runs that exact assertion while the toast
+is up and again after it hides, and reads the claim's status both times. The
+assertion flips. The status does not.
 
 It also records a conclusion we published and then had to correct, and why — we
 had drawn a conclusion about the mechanism from a comparison that changed two

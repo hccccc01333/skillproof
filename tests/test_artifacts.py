@@ -495,6 +495,21 @@ def case_readme_matches_code() -> None:
                 check(f"{script} accepts {flag}", flag in helptext,
                       "shown in a README example but absent from its --help")
 
+    # The README's prose is checked for commands and flags; its links were not
+    # checked at all, and a dead relative link on the front page is a release
+    # defect nothing else would notice.
+    relative = []
+    for target in re.findall(r"\]\(([^)]+)\)", readme):
+        target = target.strip()
+        if not target or target.startswith(("http://", "https://", "mailto:", "#")):
+            continue
+        path = target.split("#")[0].strip()
+        if path:
+            relative.append(path)
+    check("the README links to something at all", len(relative) >= 3, str(len(relative)))
+    dead = [t for t in relative if not (ROOT / t).exists()]
+    check("every relative link in the README resolves", not dead, str(dead))
+
 
 def _documented_flags(readme: str) -> dict[str, set[str]]:
     """Flags passed to a script inside the README's bash examples.

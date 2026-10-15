@@ -32,8 +32,13 @@ Most of it is what went wrong: **eight harness faults** that produced
 plausible-looking numbers, **four verifier failure modes**, and twelve runs
 quarantined as invalid with their reasons in the filenames. Two runs scored
 100/100 while being unable to finish, because their verifier gated completion on
-something already false. A table without a `finished` column would have called
-them successes.
+the confirmation toast. A table without a `finished` column would have called
+them successes. Those two run files were measured before this repository was
+assembled and were never committed — no result file here, or in its history,
+has score 100 with `finished` false — so the mechanism is now demonstrated in
+`tests/test_verifiers.py` instead of cited: the same assertion, run against the
+same page while the toast is up and after it hides, passes and then fails while
+the claim's status does not change.
 
 Everything below distinguishes what was measured from what was not.
 
