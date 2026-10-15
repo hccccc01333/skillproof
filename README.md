@@ -81,6 +81,46 @@ Those tasks run against **ExpenseDesk**, a small resettable web app in this repo
 ([`bench/site`](bench/site)) built so every condition starts from an identical
 state. It is a test harness, not the product.
 
+## What it costs
+
+Every number above is about success. None of them says what it costs, and the
+answer is not the one a skills pitch would want.
+
+Like for like, same task, same model, one skill version at a time:
+
+| task | | tokens | steps | score |
+|---|---|---|---|---|
+| `expense-report` | no skill | 56,281 | 9.0 | 35.0 |
+| | **with skill** | **45,765** | **7.3** | **100.0** |
+| `expense-submit` | no skill | 96,766 | 12.2 | 56.7 |
+| | **with skill** | 213,448 | 19.0 | **100.0** |
+| `expense-report-hard` | no skill | 33,254 | 7.0 | 20.0 |
+| | **with skill** | 195,284 | 17.3 | **100.0** |
+
+**It goes both ways and the direction is not predictable from the task.** On the
+reporting task the skill is *cheaper* and scores 65 points higher. On the other
+two it costs two to six times as much for the points it gains.
+
+The reason is in the steps column. **The agent with no skill is cheap because it
+quits early** — it stops after the first receipt, or before checking its work,
+and reports success. The skill makes it do the job: 19 steps instead of 12. The
+extra tokens are not overhead, they are the work that was being skipped.
+
+So the honest cost model is: **a skill trades tokens for success, and the
+exchange rate depends on how badly the unaided agent does.** Where the baseline
+already scores in the nineties there is nothing to buy. Where it scores in the
+twenties, the tokens buy eighty points.
+
+Induction is a one-time cost per task: **167k–293k tokens, median 221k, 11–17
+turns.** It never pays itself back in tokens. It pays back the first time the
+task would otherwise have been done wrong, which is a business judgement rather
+than a technical one.
+
+One caveat that makes these numbers pessimistic for the skill: **the harness
+sends no cache breakpoint.** The skill text rides in the system prompt and is
+re-sent on every step, where prompt caching would make most of it nearly free.
+The step-count difference — the part that actually matters — would not change.
+
 ## Verify it yourself
 
 ```bash
@@ -170,6 +210,9 @@ inventing one would be guessing at what you meant.
 - **That the verifier is mature.** It failed in four distinct ways during
   development, two of them silently, including one that made an agent write the
   wrong file.
+- **That it saves anything.** On two of three tasks a skill costs more tokens
+  than no skill, not fewer, and induction never pays for itself in tokens. See
+  [What it costs](#what-it-costs).
 
 ## The part we would want you to attack
 
