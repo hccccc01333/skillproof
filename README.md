@@ -86,12 +86,14 @@ state. It is a test harness, not the product.
 Every number above is about success. None of them says what it costs, and the
 answer is not the one a skills pitch would want.
 
-Like for like, same task, same model, one skill version at a time:
+Like for like: same task, same model, one skill generation at a time. Each row
+is the mean over every run of that condition now in `results/`, and the test
+suite recomputes them from those files:
 
 | task | | tokens | steps | score |
 |---|---|---|---|---|
 | `expense-report` | no skill | 56,281 | 9.0 | 35.0 |
-| | **with skill** | **45,765** | **7.3** | **100.0** |
+| | **with skill** | **46,377** | **7.4** | **100.0** |
 | `expense-submit` | no skill | 96,766 | 12.2 | 56.7 |
 | | **with skill** | 213,448 | 19.0 | **100.0** |
 | `expense-report-hard` | no skill | 33,254 | 7.0 | 20.0 |

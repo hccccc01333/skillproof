@@ -227,6 +227,129 @@ def case_results_have_their_evidence() -> None:
 
 
 # --------------------------------------------------------------------------
+# The numbers the README leads with, recomputed from the runs
+# --------------------------------------------------------------------------
+
+
+def _runs(task: str, condition: str) -> list[dict]:
+    out = []
+    for p in sorted((ROOT / "results").glob("exec-*.json")):
+        d = json.loads(p.read_text(encoding="utf-8"))
+        if d.get("task") == task and d.get("condition") == condition:
+            out.append(d)
+    return out
+
+
+# The README's "What it costs", as printed: task, condition, tokens, steps,
+# score. Each figure is the mean over every live run of that condition.
+COST_TABLE = [
+    ("expense-report", "no-skill", 56_281, 9.0, 35.0),
+    ("expense-report", "skill+verifier", 46_377, 7.4, 100.0),
+    ("expense-submit", "no-skill", 96_766, 12.2, 56.7),
+    ("expense-submit", "skill+verifier", 213_448, 19.0, 100.0),
+    ("expense-report-hard", "no-skill", 33_254, 7.0, 20.0),
+    ("expense-report-hard", "skill+verifier", 195_284, 17.3, 100.0),
+]
+
+
+def case_published_agent_numbers() -> None:
+    """The agent-side numbers, recomputed from the runs that produced them.
+
+    `reproduce.py` re-runs the deterministic baselines and asserts their
+    scores. The agent conditions cannot be re-run without a model and an
+    account, so the alternative is worse: their numbers live in prose, and
+    nothing notices when the prose and the runs part ways. Recomputing the
+    aggregates from the stored runs is free and catches exactly that.
+    """
+    print("\n-- the numbers the README leads with, recomputed from the runs --")
+
+    unaided = _runs("expense-submit", "no-skill")
+    check("the unaided agent has runs on both pages", len(unaided) >= 6, str(len(unaided)))
+    if unaided:
+        mean = sum(d["score"] for d in unaided) / len(unaided)
+        check("unaided agent mean is the published 56.7", round(mean, 1) == 56.7,
+              f"got {mean:.2f} over {len(unaided)} runs")
+
+    skilled = _runs("expense-submit", "skill+verifier")
+    for variant in ("default", "relayout-nostid"):
+        got = [(d["score"], d["sr"]) for d in skilled if d.get("variant") == variant]
+        check(f"skill+verifier on {variant}: 100 · SR 100 ×3",
+              len(got) >= 3 and all(s == 100.0 and sr == 100 for s, sr in got), str(got))
+
+    for task, variant, baseline in (
+        ("expense-report", "reports", 35.0),
+        ("expense-report-hard", "reports-hard", 20.0),
+    ):
+        got = [d["score"] for d in _runs(task, "no-skill") if d.get("variant") == variant]
+        check(f"{task}: unaided agent is the published {baseline}",
+              bool(got) and all(s == baseline for s in got), str(got))
+        got = [(d["score"], d["sr"]) for d in _runs(task, "skill+verifier")
+               if d.get("variant") == variant]
+        check(f"{task}: skill+verifier is 100 · SR 100",
+              bool(got) and all(s == 100.0 and sr == 100 for s, sr in got), str(got))
+
+
+def case_published_cost_numbers() -> None:
+    """The README's cost table, recomputed the same way.
+
+    One row of this table was wrong when this check was written: the report
+    task's skill row printed the mean over the three modes that involve a
+    person, which included a mode whose induction had since been withdrawn and
+    excluded the current no-human one. The figure was reproducible from a
+    subset of the runs, and the subset was not the one the caption claimed.
+    """
+    print("\n-- the cost table, recomputed from the runs --")
+    for task, condition, tokens, steps, score in COST_TABLE:
+        rs = _runs(task, condition)
+        if not rs:
+            check(f"{task}/{condition}: has runs", False)
+            continue
+        n = len(rs)
+        tok = sum((r.get("run") or {}).get("prompt_tokens", 0)
+                  + (r.get("run") or {}).get("completion_tokens", 0) for r in rs) / n
+        stp = sum((r.get("run") or {}).get("steps", 0) for r in rs) / n
+        sc = sum(r["score"] for r in rs) / n
+        check(f"{task}/{condition}: {tokens:,} tok · {steps} steps · {score} over {n} runs",
+              round(tok) == tokens and round(stp, 1) == steps and round(sc, 1) == score,
+              f"got {tok:,.0f} tokens · {stp:.1f} steps · {sc:.1f} score over {n} runs")
+
+
+def case_external_harness_numbers() -> None:
+    """The third-party runs quoted in the README's 'Beyond the benchmark'.
+
+    These are the only numbers in the README not produced by this repo's own
+    app, and they are the ones a reader is most likely to take on faith: a
+    recording that survives a mild page change and dies on a real one, against
+    a skill that does not.
+    """
+    print("\n-- the third-party harness, recomputed from its runs --")
+    ext = {p.name: json.loads(p.read_text(encoding="utf-8"))
+           for p in sorted((ROOT / "results").glob("external-*.json"))}
+    check("the third-party runs are all here", len(ext) == 6, str(sorted(ext)))
+
+    check("replay completes on the unperturbed site",
+          ext.get("external-replay-asis.json", {}).get("completed") is True)
+    check("replay survives the mild perturbation",
+          ext.get("external-replay-perturbed.json", {}).get("completed") is True)
+
+    strong = ext.get("external-replay-strong.json", {})
+    check("replay fails under the strong perturbation", strong.get("completed") is False,
+          str(strong.get("completed")))
+    check("and fails the 8 order-dependent steps, keeping the first 4",
+          len(strong.get("failed") or []) == 8
+          and [f.get("step") for f in strong.get("failed") or []] == list(range(4, 12)),
+          str([f.get("step") for f in strong.get("failed") or []]))
+
+    skill_runs = [v for k, v in ext.items() if k.startswith("external-skill-perturbed")]
+    check("the skill completes 3 of 3 under the strong perturbation",
+          len(skill_runs) == 3 and all(v.get("completed") is True for v in skill_runs),
+          str([v.get("completed") for v in skill_runs]))
+    check("and declares its two gaps instead of asserting them",
+          all(len(v.get("gaps") or []) == 2 for v in skill_runs),
+          str([len(v.get("gaps") or []) for v in skill_runs]))
+
+
+# --------------------------------------------------------------------------
 # The published policy and the rubrics must agree
 # --------------------------------------------------------------------------
 
@@ -374,6 +497,9 @@ def main() -> int:
     case_episodes()
     case_induced()
     case_results_have_their_evidence()
+    case_published_agent_numbers()
+    case_published_cost_numbers()
+    case_external_harness_numbers()
     case_policy_matches_rubric()
     case_readme_matches_code()
     print()
