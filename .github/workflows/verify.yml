@@ -29,9 +29,13 @@ jobs:
 
       - name: Install dependencies
         run: |
+          # ffmpeg is a runtime requirement for video and the tool-surface tests
+          # build a sample clip with it. Without it they skip rather than fail,
+          # but a contract that is skipped on every push is never checked.
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
-          python -m playwright install --with-deps chromium
+          python -m playwright install --with-deps chromium chromium-headless-shell
 
       - name: Published numbers reproduce
         # No model, no API key, no credentials. If this fails, either the code

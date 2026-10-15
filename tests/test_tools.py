@@ -217,8 +217,22 @@ def case_boundaries(ep: Path, out: Path) -> None:
         check("directs images to read_visual_evidence", True)
 
 
+def _have(tool: str) -> bool:
+    from shutil import which
+
+    return which(tool) is not None
+
+
 def case_video_ordering(ep: Path, out: Path) -> None:
     print("\n-- video ordering --")
+    # ffmpeg is a hard requirement for video, and building a sample needs it.
+    # Report that plainly rather than dying with a traceback: a missing tool is
+    # not a failing contract, and this crashed CI on every push for four runs
+    # before anyone read the log.
+    if not _have("ffmpeg"):
+        print("  [skip] ffmpeg is not on PATH; the video tools are untested here")
+        return
+
     # A real (tiny) video, so the ordering guard and the sampling path are both
     # exercised end to end rather than only the guard.
     video = ep / "video.mp4"
