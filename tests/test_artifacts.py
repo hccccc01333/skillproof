@@ -314,6 +314,37 @@ def case_published_cost_numbers() -> None:
               f"got {tok:,.0f} tokens · {stp:.1f} steps · {sc:.1f} score over {n} runs")
 
 
+def case_self_report_matches_truth() -> None:
+    """The README's most useful sentence, recomputed.
+
+    "Every unaided run that announced success was wrong; every skilled one was
+    right." The finding this replaced ("4 of 6 declarations were wrong") was
+    measured on six run files that later rounds overwrote, so it could not be
+    recomputed at all. This holds the property, which stays true as runs are
+    added, and the counts the documents print.
+    """
+    print("\n-- self-reported completion, recomputed --")
+    declared: dict[str, list[tuple[float, str]]] = {"no-skill": [], "skill+verifier": []}
+    for p in sorted((ROOT / "results").glob("exec-*.json")):
+        d = json.loads(p.read_text(encoding="utf-8"))
+        cond = d.get("condition")
+        if cond in declared and (d.get("run") or {}).get("finished") is True:
+            declared[cond].append((d["score"], p.name))
+
+    unaided = declared["no-skill"]
+    check("no unaided declaration was ever correct",
+          not [x for x in unaided if x[0] == 100.0], str(unaided))
+    check("and there are 10 of them, all wrong",
+          len(unaided) == 10, f"{len(unaided)} declared")
+
+    skilled = declared["skill+verifier"]
+    check("no skilled declaration was ever wrong",
+          not [x for x in skilled if x[0] != 100.0],
+          str([x for x in skilled if x[0] != 100.0]))
+    check("and there are 18 of them, all correct",
+          len(skilled) == 18, f"{len(skilled)} declared")
+
+
 def case_external_harness_numbers() -> None:
     """The third-party runs quoted in the README's 'Beyond the benchmark'.
 
@@ -499,6 +530,7 @@ def main() -> int:
     case_results_have_their_evidence()
     case_published_agent_numbers()
     case_published_cost_numbers()
+    case_self_report_matches_truth()
     case_external_harness_numbers()
     case_policy_matches_rubric()
     case_readme_matches_code()

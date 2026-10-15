@@ -297,26 +297,28 @@ task.**
 Structure, ordering, values, and completion checks are all mechanical, and a
 script gets them for free. Target selection is not, and nothing here does it.
 
-### 3. Self-reported completion is mostly wrong
+### 3. Self-reported completion: right when a skill produced it, wrong when not
 
-Across all six executed runs in the clean `default` cells, every agent declared
-the task finished. Four of the six were wrong:
+The first version of this section reported the six `default`-cell runs that
+existed then: every one declared the task finished, and four of the six were
+wrong, including one skilled run. Those run files have since been overwritten by
+later rounds of the same cells — same filenames, different runs — so that table
+cannot be re-derived and is not reproduced here. What the current evidence says
+is sharper:
 
-| run | declared | score | verdict |
-|---|---|---|---|
-| no-skill r1 | done | 70 | false confidence |
-| no-skill r2 | done | 85 | false confidence |
-| no-skill r3 | done | 85 | false confidence |
-| skill r1 | done | 100 | correct |
-| skill r2 | done | 85 | false confidence |
-| skill r3 | done | 100 | correct |
+| condition | runs | declared finished | of those, wrong | their scores |
+|---|---|---|---|---|
+| unaided agent | 11 | 10 | **10** | 20–75 |
+| skill + verifier | 18 | 18 | **0** | 100 |
 
-**4 of 6 declarations (67%) were wrong**, including one run with the induced
-skill. Every false one used language like "successfully submitted" and
-"pending approval" — the one check the skill does generate, and the one that
-happens to pass while the claim is missing two receipts.
+**Every unaided declaration was false; every skilled declaration was true.**
+The false ones read like the true ones — "submitted to the approval queue",
+"status changed from Draft to Pending approval" — because the app really does
+show those things, and it shows them for a claim that is missing two receipts
+as well. Self-report was not mostly wrong. It was wrong exactly when nothing
+checked the work.
 
-This is not captured by any score in the paper's tables, and it is the most
+That is not captured by any score in the paper's tables, and it is the most
 commercially and scientifically useful thing in this document: a skill that
 carries its own completion check is worth more than a skill that carries a
 better procedure, because the procedure can be verified after the fact and the

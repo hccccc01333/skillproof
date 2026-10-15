@@ -68,8 +68,10 @@ less. That is the gap a skill has to close, and it is the only gap worth closing
 
 And the reason the completion check exists:
 
-> We measured 6 agent runs that declared the task finished. **4 of them were
-> wrong.** All four said "successfully submitted" while scoring 70–85.
+> Across 28 agent runs that declared the task finished, self-report and truth
+> agreed in exactly one group. **Every unaided run that announced success was
+> wrong** — 10 of 10, scoring 20 to 75. **Every skilled run that announced
+> success was right** — 18 of 18, at 100.
 
 | task | original agent | recording | skill + verifier |
 |---|---|---|---|
