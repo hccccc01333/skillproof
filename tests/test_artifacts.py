@@ -178,17 +178,20 @@ def case_results_have_their_evidence() -> None:
     `docs/results.md` is built from the runs in `results/`, and each run names
     the induced skill that produced it. Delete that skill later -- tidying up
     superseded drafts, say -- and the number stays in the document while the
-    thing that produced it stops being re-derivable. That happened here: one
-    commit dropped two superseded generations as a footnote and seven run files
-    kept pointing at the empty paths.
+    thing that produced it stops being re-derivable. That happened here, twice:
+    one commit dropped two generations as a footnote, another dropped the
+    previous model's runs, and in both cases the documents kept citing them.
 
-    So every run in `results/` that names a skill must name one still on disk.
-    A withdrawn referent goes to `results/_invalid/` (the run is not evidence,
-    with the reason in its filename) or `results/_superseded/` (the finding was
-    overturned), which is what keeps the exclusion auditable.
+    So the rule is absolute: every run anywhere under `results/` -- live,
+    invalid, superseded, previous-model -- must name a skill that is on disk.
+    The archive directories are about which runs *count*; this is about whether
+    they can still be explained. Restoring the two generations from history was
+    cheaper than weakening the rule, which is what the rule was telling us to
+    do.
     """
     print("\n-- published numbers still have their evidence --")
-    runs = sorted((ROOT / "results").glob("*.json"))
+    runs = [p for p in sorted((ROOT / "results").rglob("*.json"))
+            if p.name.startswith("exec-")]
     check("there are run files to check", bool(runs))
 
     by_skill: dict[Path, list[str]] = {}
@@ -207,7 +210,7 @@ def case_results_have_their_evidence() -> None:
 
     for rel, files in sorted(by_skill.items()):
         check(f"{rel} — cited by {len(files)} run(s)", (ROOT / rel).is_dir(),
-              "gone; move those runs to _invalid/ or _superseded/")
+              "gone; restore it, or move those runs out of results/")
 
     # A check that examined nothing passes on an empty directory, and this repo
     # has shipped that mistake before.
@@ -312,6 +315,35 @@ def case_published_cost_numbers() -> None:
         check(f"{task}/{condition}: {tokens:,} tok · {steps} steps · {score} over {n} runs",
               round(tok) == tokens and round(stp, 1) == steps and round(sc, 1) == score,
               f"got {tok:,.0f} tokens · {stp:.1f} steps · {sc:.1f} score over {n} runs")
+
+
+def case_previous_model_numbers() -> None:
+    """The Results table's first round, which a tidy-up commit deleted.
+
+    Findings 1-4 and Addendum 1 of `docs/results.md` cite 80.0 and 95.0 from a
+    round run on the previous model. One commit dropped `results/_prevmodel/`
+    as superseded and nothing noticed, because nothing recomputed it. Restored,
+    every figure in that table matches, to the token, so the check is exact.
+    """
+    print("\n-- the previous-model round, recomputed --")
+    for condition, scores, sr_pct, tokens, steps in (
+        ("no-skill", 80.0, 0, 174_581, 19.3),
+        ("skill", 95.0, 67, 165_782, 18.3),
+    ):
+        files = sorted((ROOT / "results" / "_prevmodel").glob(f"exec-{condition}-*.json"))
+        if len(files) != 3:
+            check(f"_prevmodel/{condition}: three runs are kept", False, str(len(files)))
+            continue
+        runs = [json.loads(p.read_text(encoding="utf-8")) for p in files]
+        mean = sum(d["score"] for d in runs) / 3
+        sr = round(100 * sum(1 for d in runs if d.get("sr") == 100) / 3)
+        tok = sum((d["run"].get("prompt_tokens", 0) + d["run"].get("completion_tokens", 0))
+                  for d in runs) / 3
+        stp = sum(d["run"].get("steps", 0) for d in runs) / 3
+        check(f"{condition}: {scores} · SR {sr_pct}% · {tokens:,} tok · {steps} steps",
+              round(mean, 1) == scores and sr == sr_pct
+              and round(tok) == tokens and round(stp, 1) == steps,
+              f"got {mean:.1f} · SR {sr}% · {tok:,.0f} tok · {stp:.1f} steps")
 
 
 def case_self_report_matches_truth() -> None:
@@ -545,6 +577,7 @@ def main() -> int:
     case_results_have_their_evidence()
     case_published_agent_numbers()
     case_published_cost_numbers()
+    case_previous_model_numbers()
     case_self_report_matches_truth()
     case_external_harness_numbers()
     case_policy_matches_rubric()

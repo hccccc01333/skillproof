@@ -49,6 +49,7 @@ Everything below distinguishes what was measured from what was not.
 | Agent conditions on `default` and on `relayout-nostid` (2 conditions × 3 reps each) | **clean, used** — the headline |
 | Agent conditions on the two report tasks, 5 induction modes × 3 reps | **clean, used** — Addenda 7–11 |
 | Macro replay and re-parameterized, all variants (deterministic, no model) | **clean, used** |
+| Agent conditions on `default` with the previous model (2 × 3) | **history, kept** — the Results table below; in `results/_prevmodel/` |
 | Agent conditions on `jitter` (2 × 3) | **invalid** — instruction/page mismatch |
 | Agent conditions on `jitter-remap` (3) | **invalid** — API account overdrawn mid-run |
 | Skill-condition runs on `relayout-nostid` (3) and the ask-mode report runs (3) | **superseded** — the inductions they used were overtaken by later ones |
@@ -60,9 +61,13 @@ endpoint refused the account), the reason in the filename where it matters. And
 overturned: Addendum 3's 70/70/70 skill condition sits there, because the
 induction that produced it was replaced by one that derives the selection rule
 the old one could not, and scores 100/100 on the same variant. Neither directory
-deletes anything, so both exclusions can be audited; and every run left in
-`results/` names a skill that is still on disk, so every number still standing
-can be re-derived. `tests/test_artifacts.py` enforces that last part.
+deletes anything, so both exclusions can be audited.
+
+The skills those archived runs used are kept too — `induced/run3` and
+`induced/report-ask` were briefly deleted as a tidy-up and are back, because
+seven run files cited them and a published number whose skill is gone cannot be
+re-derived. `tests/test_artifacts.py` now refuses that: every run file anywhere
+under `results/`, archived included, must name a skill that is on disk.
 
 The `jitter-remap` runs initially looked like a spectacular result — 15.00 three
 times, exactly the do-nothing floor. They were not a result at all: the model
@@ -82,12 +87,20 @@ Deterministic baselines, no model involved:
 | macro on `jitter-nostid` (no stable hooks) | 35.00 | 0 | |
 | *do-nothing floor* | 15.00 | 0 | |
 
-Agent conditions, `default` only, N=3:
+Agent conditions, `default` only, N=3, model `doubao-seed-2-0-code-preview-260215`
+— the previous model, which is why these runs are kept separately in
+`results/_prevmodel/`. Every figure in this table recomputes from those six
+files, and `tests/test_artifacts.py` recomputes it:
 
 | condition | scores | mean | SR | tokens | steps |
 |---|---|---|---|---|---|
 | original agent (no skill) | 70, 85, 85 | 80.0 | 0 % | 174,581 | 19.3 |
 | agent + induced skill | 85, 100, 100 | **95.0** | **67 %** | 165,782 | 18.3 |
+
+This table's numbers were unpublished-evidence for a while: a later commit
+dropped `results/_prevmodel/` from the tree as a tidy-up, while Findings 1–4
+and Addendum 1 kept citing 80.0 and 95.0. Restored from that commit's parent,
+they match to the token.
 
 ## Findings
 

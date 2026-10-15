@@ -71,6 +71,14 @@ def wait_for(url: str, timeout: float = 25.0) -> None:
 # nothing has been done.
 WRONG_STATE = {
     "expensedesk-submit-travel-claim": "default",
+    # The superseded `run3` generation, kept because sixteen run files cite it
+    # and its numbers are cited in docs/results.md. Its verifier is the one
+    # Addendum 4 describes as mode 2: A3 asserts the literal "March 2026", so
+    # the demonstrated page satisfies it whether or not the work was done. It
+    # still has to reject the untouched page, which it does through A1 and A2;
+    # A3 will be reported under "already true here", which is the line that
+    # exists to show exactly this.
+    "submit-travel-reimbursement-claim": "default",
     "expense-period-report": "reports",
     "expense-period-report-json": "reports",
     "prepare-expense-report-json": "reports",
