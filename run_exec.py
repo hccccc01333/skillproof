@@ -101,7 +101,7 @@ def main() -> int:
     wait_for(f"http://127.0.0.1:{port}/api/state")
     print(f"[serve] variant={args.variant} on {base_url}")
     print(f"[exec]  condition={args.condition} "
-          f"model={os.environ.get('S2S_INDUCT_MODEL') or _llm_default()}")
+          f"model={os.environ.get('S2S_INDUCT_MODEL') or '(unset)'}")
     try:
         run = execute(
             base_url=base_url,

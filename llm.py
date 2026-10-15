@@ -49,20 +49,22 @@ def extra_headers() -> dict | None:
     return headers if isinstance(headers, dict) else None
 
 
-# The default is the author's own model, not a requirement: any id the
-# configured endpoint serves works. It was `deepseek-chat`, which is a model
-# name from DeepSeek's own platform and is simply invalid on a gateway -- so
-# anyone who set the endpoint and the key but not the model got a confusing
-# upstream error instead of a missing setting.
-#
-# The `-free` suffix matters. Availability of free tiers is intermittent and
-# per-account, so a run can fail with "Model is unavailable" on one key and
-# succeed on another; that is the endpoint's business, not this code's.
-DEFAULT_MODEL = "deepseek-v4.1-flash-free"
-
-
 def model_name() -> str:
-    return os.environ.get("S2S_INDUCT_MODEL", DEFAULT_MODEL)
+    """The model to use, which the caller must name.
+
+    Deliberately no default. Any default is one provider's model id, and this
+    code is not tied to a provider: a default that happens to be right for one
+    endpoint is a silent mismatch on every other, and it fails as an upstream
+    error rather than as a missing setting. There is no way to guess a model,
+    so it is not guessed.
+    """
+    model = os.environ.get("S2S_INDUCT_MODEL")
+    if not model:
+        raise EndpointNotConfigured(
+            "set S2S_INDUCT_MODEL to a model id your endpoint serves "
+            "(S2S_INDUCT_BASE_URL and S2S_INDUCT_API_KEY are also required)"
+        )
+    return model
 
 
 def make_client():

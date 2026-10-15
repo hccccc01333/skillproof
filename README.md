@@ -43,13 +43,8 @@ remembering where it was on the day you recorded.
 ```bash
 export S2S_INDUCT_BASE_URL=https://api.example.com/v1
 export S2S_INDUCT_API_KEY=...
-export S2S_INDUCT_MODEL=deepseek-v4.1-flash-free
+export S2S_INDUCT_MODEL=<a model id your endpoint serves>
 ```
-
-Any id the endpoint serves works. Free tiers are capacity-limited and the same
-model id can be available on one account and not another, or available in the
-morning and not in the afternoon — that is the endpoint's business, and the
-harness says so plainly rather than passing through a bare upstream error.
 
 **Recording, running an induced skill, replaying, and the entire benchmark work
 without one.** So does verifying every claim on this page — `reproduce.py`

@@ -45,9 +45,12 @@ DEFAULT_OUTPUT_LIMIT = 16_000
 # How many identical finalizer failures in a row before the harness intervenes.
 FINALIZE_THRASH_LIMIT = 3
 
-
-class EndpointNotConfigured(RuntimeError):
-    pass
+# Re-exported, not redefined. There used to be a second class of this name here,
+# left behind when client construction moved into `llm`, and `run_induct.py`
+# caught that one while `llm` raised the other -- so an unconfigured model
+# escaped as a traceback instead of reaching the handler written for it. Two
+# classes with one name is a bug that reads as working code.
+from llm import EndpointNotConfigured  # noqa: E402,F401
 
 
 @dataclass
