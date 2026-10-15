@@ -46,6 +46,13 @@ jobs:
       - name: Tool-surface and verifier contracts
         run: python tests/test_tools.py
 
+      - name: The recorder's frame bookkeeping holds
+        # The recorder shoots a frame *before* each action and one after, and
+        # registers both in the deck it hands to the paper. A frame that is shot
+        # but never registered is invisible to everything downstream, and the
+        # only symptom is a missing image -- which no other check would notice.
+        run: python tests/test_recorder.py
+
       - name: Shipped artifacts are well-formed
         run: python tests/test_artifacts.py
 
