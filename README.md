@@ -8,6 +8,7 @@
 git clone https://github.com/hccccc01333/skillproof && cd skillproof && bash setup.sh
 ```
 
+[![verify](https://github.com/hccccc01333/skillproof/actions/workflows/verify.yml/badge.svg)](https://github.com/hccccc01333/skillproof/actions/workflows/verify.yml)
 [![License](https://img.shields.io/badge/license-MIT-f4c430?style=flat-square)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776ab?style=flat-square&logo=python&logoColor=white)](#requirements)
 [![Verify](https://img.shields.io/badge/verify-11s%20%C2%B7%20no%20model%20%C2%B7%20no%20credentials-2f5fd0?style=flat-square)](#verify-it-yourself)
