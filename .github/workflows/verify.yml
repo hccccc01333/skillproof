@@ -49,6 +49,12 @@ jobs:
       - name: Shipped artifacts are well-formed
         run: python tests/test_artifacts.py
 
+      - name: Shipped verifiers discriminate
+        # A verifier exists to refuse `done` on wrong work. Nothing had ever
+        # checked that the assertions fail when the work is wrong, because every
+        # run that used a working verifier passed it.
+        run: python tests/test_verifiers.py
+
       - name: A fresh clone installs with one command
         # setup.sh is what the README tells a reader to run. Running it here
         # means the documented path cannot rot without the build going red.
