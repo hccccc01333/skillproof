@@ -1,8 +1,7 @@
 """Episode schema for skillproof recordings.
 
-Field names follow Work2Skill Appendix B so that an
-induction agent written against the paper's schema can read our episodes
-unchanged. The web-specific additions are additive and namespaced under keys
+The field names follow the episode schema Work2Skill introduces, so that an
+induction agent written against that schema reads these episodes unchanged. The web-specific additions are additive and namespaced under keys
 the paper does not use, so a paper-compatible reader can ignore them.
 
 Directory layout produced by EpisodeWriter.finalize():

@@ -1,7 +1,7 @@
 """Prompts and tool schemas for the induction agent.
 
-Reproduced from the Work2Skill paper so that our results are comparable to
-theirs, with two web adaptations noted inline:
+Adapted from the prompts Work2Skill uses, so that results stay comparable
+across the two, with two web adaptations noted inline:
 
   * "NexAU skill" becomes "skill" -- the output format is the Agent Skills
     convention (a folder containing SKILL.md with YAML frontmatter), which is

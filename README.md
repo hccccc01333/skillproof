@@ -223,12 +223,24 @@ Windows without Git Bash) installs the rest from `requirements.txt`.
 | `pillow` | downscaling evidence frames before they reach a model |
 | `openai` | induction only — nothing else imports it |
 
-## License
+## What this builds on
 
-MIT.
+Three things are borrowed, and they are the scaffolding rather than the argument:
 
-The episode schema, the evidence-exploration tool surface and the skill-authoring
-policy follow the format described in the Work2Skill paper, so that work written
-against that format reads these episodes unchanged. Everything else — the
-benchmark, the perturbation ladder, the macro baselines, the completion verifier
-and every result in this repo — is this project's own.
+- **The shape of the recording data.** An episode is a task, a normalized action
+  trace, and indexed evidence frames, so that a program written for that shape
+  reads these episodes unchanged.
+- **The idea of giving the induction agent a small set of evidence-exploration
+  tools** — read a file, look at a frame, sample a video — rather than loading
+  the whole recording into context.
+- **The structure of the skill-authoring policy**, which asks for semantic
+  targets, phase boundaries and observable completion checks.
+
+What this project adds: a web target instead of a desktop one, the macro
+baseline nobody runs, a completion verifier that refuses `done` and declares
+what it cannot check, the perturbation ladder the comparison needs, and the
+question the induction asks when it cannot work something out on its own.
+
+All three come from **Work2Skill**. The relationship is kept current here rather
+than settled once: the borrowed parts may be replaced as this project develops,
+and what replaces them is worth recording.

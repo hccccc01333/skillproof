@@ -1,7 +1,7 @@
 # Recording data format
 
-This document specifies the on-disk format a skillproof episode. It is a
-web-adapted version of the Work2Skill evidence schema (Appendix B). Everything
+This document specifies the on-disk format of a skillproof episode. The schema
+is Work2Skill's, web-adapted. Everything
 downstream — skill induction, macro replay, evaluation — reads this and
 nothing else.
 
