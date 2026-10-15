@@ -68,10 +68,14 @@ less. That is the gap a skill has to close, and it is the only gap worth closing
 
 And the reason the completion check exists:
 
-> Across 28 agent runs that declared the task finished, self-report and truth
-> agreed in exactly one group. **Every unaided run that announced success was
-> wrong** — 10 of 10, scoring 20 to 75. **Every skilled run that announced
-> success was right** — 18 of 18, at 100.
+> Across the 28 agent runs on the current model that declared the task
+> finished, self-report and truth agreed in exactly one group. **Every unaided
+> run that announced success was wrong** — 10 of 10, scoring 20 to 75. **Every
+> skilled run that announced success was right** — 18 of 18, at 100.
+
+The previous model's round is the counterexample that keeps that honest: one of
+its three skilled runs declared success at 85. A skill alone does not make the
+report true. (`results/_prevmodel/`.)
 
 | task | original agent | recording | skill + verifier |
 |---|---|---|---|

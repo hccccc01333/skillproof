@@ -376,6 +376,20 @@ def case_self_report_matches_truth() -> None:
     check("and there are 18 of them, all correct",
           len(skilled) == 18, f"{len(skilled)} declared")
 
+    # The previous model is excluded from the counts above on purpose, and the
+    # reason is not tidiness: its round contains the counterexample the README
+    # cites, one skilled run that declared success at 85. Counting it would
+    # silently turn "every skilled declaration was true" into a corollary of
+    # which runs were in the glob.
+    prev = []
+    for p in sorted((ROOT / "results" / "_prevmodel").glob("exec-skill-*.json")):
+        d = json.loads(p.read_text(encoding="utf-8"))
+        if (d.get("run") or {}).get("finished") is True:
+            prev.append((d["score"], p.name))
+    check("the previous model's round still has its one false success",
+          len(prev) == 3 and sorted(s for s, _ in prev) == [85.0, 100.0, 100.0],
+          str(sorted(prev)))
+
 
 def case_external_harness_numbers() -> None:
     """The third-party runs quoted in the README's 'Beyond the benchmark'.

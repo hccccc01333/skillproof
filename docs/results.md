@@ -336,6 +336,12 @@ show those things, and it shows them for a claim that is missing two receipts
 as well. Self-report was not mostly wrong. It was wrong exactly when nothing
 checked the work.
 
+That last sentence is a statement about this round, and the previous model's
+round is the counterexample that proves the distinction matters: one of its
+three skilled runs declared success at 85 (`results/_prevmodel/` —
+`exec-skill-default-r2.json`). Carrying the procedure is not the same as
+carrying the check, and the run files keep the two apart.
+
 That is not captured by any score in the paper's tables, and it is the most
 commercially and scientifically useful thing in this document: a skill that
 carries its own completion check is worth more than a skill that carries a
