@@ -1,13 +1,15 @@
 """Contract tests for the artifacts this repo ships.
 
 `tests/test_tools.py` tests the induction tool surface. This tests the *data*:
-the recorded episodes and the induced skills that are checked in, and the
-published policy document that the rubrics claim to implement.
+the recorded episodes and the induced skills that are checked in, the run
+evidence behind every published number, and the published policy document that
+the rubrics claim to implement.
 
 They exist because shipped artifacts rot silently. A hand-edited episode, a
 skill whose frontmatter drifted from its folder name, a verifier that stopped
-parsing, or a rubric item that no longer maps to a stated rule -- none of those
-break any code path, and all of them make the repo's claims unverifiable.
+parsing, a rubric item that no longer maps to a stated rule, or a number whose
+run file was deleted in a tidy-up -- none of those break any code path, and all
+of them make the repo's claims unverifiable.
 
     python tests/test_artifacts.py
 """
@@ -166,6 +168,65 @@ def case_induced() -> None:
 
 
 # --------------------------------------------------------------------------
+# Every published number still has its evidence
+# --------------------------------------------------------------------------
+
+
+def case_results_have_their_evidence() -> None:
+    """A run file is the evidence behind a published number.
+
+    `docs/results.md` is built from the runs in `results/`, and each run names
+    the induced skill that produced it. Delete that skill later -- tidying up
+    superseded drafts, say -- and the number stays in the document while the
+    thing that produced it stops being re-derivable. That happened here: one
+    commit dropped two superseded generations as a footnote and seven run files
+    kept pointing at the empty paths.
+
+    So every run in `results/` that names a skill must name one still on disk.
+    A withdrawn referent goes to `results/_invalid/` (the run is not evidence,
+    with the reason in its filename) or `results/_superseded/` (the finding was
+    overturned), which is what keeps the exclusion auditable.
+    """
+    print("\n-- published numbers still have their evidence --")
+    runs = sorted((ROOT / "results").glob("*.json"))
+    check("there are run files to check", bool(runs))
+
+    by_skill: dict[Path, list[str]] = {}
+    for path in runs:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        run = data.get("run") or {}
+        skill_root = data.get("skill_root") or run.get("skill_root")
+        if not skill_root:
+            continue
+        # Runs record absolute paths from the machine that produced them. Keep
+        # the part from `induced` on, so the check means the same thing here as
+        # it does on a fresh clone.
+        parts = Path(str(skill_root).replace("\\", "/")).parts
+        rel = Path(*parts[parts.index("induced"):]) if "induced" in parts else Path(skill_root)
+        by_skill.setdefault(rel, []).append(path.name)
+
+    for rel, files in sorted(by_skill.items()):
+        check(f"{rel} — cited by {len(files)} run(s)", (ROOT / rel).is_dir(),
+              "gone; move those runs to _invalid/ or _superseded/")
+
+    # A check that examined nothing passes on an empty directory, and this repo
+    # has shipped that mistake before.
+    check("at least one run names a skill", bool(by_skill),
+          "no run file referenced a skill — the check would be vacuous")
+
+    # The documents name run files as their evidence. A name that matches no
+    # file is a citation to nothing, and a citation to nothing is how the drift
+    # above started: the claim stayed, the evidence left.
+    cited: set[str] = set()
+    for doc in (ROOT / "README.md", ROOT / "docs" / "results.md"):
+        cited.update(re.findall(r"exec-[A-Za-z0-9_+.-]*\.json", doc.read_text(encoding="utf-8")))
+    check("the documents cite run files at all", bool(cited), str(sorted(cited)[:3]))
+    present = {p.name for p in (ROOT / "results").rglob("*.json")}
+    absent = sorted(n for n in cited if n not in present)
+    check("every run file the documents cite exists", not absent, str(absent))
+
+
+# --------------------------------------------------------------------------
 # The published policy and the rubrics must agree
 # --------------------------------------------------------------------------
 
@@ -312,6 +373,7 @@ def _documented_flags(readme: str) -> dict[str, set[str]]:
 def main() -> int:
     case_episodes()
     case_induced()
+    case_results_have_their_evidence()
     case_policy_matches_rubric()
     case_readme_matches_code()
     print()

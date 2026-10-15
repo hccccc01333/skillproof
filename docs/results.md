@@ -13,11 +13,14 @@ That gap is the whole argument. It is also the correction to this document's
 first verdict, which was that induction loses to a cheap baseline — true on the
 demonstrated page, and overturned once the perturbed page was measured.
 
-The other correction is in [Addendum 11](#addendum-11-a-correction-to-addendum-6-and-7):
+The other corrections are in
+[Addendum 11](#addendum-11-a-correction-to-addendum-6-and-7) and
+[Addendum 12](#addendum-12-the-selection-rule-and-the-confound-underneath-it):
 this document concluded that induction cannot learn a rule which is not legible
-as a data field, and that the answer is to ask the person. A later run showed
-the induction derives such rules by itself when it is required to reconcile the
-demonstration's output against its input. The question is a fallback.
+as a data field and must ask the person, and — separately — that induction
+cannot learn *which* target to act on. A later induction of the same episode,
+asked nothing, wrote both rules down. The question is a fallback, and the
+selection rule transfers.
 
 **Read the addenda as a record, not as a paper.** They are chronological, they
 contradict each other where the evidence changed, and the corrections are left
@@ -38,13 +41,23 @@ Everything below distinguishes what was measured from what was not.
 
 | data | status |
 |---|---|
-| Agent conditions on `default` (2 conditions × 3 reps) | **clean, used** |
-| Macro replay, all variants (deterministic, no model) | **clean, used** |
-| Agent conditions on `jitter` (2 × 3) | **discarded** — instruction/page mismatch |
-| Agent conditions on `jitter-remap` (3) | **discarded** — API account overdrawn mid-run |
+| Agent conditions on `default` and on `relayout-nostid` (2 conditions × 3 reps each) | **clean, used** — the headline |
+| Agent conditions on the two report tasks, 5 induction modes × 3 reps | **clean, used** — Addenda 7–11 |
+| Macro replay and re-parameterized, all variants (deterministic, no model) | **clean, used** |
+| Agent conditions on `jitter` (2 × 3) | **invalid** — instruction/page mismatch |
+| Agent conditions on `jitter-remap` (3) | **invalid** — API account overdrawn mid-run |
+| Skill-condition runs on `relayout-nostid` (3) and the ask-mode report runs (3) | **superseded** — the inductions they used were overtaken by later ones |
 
-Quarantined results are in `results/_invalid/` with the reason in the filename,
-not deleted, so the exclusion can be audited.
+Two quarantines, with different meanings. `results/_invalid/` holds runs that
+are **not evidence** (the run aborted, the instruction mismatched the page, the
+endpoint refused the account), the reason in the filename where it matters. And
+`results/_superseded/` holds runs that **were evidence** and were later
+overturned: Addendum 3's 70/70/70 skill condition sits there, because the
+induction that produced it was replaced by one that derives the selection rule
+the old one could not, and scores 100/100 on the same variant. Neither directory
+deletes anything, so both exclusions can be audited; and every run left in
+`results/` names a skill that is still on disk, so every number still standing
+can be re-derived. `tests/test_artifacts.py` enforces that last part.
 
 The `jitter-remap` runs initially looked like a spectacular result — 15.00 three
 times, exactly the do-nothing floor. They were not a result at all: the model
@@ -1081,6 +1094,92 @@ The failure was not the wrong conclusion. It was drawing a conclusion about the
 policy and the presence of a human. That is the same confound this document
 criticised the paper for, committed here.
 
+## Addendum 12: the selection rule, and the confound underneath it
+
+Addendum 3 is the most emphatic conclusion in this document: *induction
+transfers procedure and does not transfer judgement*, with R5 and R6 at 0 of 3
+in both conditions and the skill's selection rule still "the word relevant". It
+closed by saying the question — whether induction can learn a selection rule —
+"is now measurable".
+
+It has been measured, and the answer is that it can. This is the third
+correction in the document, and it arrives with the same shape of confound as
+the other two.
+
+| condition | `default` | `relayout-nostid` |
+|---|---|---|
+| skill induced by `doubao-seed-2-0-code-preview-260215`, no verifier | 70.0 · SR 0 (N=1) | 70.0, 70.0, 70.0 · SR 0 |
+| **skill + verifier, induced by `deepseek-v4.1-flash`** | **100 · SR 100 ×3** | **100 · SR 100 ×3** |
+
+Ten runs, every one completed, no endpoint errors. The current condition is the
+six runs named `exec-skill+verifier-default-r1.json`,
+`exec-skill+verifier-default-r2.json`, `exec-skill+verifier-default-r3.json`,
+`exec-skill+verifier-relayout-nostid-r1.json`,
+`exec-skill+verifier-relayout-nostid-r2.json` and
+`exec-skill+verifier-relayout-nostid-r3.json`, all in `results/`. The superseded
+condition is in `results/_superseded/`.
+
+### What moved is the rule, written down
+
+Quoted from the two skills. First Addendum 3's, then the one that scores 100:
+
+> In the "RECEIPT INBOX" section, find the receipts relevant to the travel
+> claim. For each relevant receipt, click the "Attach" button next to it.
+> Leave non-travel-related receipts unattached.
+
+> Leave a receipt unattached when its title or merchant marks it as personal
+> spending (a title containing `Personal`) or when it belongs to a different
+> expense category such as meals and entertainment (for example a team dinner).
+
+The second is the selection rule, stated. It is legible from the demonstration —
+five receipts, three attached and two deliberately skipped, and the titles that
+distinguish them are in the evidence the induction reads. The induction that
+wrote it asked nothing: 19 tool calls, zero `ask_human` events, temperature 0,
+same episode as the skill it replaces.
+
+### The confound
+
+The two skills were produced by two inductions that differ in three recorded
+ways at once: the model (`doubao-seed-2-0-code-preview-260215` →
+`deepseek-v4.1-flash`), the system prompt (a clause added between the runs
+requiring every skill to ship a verifier), and `image_max_size` (unset → 768).
+The execution side is held constant — same executor model, same episode, same
+instruction per variant — so the skill text is the only executor-side
+difference.
+
+That supports one statement and not a second one. It supports: an induction
+wrote the selection rule down, and the skill carrying it scores 100/100 on the
+page where the recording scores 25. It does not support: which of the three
+changes is responsible. That is the confound Addendum 11 was written about,
+moved from the execution into the induction, and the fix is the same — change
+one variable at a time. That re-run is not in this document.
+
+### What the verifier did in those six runs: nothing
+
+`verifier_runs: 2, done_rejections: 0` in all six. Its assertions read page
+text, and page text does not say which receipts are attached, so it could not
+have gated on the rule even if it had tried. The 30 points came from the skill
+text. What a verifier contributes is a separate measurement (Addendum 4), and
+it is not this one.
+
+### What this does to the macro's win
+
+Addendum 1 concluded that a re-parameterized macro beats the induced skill
+everywhere both were measured — 100 vs 95.0 on `default` — and "Where this
+ended up" repeated it. That remains true of the skill it was measured against,
+and is false of the current one:
+
+| `relayout-nostid` | score | why |
+|---|---|---|
+| macro, re-parameterized | 25.00 · SR 0 | target selection still comes from the recording, and the hooks it lands on are gone: 11 of 19 resolutions fail |
+| **skill + verifier, current** | **100.00 · SR 100** | the rule says which receipt is which |
+
+Where the page keeps its hooks the macro's win stands, and it costs no model
+and no tokens. Where the hooks are gone and choosing the target requires
+reading the task, the macro falls to the same 25 as replaying the recording
+verbatim, and the skill is the only condition above the floor. That is the moat
+this project claimed in the abstract, with a cell to point at.
+
 ## What the corrected experiment requires
 
 The decisive comparison is unmeasured. It needs:
@@ -1093,9 +1192,17 @@ The decisive comparison is unmeasured. It needs:
 3. More repetitions. N=3 gives a spread of 70–85 for the baseline on one cell;
    N=3 is not enough to separate conditions that differ by 15 points.
 
-Until then, the honest statement is: **the pipeline is validated, the skill
-helps on the demonstrated page, and the recording beats it there — so nothing
-here yet justifies using induction over replaying a macro.**
+Until then, the honest statement is: **the pipeline is validated, and the
+recording beats the skill on the demonstrated page.**
+
+**Addendum 12, written after this section, retires the clause that used to
+close that sentence** ("nothing here yet justifies using induction over
+replaying a macro"). On `relayout-nostid` the re-parameterized macro falls to
+25.00 and the current skill scores 100.00 three times, so induction is worth
+its cost exactly where the page stops matching the recording. Everywhere the
+macro still ties or leads — 100.00 on `default`, `jitter` and `relayout`, 65.00
+on `jitter-remap` — the skill has not been run, so the comparison stays open
+there.
 
 ## Reproducing
 
