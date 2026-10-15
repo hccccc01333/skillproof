@@ -292,6 +292,7 @@ def execute(
     workspace: Path | None = None,
     reset: bool = True,
     capture_state: bool = True,
+    perturb_js: str | None = None,
     headed: bool = False,
     verbose: bool = False,
 ) -> ExecRun:
@@ -319,6 +320,11 @@ def execute(
     with sync_playwright() as pw:
         browser = pw.chromium.launch(headless=not headed)
         context = browser.new_context(viewport={"width": 1280, "height": 860}, accept_downloads=True)
+        if perturb_js:
+            # Runs on every page load, which is what a perturbation needs: a
+            # third-party site re-renders on navigation, so a one-shot injection
+            # would only survive the first page.
+            context.add_init_script(perturb_js)
         page = context.new_page()
 
         if workspace is not None:

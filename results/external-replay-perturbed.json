@@ -1,0 +1,107 @@
+{
+  "steps": [
+    {
+      "step": 0,
+      "kind": "type",
+      "caption": "Type the user name",
+      "resolved_by": "role+name",
+      "ok": true
+    },
+    {
+      "step": 1,
+      "kind": "type",
+      "caption": "Type the password",
+      "resolved_by": "role+name",
+      "ok": true
+    },
+    {
+      "step": 2,
+      "kind": "click",
+      "caption": "Click Login",
+      "resolved_by": "role+name",
+      "ok": true
+    },
+    {
+      "step": 3,
+      "kind": "observe",
+      "resolved_by": "skipped",
+      "ok": true
+    },
+    {
+      "step": 4,
+      "kind": "click",
+      "caption": "Add the cheapest item, Sauce Labs Onesie, to the cart",
+      "resolved_by": "css",
+      "ok": true
+    },
+    {
+      "step": 5,
+      "kind": "click",
+      "caption": "Open the cart",
+      "resolved_by": "role+name",
+      "ok": true
+    },
+    {
+      "step": 6,
+      "kind": "click",
+      "caption": "Click Checkout",
+      "resolved_by": "css",
+      "ok": true
+    },
+    {
+      "step": 7,
+      "kind": "type",
+      "caption": "Type the first name",
+      "resolved_by": "role+name",
+      "ok": true
+    },
+    {
+      "step": 8,
+      "kind": "type",
+      "caption": "Type the last name",
+      "resolved_by": "role+name",
+      "ok": true
+    },
+    {
+      "step": 9,
+      "kind": "type",
+      "caption": "Type the postal code",
+      "resolved_by": "role+name",
+      "ok": true
+    },
+    {
+      "step": 10,
+      "kind": "click",
+      "caption": "Click Continue",
+      "resolved_by": "css",
+      "ok": true
+    },
+    {
+      "step": 11,
+      "kind": "click",
+      "caption": "Click Finish",
+      "resolved_by": "css",
+      "ok": true
+    },
+    {
+      "step": 12,
+      "kind": "verify",
+      "resolved_by": "skipped",
+      "ok": true
+    },
+    {
+      "step": 13,
+      "kind": "observe",
+      "resolved_by": "skipped",
+      "ok": true
+    }
+  ],
+  "failed": [],
+  "completed": true,
+  "final_url": "https://www.saucedemo.com/checkout-complete.html",
+  "mode": "replay",
+  "site": "https://www.saucedemo.com",
+  "perturbed": true,
+  "wall_ms": 14431,
+  "at": "2026-10-15T08:21:25.546930+00:00"
+}

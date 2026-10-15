@@ -228,28 +228,45 @@ Windows without Git Bash) installs the rest from `requirements.txt`.
 ## Beyond the benchmark
 
 Every number above was measured on an app written for the benchmark, which is
-the obvious objection to all of it. So the pipeline was also run against
-**saucedemo.com** — a public demo storefront this project does not own:
+the obvious objection to all of it. So the same comparison was run against
+**saucedemo.com** — a public demo storefront this project does not own, on a
+real multi-step workflow: log in, compare six prices, add the cheapest item,
+check out.
+
+A third-party site cannot be revised the way the benchmark revises its own app.
+What *can* be revised is what the browser sees, and from the agent's side that
+is the same thing: the names and hooks it learned are no longer there.
 
 ```bash
-.venv/Scripts/python.exe bench/external/saucedemo.py    # record the demonstration
-.venv/Scripts/python.exe run_induct.py --episode saucedemo
-.venv/Scripts/python.exe run_skill.py --skill induced/saucedemo     --url https://www.saucedemo.com --instruction "Log in, add the cheapest item..."
+.venv/Scripts/python.exe bench/external/saucedemo.py             # record
+.venv/Scripts/python.exe run_induct.py --episode saucedemo        # induce
+
+.venv/Scripts/python.exe bench/external/harness.py --mode replay
+.venv/Scripts/python.exe bench/external/harness.py --mode replay --perturb
+.venv/Scripts/python.exe bench/external/harness.py --mode replay --perturb --strong
+.venv/Scripts/python.exe bench/external/harness.py --mode skill  --perturb --strong
 ```
 
-The workflow is real and multi-step: log in, compare six prices, add the
-cheapest item, check out. What happened:
+| | site as-is | controls renamed | renamed, hooks regenerated |
+|---|---|---|---|
+| **replay** the recording | **completed** | **completed** | **failed** — 8 of 14 steps, no order |
+| **skill** + verifier | — | — | **completed**, verifier passed |
 
-| | |
-|---|---|
-| recording | 14 actions, 15 frames |
-| induction | **asked nothing** — it derived the procedure, including the price comparison, from the demonstration alone |
-| skill | parameterised: no item name, no price, no `$7.99` anywhere in it |
-| live run | completed, verifier passed, 15 steps |
+**The recording survives a rename, and that is worth knowing.** Four of its
+steps fell through to the structural CSS path it also carries —
+`input#login-button` — so the words could move without the target moving. It
+takes losing the hooks as well to break it, which is exactly what the
+benchmark's `relayout` versus `relayout-nostid` pair showed. A claim that
+renaming alone breaks a recording would have been wrong, and this is where we
+found that out.
 
-The verifier checked three things it could — the confirmation page, its message,
-its own control — and **declared two it could not**, including the judgement
-itself:
+The induction, from that demonstration, **asked nothing** — it derived the
+procedure including the price comparison — and produced a skill with no item
+name, no price and no `$7.99` anywhere in it. It then completed the same task on
+the same perturbed page where the recording could not.
+
+The verifier checked three things it could and **declared two it could not**,
+including the judgement itself:
 
 ```
 2 thing(s) this skill cannot check:
@@ -259,21 +276,22 @@ itself:
     postal code cannot be checked: it restates neither
 ```
 
-That is the design working on a site its author did not write, with no human in
-the loop. It is also the limit: **the skill can carry the rule, and the verifier
-still cannot confirm the rule was applied.** The confirmation page does not say
-what you bought.
+**The skill carries the rule and the verifier still cannot confirm it was
+applied**, because the confirmation page does not say what you bought. That is
+the honest limit of the whole approach, visible here more clearly than anywhere
+in the benchmark.
 
-Two things a third-party site costs, and neither is worked around: there is no
-reset endpoint and no state API, so the episode starts from whatever the site
-serves and evaluation has to read the rendered page; and nothing pins the site,
-so if it moves a control this breaks.
+Two things a third-party site costs, neither worked around: there is no reset
+endpoint and no state API, so evaluation reads the rendered page; and nothing
+pins the site, so a real change to it breaks this harness rather than being
+absorbed.
 
-It also found a real defect on the first attempt. Every control in the benchmark
-app is a `<button>` with text, so the recorder's name resolution never had to
-handle `<input type="submit" value="Login">` — an input has no text content, so
-the accessible name came back empty, on the second action. Fixed in
-`recorder/capture.js`.
+It also found a capture defect on the second action. Every control in the
+benchmark app is a `<button>` with text, so name resolution never had to handle
+`<input type="submit" value="Login">` — an input has no text content, so the
+accessible name came back empty and a skill induced from that recording would
+have had nothing to name the control by. Fixed in `recorder/capture.js`. The
+benchmark could not have exposed that; a real page did, immediately.
 
 ## What this builds on
 

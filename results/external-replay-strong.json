@@ -1,0 +1,181 @@
+{
+  "steps": [
+    {
+      "step": 0,
+      "kind": "type",
+      "caption": "Type the user name",
+      "resolved_by": "role+name",
+      "ok": true
+    },
+    {
+      "step": 1,
+      "kind": "type",
+      "caption": "Type the password",
+      "resolved_by": "role+name",
+      "ok": true
+    },
+    {
+      "step": 2,
+      "kind": "click",
+      "caption": "Click Login",
+      "resolved_by": "role+name",
+      "ok": true
+    },
+    {
+      "step": 3,
+      "kind": "observe",
+      "resolved_by": "skipped",
+      "ok": true
+    },
+    {
+      "step": 4,
+      "kind": "click",
+      "caption": "Add the cheapest item, Sauce Labs Onesie, to the cart",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 5,
+      "kind": "click",
+      "caption": "Open the cart",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 6,
+      "kind": "click",
+      "caption": "Click Checkout",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 7,
+      "kind": "type",
+      "caption": "Type the first name",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 8,
+      "kind": "type",
+      "caption": "Type the last name",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 9,
+      "kind": "type",
+      "caption": "Type the postal code",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 10,
+      "kind": "click",
+      "caption": "Click Continue",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 11,
+      "kind": "click",
+      "caption": "Click Finish",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 12,
+      "kind": "verify",
+      "resolved_by": "skipped",
+      "ok": true
+    },
+    {
+      "step": 13,
+      "kind": "observe",
+      "resolved_by": "skipped",
+      "ok": true
+    }
+  ],
+  "failed": [
+    {
+      "step": 4,
+      "kind": "click",
+      "caption": "Add the cheapest item, Sauce Labs Onesie, to the cart",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 5,
+      "kind": "click",
+      "caption": "Open the cart",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 6,
+      "kind": "click",
+      "caption": "Click Checkout",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 7,
+      "kind": "type",
+      "caption": "Type the first name",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 8,
+      "kind": "type",
+      "caption": "Type the last name",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 9,
+      "kind": "type",
+      "caption": "Type the postal code",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 10,
+      "kind": "click",
+      "caption": "Click Continue",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    },
+    {
+      "step": 11,
+      "kind": "click",
+      "caption": "Click Finish",
+      "resolved_by": "failed",
+      "ok": false,
+      "error": "target not found on the current page"
+    }
+  ],
+  "completed": false,
+  "final_url": "https://www.saucedemo.com/inventory.html",
+  "mode": "replay",
+  "site": "https://www.saucedemo.com",
+  "perturbed": true,
+  "strong": true,
+  "wall_ms": 10831,
+  "at": "2026-10-15T08:23:52.791313+00:00"
+}

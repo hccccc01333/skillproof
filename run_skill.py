@@ -72,6 +72,10 @@ def main() -> int:
                     help="directory for downloads and deliverables. Defaults to a temp dir.")
     ap.add_argument("--max-steps", type=int, default=30)
     ap.add_argument("--headed", action="store_true", help="watch it run")
+    ap.add_argument("--perturb", default=None, metavar="JS",
+                    help="JavaScript applied on every page load, to simulate the site "
+                         "changing under a skill. Same idea as the benchmark's relayout "
+                         "variant, for a site whose source you do not have.")
     ap.add_argument("--quiet", action="store_true", help="only print the outcome")
     args = ap.parse_args()
 
@@ -104,6 +108,7 @@ def main() -> int:
         max_steps=args.max_steps,
         reset=False,          # an arbitrary page has no reset endpoint
         capture_state=False,  # and no state endpoint to read
+        perturb_js=(Path(args.perturb).read_text(encoding="utf-8") if args.perturb else None),
         headed=args.headed,
         verbose=not args.quiet,
     )
