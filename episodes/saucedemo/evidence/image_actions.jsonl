@@ -1,0 +1,15 @@
+{"image": "evidence/000001.png", "action_id": "act_saucedemo_0000", "frame_time_ms": 6500, "action_delta_ms": 0, "trigger": "boundary"}
+{"image": "evidence/000002.png", "action_id": "act_saucedemo_0000", "frame_time_ms": 7234, "action_delta_ms": 734, "trigger": "result"}
+{"image": "evidence/000003.png", "action_id": "act_saucedemo_0001", "frame_time_ms": 7813, "action_delta_ms": 579, "trigger": "result"}
+{"image": "evidence/000004.png", "action_id": "act_saucedemo_0002", "frame_time_ms": 8891, "action_delta_ms": 1078, "trigger": "result"}
+{"image": "evidence/000005.png", "action_id": "act_saucedemo_0003", "frame_time_ms": 9547, "action_delta_ms": 656, "trigger": "result"}
+{"image": "evidence/000006.png", "action_id": "act_saucedemo_0004", "frame_time_ms": 10125, "action_delta_ms": 578, "trigger": "result"}
+{"image": "evidence/000007.png", "action_id": "act_saucedemo_0005", "frame_time_ms": 10750, "action_delta_ms": 625, "trigger": "result"}
+{"image": "evidence/000008.png", "action_id": "act_saucedemo_0006", "frame_time_ms": 11375, "action_delta_ms": 625, "trigger": "result"}
+{"image": "evidence/000009.png", "action_id": "act_saucedemo_0007", "frame_time_ms": 11859, "action_delta_ms": 484, "trigger": "result"}
+{"image": "evidence/000010.png", "action_id": "act_saucedemo_0008", "frame_time_ms": 12468, "action_delta_ms": 609, "trigger": "result"}
+{"image": "evidence/000011.png", "action_id": "act_saucedemo_0009", "frame_time_ms": 13125, "action_delta_ms": 657, "trigger": "result"}
+{"image": "evidence/000012.png", "action_id": "act_saucedemo_0010", "frame_time_ms": 13782, "action_delta_ms": 657, "trigger": "result"}
+{"image": "evidence/000013.png", "action_id": "act_saucedemo_0011", "frame_time_ms": 14407, "action_delta_ms": 625, "trigger": "result"}
+{"image": "evidence/000014.png", "action_id": "act_saucedemo_0012", "frame_time_ms": 14875, "action_delta_ms": 468, "trigger": "result"}
+{"image": "evidence/000015.png", "action_id": "act_saucedemo_0013", "frame_time_ms": 15625, "action_delta_ms": 750, "trigger": "result"}

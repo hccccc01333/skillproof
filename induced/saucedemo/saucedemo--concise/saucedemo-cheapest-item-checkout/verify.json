@@ -1,0 +1,32 @@
+{
+  "assertions": [
+    {
+      "id": "A1",
+      "type": "text_present",
+      "value": "Checkout: Complete!",
+      "description": "The page is the checkout confirmation surface, so the order was placed rather than left on the overview"
+    },
+    {
+      "id": "A2",
+      "type": "text_present",
+      "value": "Thank you for your order!",
+      "description": "The confirmation message is shown, which only appears after Finish succeeds"
+    },
+    {
+      "id": "A3",
+      "type": "element_present",
+      "value": "Back Home",
+      "description": "The confirmation page's own control is present, distinguishing a real completed order from a stale or partial render"
+    },
+    {
+      "id": "A4",
+      "type": "unverifiable",
+      "description": "That the single ordered line item is the lowest-priced product in the catalog, in quantity 1, cannot be checked from the confirmation page: it lists no line item, and the catalog prices are live and can change between runs. Verify the selection on the Checkout: Overview page (one row, QTY 1, unit price equal to the cheapest card price read on the Products page) before clicking Finish."
+    },
+    {
+      "id": "A5",
+      "type": "unverifiable",
+      "description": "That checkout was completed with the task's supplied customer name and postal code cannot be checked from the confirmation page: it restates neither field. Verify the typed values on the Checkout: Your Information form and the shipping summary on Checkout: Overview before continuing."
+    }
+  ]
+}

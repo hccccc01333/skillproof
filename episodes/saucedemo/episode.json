@@ -1,0 +1,40 @@
+{
+  "schema_version": "s2s-episode/1.0",
+  "episode_id": "saucedemo",
+  "task_id": "saucedemo",
+  "application": "saucedemo.com",
+  "recording": {
+    "duration_ms": 15625,
+    "started_at": null,
+    "finished_at": null,
+    "viewport": {
+      "width": 1280,
+      "height": 860
+    },
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+    "target_url": "https://www.saucedemo.com",
+    "capture_config": {},
+    "input_source": "scripted"
+  },
+  "counts": {
+    "actions": 14,
+    "keylog_events": 34,
+    "images": 15,
+    "keyframes": 15
+  },
+  "files": [
+    "task.json",
+    "episode.json",
+    "trace/actions.jsonl",
+    "trace/keylog.jsonl",
+    "video.mp4",
+    "summary.md",
+    "evidence/manifest.json",
+    "evidence/image_actions.jsonl"
+  ],
+  "evidence_roots": {
+    "input": ".",
+    "output": "output/"
+  },
+  "source": null
+}

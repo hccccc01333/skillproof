@@ -1,0 +1,11 @@
+{
+  "application": "saucedemo.com",
+  "instruction": "Log in, add the cheapest item to the cart, and complete checkout with the name 'Dana Whitfield' and postal code '18503'.",
+  "task_inputs": {
+    "user": "standard_user",
+    "name": "Dana Whitfield",
+    "postal_code": "18503"
+  },
+  "notes": "A third-party site, not an app written for this benchmark. No reset endpoint and no state API, so the episode starts from whatever the site serves and any evaluation must read the rendered page.",
+  "task_id": "saucedemo"
+}

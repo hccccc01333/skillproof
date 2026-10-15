@@ -119,11 +119,22 @@ def main() -> int:
         report = run.verifier_at_finish or {}
         print(f"verifier: {'PASSED' if report.get('passed') else 'NOT PASSED'} "
               f"({run.verifier_runs} run(s), {run.done_rejections} completion attempt(s) refused)")
+        # Checks and gaps are different things and must not both be printed as
+        # results. A declared gap returns ok=True -- it is not a failure -- so
+        # printing every result and then the gaps again showed each gap twice,
+        # once as PASS. That reads as "this was verified", which is the opposite
+        # of what a gap means.
         for r in report.get("results", []):
+            if r.get("type") == "unverifiable":
+                continue
             mark = "PASS" if r["ok"] else "FAIL"
             print(f"  [{mark}] {r['id']}: {r['description'][:80]}")
-        for gap in report.get("gaps", []):
-            print(f"  [GAP ] {gap[:100]}")
+        gaps = report.get("gaps", [])
+        if gaps:
+            print()
+            print(f"  {len(gaps)} thing(s) this skill cannot check:")
+            for gap in gaps:
+                print(f"    - {gap[:150]}")
 
     files = sorted(p for p in workspace.rglob("*") if p.is_file())
     if files:

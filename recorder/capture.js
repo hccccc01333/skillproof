@@ -68,8 +68,7 @@
     if (byId) {
       const parts = byId
         .split(/\s+/)
-        .map((id) => document.getElementById(id))
-        .filter(Boolean)
+        .map((id) => document.getElementById(id))        .filter(Boolean)
         .map((n) => n.textContent.trim())
         .filter(Boolean);
       if (parts.length) return parts.join(" ");
@@ -81,6 +80,22 @@
     const ph = el.getAttribute("placeholder");
     const t = el.tagName.toLowerCase();
     if (ph && (t === "input" || t === "textarea")) return ph;
+
+    // A submit or button input is labelled by its `value`, and it has no text
+    // content to fall back on -- an <input> never has children. Without this,
+    // `<input type="submit" value="Login">` resolves to an empty name, and a
+    // skill induced from that recording has nothing to name the control by.
+    //
+    // Found by recording against a third-party site: every control in the
+    // benchmark app is a <button> with text, so the benchmark could not expose
+    // this and a real page did, on the second action.
+    if (t === "input") {
+      const type = (el.getAttribute("type") || "text").toLowerCase();
+      if (type === "submit" || type === "button" || type === "reset") {
+        const value = el.getAttribute("value");
+        if (value && value.trim()) return value.trim();
+      }
+    }
 
     const title = el.getAttribute("title");
     if (title && title.trim()) return title.trim();

@@ -161,9 +161,11 @@ inventing one would be guessing at what you meant.
   method. That is the standard credibility hole for a benchmark like this, and
   the mitigation is that the rules are [written down](docs/policies/expense-policy.md)
   with a rubric mapping, so the scoring can be checked rather than believed.
-- **That it generalises.** Two tasks, one model, 3–6 runs per cell, and every
-  number was measured on the benchmark app in this repo. Someone re-running this
-  will get different numbers, and nobody has yet run it against a real site.
+- **That the benchmark numbers generalise.** They come from two tasks, one
+  model, 3–6 runs per cell, on an app written for the benchmark. Someone
+  re-running this will get different numbers. What has been checked against a
+  site this project does not own is in [Beyond the benchmark](#beyond-the-benchmark),
+  and it is one workflow on one site.
 - **That the verifier is mature.** It failed in four distinct ways during
   development, two of them silently, including one that made an agent write the
   wrong file.
@@ -222,6 +224,56 @@ Windows without Git Bash) installs the rest from `requirements.txt`.
 | `playwright` | recording, replaying, running a skill, and `reproduce.py` |
 | `pillow` | downscaling evidence frames before they reach a model |
 | `openai` | induction only — nothing else imports it |
+
+## Beyond the benchmark
+
+Every number above was measured on an app written for the benchmark, which is
+the obvious objection to all of it. So the pipeline was also run against
+**saucedemo.com** — a public demo storefront this project does not own:
+
+```bash
+.venv/Scripts/python.exe bench/external/saucedemo.py    # record the demonstration
+.venv/Scripts/python.exe run_induct.py --episode saucedemo
+.venv/Scripts/python.exe run_skill.py --skill induced/saucedemo     --url https://www.saucedemo.com --instruction "Log in, add the cheapest item..."
+```
+
+The workflow is real and multi-step: log in, compare six prices, add the
+cheapest item, check out. What happened:
+
+| | |
+|---|---|
+| recording | 14 actions, 15 frames |
+| induction | **asked nothing** — it derived the procedure, including the price comparison, from the demonstration alone |
+| skill | parameterised: no item name, no price, no `$7.99` anywhere in it |
+| live run | completed, verifier passed, 15 steps |
+
+The verifier checked three things it could — the confirmation page, its message,
+its own control — and **declared two it could not**, including the judgement
+itself:
+
+```
+2 thing(s) this skill cannot check:
+  - That the single ordered line item is the lowest-priced product in the
+    catalog, in quantity 1, cannot be checked from the confirmation page
+  - That checkout was completed with the task's supplied customer name and
+    postal code cannot be checked: it restates neither
+```
+
+That is the design working on a site its author did not write, with no human in
+the loop. It is also the limit: **the skill can carry the rule, and the verifier
+still cannot confirm the rule was applied.** The confirmation page does not say
+what you bought.
+
+Two things a third-party site costs, and neither is worked around: there is no
+reset endpoint and no state API, so the episode starts from whatever the site
+serves and evaluation has to read the rendered page; and nothing pins the site,
+so if it moves a control this breaks.
+
+It also found a real defect on the first attempt. Every control in the benchmark
+app is a `<button>` with text, so the recorder's name resolution never had to
+handle `<input type="submit" value="Login">` — an input has no text content, so
+the accessible name came back empty, on the second action. Fixed in
+`recorder/capture.js`.
 
 ## What this builds on
 
