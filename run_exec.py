@@ -23,6 +23,7 @@ for p in (ROOT, ROOT / "bench"):
         sys.path.insert(0, str(p))
 
 from evaluator import evaluate_any, format_report  # noqa: E402
+from llm import model_name as _llm_default  # noqa: E402
 from verifier import Verifier  # noqa: E402
 from executor.agent import execute  # noqa: E402
 from run_sample import free_port, wait_for  # noqa: E402
@@ -100,7 +101,7 @@ def main() -> int:
     wait_for(f"http://127.0.0.1:{port}/api/state")
     print(f"[serve] variant={args.variant} on {base_url}")
     print(f"[exec]  condition={args.condition} "
-          f"model={os.environ.get('S2S_INDUCT_MODEL', 'deepseek-chat')}")
+          f"model={os.environ.get('S2S_INDUCT_MODEL') or _llm_default()}")
     try:
         run = execute(
             base_url=base_url,

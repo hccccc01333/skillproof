@@ -49,8 +49,20 @@ def extra_headers() -> dict | None:
     return headers if isinstance(headers, dict) else None
 
 
+# The default is the author's own model, not a requirement: any id the
+# configured endpoint serves works. It was `deepseek-chat`, which is a model
+# name from DeepSeek's own platform and is simply invalid on a gateway -- so
+# anyone who set the endpoint and the key but not the model got a confusing
+# upstream error instead of a missing setting.
+#
+# The `-free` suffix matters. Availability of free tiers is intermittent and
+# per-account, so a run can fail with "Model is unavailable" on one key and
+# succeed on another; that is the endpoint's business, not this code's.
+DEFAULT_MODEL = "deepseek-v4.1-flash-free"
+
+
 def model_name() -> str:
-    return os.environ.get("S2S_INDUCT_MODEL", "deepseek-chat")
+    return os.environ.get("S2S_INDUCT_MODEL", DEFAULT_MODEL)
 
 
 def make_client():
@@ -68,6 +80,36 @@ def make_client():
             "S2S_INDUCT_MODEL, S2S_INDUCT_EXTRA_HEADERS)"
         )
     return OpenAI(base_url=base_url, api_key=api_key, default_headers=extra_headers())
+
+
+class ModelUnavailable(Exception):
+    """The endpoint knows the model and has no capacity for it.
+
+    Distinct from a bad request or bad auth: the id is right, the account is
+    entitled, and the gateway's upstream pool is empty. Free tiers are
+    capacity-limited and this happens; it is not a configuration error and
+    retrying immediately does not help.
+    """
+
+
+def as_model_error(exc: Exception, model: str) -> Exception:
+    """Turn a bare upstream failure into one that names the model.
+
+    The gateway answers `Upstream request failed: Model is unavailable.` which
+    does not say which model, that it is a capacity problem rather than a
+    permissions one, or that a paid sibling of the same model exists. All three
+    were needed to diagnose this the first time.
+    """
+    text = str(exc)
+    if "unavailable" not in text.lower():
+        return exc
+    return ModelUnavailable(
+        f"{model!r} is unavailable at this endpoint. The id is recognised and the "
+        f"account is entitled -- this is an upstream capacity limit, which free "
+        f"tiers have and this one hit repeatedly. It is not a configuration error. "
+        f"Options: retry later, or set S2S_INDUCT_MODEL to a non-free sibling of "
+        f"the same model.\n\n  {text[:300]}"
+    )
 
 
 def is_retryable(exc: Exception) -> bool:
@@ -97,6 +139,9 @@ def chat(client, *, attempts: int = DEFAULT_ATTEMPTS, verbose: bool = False, **k
         try:
             return client.chat.completions.create(**kwargs)
         except Exception as exc:  # noqa: BLE001
+            named = as_model_error(exc, kwargs.get("model", "?"))
+            if named is not exc:
+                raise named from exc
             if not is_retryable(exc):
                 raise
             last = exc
