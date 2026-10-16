@@ -272,6 +272,64 @@ def case_task_must_be_read(ep: Path, out: Path) -> None:
     check("finalize fails when task.json was never read", not r["ok"], str(r.get("problems")))
 
 
+def case_capacity_errors_are_waited_out() -> None:
+    """`llm.chat` waits out a capacity limit instead of dropping the work.
+
+    A free endpoint's pool empties and refills on its own schedule. A
+    16-iteration induction holding 440k tokens of context died at iteration 17
+    on exactly that, and threw away everything it had built. The failure is not
+    retryable in the "ask again now" sense, but it is in the "ask again in a
+    moment" sense, so the client pays a bounded amount of waiting and then
+    reports it with the model named.
+    """
+    print("\n-- a capacity limit is waited out, then reported --")
+    import types as _types
+
+    import llm
+
+    class Upstream(Exception):
+        def __init__(self):
+            super().__init__("Upstream request failed: Model is unavailable.")
+
+    class Completions:
+        def __init__(self, fails: int):
+            self.fails = fails
+            self.calls = 0
+
+        def create(self, **kwargs):
+            self.calls += 1
+            if self.calls <= self.fails:
+                raise Upstream()
+            return "answered"
+
+    class Client:
+        def __init__(self, fails: int):
+            self.completions = Completions(fails)
+            self.chat = _types.SimpleNamespace(completions=self.completions)
+
+    saved = llm.CAPACITY_DELAY
+    llm.CAPACITY_DELAY = 0.01  # the waiting is the behaviour; its length is not
+    try:
+        client = Client(2)
+        out = llm.chat(client, model="m")
+        check("recovers once the pool refills",
+              out == "answered" and client.completions.calls == 3,
+              f"{out!r} after {client.completions.calls} calls")
+
+        client = Client(99)
+        try:
+            llm.chat(client, model="m")
+            check("gives up when the pool stays empty", False, "returned normally")
+        except llm.ModelUnavailable as exc:
+            check("gives up when the pool stays empty", True)
+            check("after a bounded number of attempts",
+                  client.completions.calls == llm.CAPACITY_ATTEMPTS,
+                  f"{client.completions.calls} calls, limit {llm.CAPACITY_ATTEMPTS}")
+            check("and the error names the model", "'m'" in str(exc), str(exc)[:60])
+    finally:
+        llm.CAPACITY_DELAY = saved
+
+
 def main() -> int:
     tmp = Path(tempfile.mkdtemp(prefix="s2s-tools-"))
     try:
@@ -286,6 +344,8 @@ def main() -> int:
             case(ep, out)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+    case_capacity_errors_are_waited_out()
 
     print()
     if FAILURES:

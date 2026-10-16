@@ -29,6 +29,15 @@ DEFAULT_ATTEMPTS = 12
 DEFAULT_BASE_DELAY = 2.0
 DEFAULT_MAX_DELAY = 30.0
 
+# A capacity limit is a different animal from a transient failure: the request
+# was well formed and the account is entitled, the upstream pool is just empty.
+# Retrying immediately does not help -- but waiting does, and waiting is all
+# that is on offer, so the run pays a bounded amount of it. Added because a
+# 16-iteration induction (440k tokens of context) died on this at iteration 17
+# and threw the whole run away; the pool had refilled minutes later.
+CAPACITY_ATTEMPTS = 4
+CAPACITY_DELAY = 20.0
+
 # Status codes worth trying again. Everything else is treated as permanent, so
 # a malformed request fails fast instead of burning the budget.
 RETRYABLE_STATUS = {408, 409, 425, 429, 500, 502, 503, 504, 522, 524}
@@ -90,7 +99,9 @@ class ModelUnavailable(Exception):
     Distinct from a bad request or bad auth: the id is right, the account is
     entitled, and the gateway's upstream pool is empty. Free tiers are
     capacity-limited and this happens; it is not a configuration error and
-    retrying immediately does not help.
+    retrying immediately does not help. `chat()` waits and tries again a bounded
+    number of times, because a delay does help and a long run that dies here
+    loses everything it had done.
     """
 
 
@@ -136,12 +147,23 @@ def chat(client, *, attempts: int = DEFAULT_ATTEMPTS, verbose: bool = False, **k
     Raises on the final attempt, and immediately on anything non-retryable.
     """
     delay = DEFAULT_BASE_DELAY
+    capacity_used = 0
     last: Exception | None = None
     for attempt in range(1, attempts + 1):
         try:
             return client.chat.completions.create(**kwargs)
         except Exception as exc:  # noqa: BLE001
             named = as_model_error(exc, kwargs.get("model", "?"))
+            if isinstance(named, ModelUnavailable):
+                capacity_used += 1
+                if capacity_used >= CAPACITY_ATTEMPTS:
+                    raise named from exc
+                if verbose:
+                    print(f"    [capacity {capacity_used}/{CAPACITY_ATTEMPTS}] "
+                          f"model unavailable — waiting {CAPACITY_DELAY:.0f}s")
+                time.sleep(CAPACITY_DELAY)
+                last = named
+                continue
             if named is not exc:
                 raise named from exc
             if not is_retryable(exc):
