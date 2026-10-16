@@ -14,5 +14,8 @@ __pycache__/
 episodes/_work/
 results/_work/
 induced/*/.frames/
-induced/*/.frames/
-results/_prevmodel/
+
+# `results/_prevmodel/` was listed here and is not scratch any more: it holds the
+# runs behind the Results table of docs/results.md, and every file in it is
+# tracked. Leaving the rule in place would silently swallow anything added
+# there later.

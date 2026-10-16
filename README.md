@@ -15,6 +15,11 @@ git clone https://github.com/hccccc01333/skillproof && cd skillproof && bash set
 
 [How it works](#how-it-works) · [What you need](#what-you-need) · [Why you can trust it](#why-you-can-trust-it) · [Verify it yourself](#verify-it-yourself) · [What this does not claim](#what-this-does-not-claim)
 
+**New here?** [docs/quickstart.md](docs/quickstart.md) — ten minutes, your own
+page, and the parts that will bite you.
+**Reading it as research?** [docs/technical-report.md](docs/technical-report.md)
+— the claims, the setup, the numbers, and what would falsify them.
+
 </div>
 
 ---
@@ -273,6 +278,13 @@ can send us.
 | `run_skill.py` | run an induced skill against any page |
 | `run_macro.py` · `run_exec.py` · `run_sample.py` | the benchmark: baselines and agent conditions |
 | `run_verifier_gen.py` | generate a completion verifier for an existing skill |
+
+| | |
+|---|---|
+| [docs/quickstart.md](docs/quickstart.md) | your first ten minutes, on your own page |
+| [docs/technical-report.md](docs/technical-report.md) | the claims, setup, numbers and limits, in one document |
+| [docs/results.md](docs/results.md) | the chronological record, corrections included |
+| [docs/walkthrough-theinternet.md](docs/walkthrough-theinternet.md) | the whole flow run on a public site, mistakes and all |
 
 ## Layout
 

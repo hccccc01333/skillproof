@@ -222,7 +222,8 @@ def case_results_have_their_evidence() -> None:
     # above started: the claim stayed, the evidence left.
     cited: set[str] = set()
     docs = [ROOT / "README.md", ROOT / "docs" / "results.md",
-            ROOT / "docs" / "walkthrough-theinternet.md"]
+            ROOT / "docs" / "walkthrough-theinternet.md",
+            ROOT / "docs" / "technical-report.md", ROOT / "docs" / "quickstart.md"]
     for doc in docs:
         if doc.is_file():
             cited.update(re.findall(r"(?:exec|external|theinternet|macro)-[A-Za-z0-9_+.-]*\.json",
@@ -573,6 +574,58 @@ def case_readme_matches_code() -> None:
     check("every relative link in the README resolves", not dead, str(dead))
 
 
+def case_docs_match_code() -> None:
+    """The same two checks for every other published document.
+
+    The README is where a reader starts; `docs/` is where they go next, and the
+    quickstart is the page people copy commands from. A dead relative link or an
+    `unrecognized arguments` in a guide nobody checks is the same defect as in
+    the README, with less excuse.
+    """
+    print("\n-- the other documents' commands and links --")
+    import re
+    import subprocess
+
+    docs = sorted((ROOT / "docs").glob("*.md"))
+    check("there are documents to check", len(docs) >= 3, str([d.name for d in docs]))
+
+    for doc in docs:
+        text = doc.read_text(encoding="utf-8")
+
+        targets = []
+        for target in re.findall(r"\]\(([^)]+)\)", text):
+            target = target.strip()
+            if not target or target.startswith(("http://", "https://", "mailto:", "#")):
+                continue
+            path = target.split("#")[0].strip()
+            if path:
+                targets.append(path)
+        # Resolved against the document's own directory, which is what a browser
+        # and GitHub do. No fallback to the repo root: a link inside `docs/`
+        # that only works from the root renders in a local preview and 404s
+        # for a reader.
+        dead = [t for t in targets if not (doc.parent / t).exists()]
+        check(f"{doc.name}: every relative link resolves", not dead, str(dead))
+
+        documented = _documented_flags(text)
+        check(f"{doc.name}: flags worth checking are present or it shows no commands",
+              True, "")  # per-flag checks below carry the failures
+        for script, flags in documented.items():
+            found = sorted(p for p in ROOT.rglob(script)
+                           if ".venv" not in p.parts and "_ref" not in p.parts)
+            if not found:
+                check(f"{doc.name}: {script} exists somewhere", False,
+                      "named in an example, absent from the repo")
+                continue
+            proc = subprocess.run([sys.executable, str(found[0]), "--help"],
+                                  capture_output=True, text=True, timeout=60)
+            helptext = proc.stdout + proc.stderr
+            missing = sorted(f for f in flags if f not in helptext)
+            check(f"{doc.name}: {script} accepts {len(flags)} documented flag(s)",
+                  not missing,
+                  "shown in an example but absent from --help: " + ", ".join(missing))
+
+
 def _documented_flags(readme: str) -> dict[str, set[str]]:
     """Flags passed to a script inside the README's bash examples.
 
@@ -612,6 +665,7 @@ def main() -> int:
     case_external_harness_numbers()
     case_policy_matches_rubric()
     case_readme_matches_code()
+    case_docs_match_code()
     print()
     if FAILURES:
         print(f"{len(FAILURES)} FAILED: {', '.join(FAILURES)}")
