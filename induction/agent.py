@@ -140,13 +140,27 @@ def induce(
     temperature: float = 0.0,
     ask=None,
     verbose: bool = False,
+    drop_verifier_clause: bool = False,
 ) -> InductionRun:
-    """Run one induction. `prompt_variant` is 'concise' (ours) or 'pipeline'."""
+    """Run one induction. `prompt_variant` is 'concise' (ours) or 'pipeline'.
+
+    `drop_verifier_clause` removes the one prompt line that tells the induction
+    every skill must ship a completion verifier. It is an ablation, not a
+    setting: the tool contract still requires the file, so the run measures what
+    the *prompt* is worth, which is the variable that differed between two
+    generations of this project's own skills. The prompt actually used is
+    recorded in `run-metadata.json`, so the artifact identifies its own arm.
+    """
     episode_dir = Path(episode_dir).resolve()
     output_dir = Path(output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
     system = INDUCTION_SYSTEM if prompt_variant == "concise" else PIPELINE_SYSTEM
+    if drop_verifier_clause:
+        kept = [ln for ln in system.splitlines()
+                if "machine-checkable completion verifier" not in ln]
+        assert len(kept) == len(system.splitlines()) - 1, "clause not found to drop"
+        system = "\n".join(kept)
     run = InductionRun(episode_id=episode_dir.name, model=model_name(),
                        prompt_variant=prompt_variant)
 

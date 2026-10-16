@@ -79,6 +79,11 @@ WRONG_STATE = {
     # A3 will be reported under "already true here", which is the line that
     # exists to show exactly this.
     "submit-travel-reimbursement-claim": "default",
+    # The two skills from the Addendum 14 ablation. They are ExpenseDesk skills,
+    # so their wrong state is the untouched claim page and this suite can check
+    # them for real rather than skipping.
+    "submit-expense-claim": "default",
+    "submit-expense-claim-approval-queue": "default",
     "expense-period-report": "reports",
     "expense-period-report-json": "reports",
     "prepare-expense-report-json": "reports",

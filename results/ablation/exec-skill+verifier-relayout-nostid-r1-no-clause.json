@@ -1,0 +1,442 @@
+{
+  "condition": "skill+verifier",
+  "variant": "relayout-nostid",
+  "task": "expense-submit",
+  "instruction": "Get my April 2026 travel reimbursement claim into the approval queue.",
+  "workspace": null,
+  "rep": 1,
+  "skill_root": "induced/ablation/no-clause/expense-submit-default--concise",
+  "verifier_assertions": [
+    {
+      "id": "A1",
+      "type": "text_present",
+      "description": "The claim's status reads Pending approval on the claim detail page and in the MY CLAIMS list, meaning it reached the approval queue",
+      "value": "Pending approval",
+      "count": null,
+      "role": null,
+      "expected": null
+    },
+    {
+      "id": "A2",
+      "type": "text_present",
+      "description": "The submission confirmation is visible on the claim page, with the submitter and the claim total",
+      "value": "Claim submitted for approval",
+      "count": null,
+      "role": null,
+      "expected": null
+    },
+    {
+      "id": "A3",
+      "type": "text_absent",
+      "description": "No outstanding-submission-requirements banner remains, so the category and cost center requirements are satisfied",
+      "value": "This claim cannot be submitted yet:",
+      "count": null,
+      "role": null,
+      "expected": null
+    },
+    {
+      "id": "A4",
+      "type": "unverifiable",
+      "description": "The Cost center field on the claim holds the cost center code for this claim. The value is task-specific, so no fixed string can be asserted; the agent must confirm the field is filled with the code it was given.",
+      "value": null,
+      "count": null,
+      "role": null,
+      "expected": null
+    },
+    {
+      "id": "A5",
+      "type": "unverifiable",
+      "description": "The attached receipts and the EXPENSE LINES rows correspond one to one, and no receipt that is non-travel or dated outside the claim's period is attached. The assertion language cannot compare the count of Attached receipt rows against the count of expense lines, so the agent must confirm this by reading both lists.",
+      "value": null,
+      "count": null,
+      "role": null,
+      "expected": null
+    }
+  ],
+  "score": 100.0,
+  "sr": 100,
+  "passed": true,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 15,
+      "requirement": "Claim reached the approval queue",
+      "satisfied": true,
+      "detail": "status='pending_approval'"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Category is a travel category",
+      "satisfied": true,
+      "detail": "category='Travel - International'"
+    },
+    {
+      "id": "R3",
+      "weight": 15,
+      "requirement": "Cost center matches the user's own cost center",
+      "satisfied": true,
+      "detail": "got 'CC-5120', expected 'CC-5120'"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "All three trip receipts attached",
+      "satisfied": true,
+      "detail": "attached=['rcp_3310', 'rcp_3311', 'rcp_3312']"
+    },
+    {
+      "id": "R5",
+      "weight": 15,
+      "requirement": "No non-trip receipt attached",
+      "satisfied": true,
+      "detail": "offending=[]"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Line total equals the sum of the trip receipts",
+      "satisfied": true,
+      "detail": "got 837.90, expected 837.90"
+    },
+    {
+      "id": "R7",
+      "weight": 10,
+      "requirement": "Claim total exceeds the cost-center threshold",
+      "satisfied": true,
+      "detail": "total 837.90 vs threshold 500.00"
+    }
+  ],
+  "run": {
+    "condition": "skill+verifier",
+    "episode_id": "",
+    "variant": "relayout-nostid",
+    "model": "longcat-2.5-preview-free",
+    "finished": false,
+    "finish_note": "",
+    "steps": 30,
+    "wall_ms": 372327,
+    "prompt_tokens": 811194,
+    "completion_tokens": 2963,
+    "errors": [],
+    "verifier_present": true,
+    "verifier_runs": 5,
+    "done_rejections": 0,
+    "verifier_at_finish": {
+      "passed": false,
+      "results": [
+        {
+          "id": "A1",
+          "ok": true,
+          "description": "The claim's status reads Pending approval on the claim detail page and in the MY CLAIMS list, meaning it reached the approval queue",
+          "type": "text_present",
+          "detail": "searched visible text for 'Pending approval': found"
+        },
+        {
+          "id": "A2",
+          "ok": false,
+          "description": "The submission confirmation is visible on the claim page, with the submitter and the claim total",
+          "type": "text_present",
+          "detail": "searched visible text for 'Claim submitted for approval': not found"
+        },
+        {
+          "id": "A3",
+          "ok": true,
+          "description": "No outstanding-submission-requirements banner remains, so the category and cost center requirements are satisfied",
+          "type": "text_absent",
+          "detail": "'This claim cannot be submitted yet:' absent"
+        },
+        {
+          "id": "A4",
+          "ok": true,
+          "description": "The Cost center field on the claim holds the cost center code for this claim. The value is task-specific, so no fixed string can be asserted; the agent must confirm the field is filled with the code it was given.",
+          "type": "unverifiable",
+          "detail": "declared gap: The Cost center field on the claim holds the cost center code for this claim. The value is task-specific, so no fixed string can be asserted; the agent must confirm the field is filled with the code it was given."
+        },
+        {
+          "id": "A5",
+          "ok": true,
+          "description": "The attached receipts and the EXPENSE LINES rows correspond one to one, and no receipt that is non-travel or dated outside the claim's period is attached. The assertion language cannot compare the count of Attached receipt rows against the count of expense lines, so the agent must confirm this by reading both lists.",
+          "type": "unverifiable",
+          "detail": "declared gap: The attached receipts and the EXPENSE LINES rows correspond one to one, and no receipt that is non-travel or dated outside the claim's period is attached. The assertion language cannot compare the count of Attached receipt rows against the count of expense lines, so the agent must confirm this by reading both lists."
+        }
+      ],
+      "gaps": [
+        "The Cost center field on the claim holds the cost center code for this claim. The value is task-specific, so no fixed string can be asserted; the agent must confirm the field is filled with the code it was given.",
+        "The attached receipts and the EXPENSE LINES rows correspond one to one, and no receipt that is non-travel or dated outside the claim's period is attached. The assertion language cannot compare the count of Attached receipt rows against the count of expense lines, so the agent must confirm this by reading both lists."
+      ]
+    },
+    "workspace": null,
+    "downloads": [],
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "click",
+        "args": {
+          "index": 3
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 1,
+        "tool": "click",
+        "args": {
+          "index": 3
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 2,
+        "tool": "click",
+        "args": {
+          "index": 3
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 3,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "Pacific Air SFO-KIX"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 4,
+        "tool": "type",
+        "args": {
+          "index": 6,
+          "text": "538.20"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 5,
+        "tool": "click",
+        "args": {
+          "index": 7
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 6,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "Kyoto Ryokan 3 nights"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 7,
+        "tool": "type",
+        "args": {
+          "index": 6,
+          "text": "268.50"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 8,
+        "tool": "click",
+        "args": {
+          "index": 7
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 9,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "Airport express rail"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 10,
+        "tool": "type",
+        "args": {
+          "index": 6,
+          "text": "31.20"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 11,
+        "tool": "click",
+        "args": {
+          "index": 7
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 12,
+        "tool": "click",
+        "args": {
+          "index": 9
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 13,
+        "tool": "select_option",
+        "args": {
+          "index": 9,
+          "option": "Travel - International"
+        },
+        "result": "selected Travel - International",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 14,
+        "tool": "type",
+        "args": {
+          "index": 8,
+          "text": "CC-5120"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 15,
+        "tool": "click",
+        "args": {
+          "index": 11
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 16,
+        "tool": "click",
+        "args": {
+          "index": 13
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 17,
+        "tool": "run_verifier",
+        "args": {},
+        "result": "VERIFIER FAILED:\n  [PASS] A1: The claim's status reads Pending approval on the claim detail page and in the MY CLAIMS list, meaning it reached the approval queue -- searched visible text for 'Pending ",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 18,
+        "tool": "scroll",
+        "args": {
+          "direction": "up"
+        },
+        "result": "scrolled up",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 19,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 20,
+        "tool": "run_verifier",
+        "args": {},
+        "result": "VERIFIER FAILED:\n  [PASS] A1: The claim's status reads Pending approval on the claim detail page and in the MY CLAIMS list, meaning it reached the approval queue -- searched visible text for 'Pending ",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 21,
+        "tool": "click",
+        "args": {
+          "index": 1
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 22,
+        "tool": "click",
+        "args": {
+          "index": 0
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 23,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 24,
+        "tool": "run_verifier",
+        "args": {},
+        "result": "VERIFIER FAILED:\n  [PASS] A1: The claim's status reads Pending approval on the claim detail page and in the MY CLAIMS list, meaning it reached the approval queue -- searched visible text for 'Pending ",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 25,
+        "tool": "click",
+        "args": {
+          "index": 2
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 26,
+        "tool": "scroll",
+        "args": {
+          "direction": "down"
+        },
+        "result": "scrolled down",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 27,
+        "tool": "run_verifier",
+        "args": {},
+        "result": "VERIFIER FAILED:\n  [PASS] A1: The claim's status reads Pending approval on the claim detail page and in the MY CLAIMS list, meaning it reached the approval queue -- searched visible text for 'Pending ",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 28,
+        "tool": "click",
+        "args": {
+          "index": 2
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:55004/"
+      },
+      {
+        "step": 29,
+        "tool": "run_verifier",
+        "args": {},
+        "result": "VERIFIER FAILED:\n  [PASS] A1: The claim's status reads Pending approval on the claim detail page and in the MY CLAIMS list, meaning it reached the approval queue -- searched visible text for 'Pending ",
+        "url": "http://127.0.0.1:55004/"
+      }
+    ]
+  }
+}

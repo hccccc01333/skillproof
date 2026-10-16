@@ -1,0 +1,33 @@
+{
+  "episode_id": "expense-submit-default",
+  "output_root": "D:\\Projects\\show2skill\\induced\\ablation\\with-clause\\expense-submit-default--concise",
+  "skills": [
+    {
+      "path": "submit-expense-claim-approval-queue/SKILL.md",
+      "name": "submit-expense-claim-approval-queue",
+      "bytes": 5850
+    }
+  ],
+  "skills_hashed": {
+    "submit-expense-claim-approval-queue/SKILL.md": "7eec5eaf42dad3bb"
+  },
+  "orphaned_skill_files": [],
+  "verifiers": [
+    {
+      "path": "submit-expense-claim-approval-queue/verify.json",
+      "assertions": 3
+    }
+  ],
+  "inspected": {
+    "task_json_read": true,
+    "video_metadata": [
+      "video.mp4"
+    ],
+    "video_sampled": [
+      "video.mp4"
+    ]
+  },
+  "tool_calls": 23,
+  "warnings": [],
+  "note": "Structural validation only. This manifest confirms the agent read the task, wrote skills, read them back, and respected video ordering. It does not assert that any skill is correct."
+}

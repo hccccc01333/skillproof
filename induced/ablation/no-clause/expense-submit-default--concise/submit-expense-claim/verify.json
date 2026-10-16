@@ -1,0 +1,14 @@
+{
+  "assertions": [
+    {"id": "A1", "type": "text_present", "value": "Pending approval",
+     "description": "The claim's status reads Pending approval on the claim detail page and in the MY CLAIMS list, meaning it reached the approval queue"},
+    {"id": "A2", "type": "text_present", "value": "Claim submitted for approval",
+     "description": "The submission confirmation is visible on the claim page, with the submitter and the claim total"},
+    {"id": "A3", "type": "text_absent", "value": "This claim cannot be submitted yet:",
+     "description": "No outstanding-submission-requirements banner remains, so the category and cost center requirements are satisfied"},
+    {"id": "A4", "type": "unverifiable",
+     "description": "The Cost center field on the claim holds the cost center code for this claim. The value is task-specific, so no fixed string can be asserted; the agent must confirm the field is filled with the code it was given."},
+    {"id": "A5", "type": "unverifiable",
+     "description": "The attached receipts and the EXPENSE LINES rows correspond one to one, and no receipt that is non-travel or dated outside the claim's period is attached. The assertion language cannot compare the count of Attached receipt rows against the count of expense lines, so the agent must confirm this by reading both lists."}
+  ]
+}

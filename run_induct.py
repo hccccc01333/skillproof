@@ -33,6 +33,11 @@ def main() -> int:
     ap.add_argument("--answers", default=None,
                     help="JSON knowledge base standing in for the demonstrator; "
                          "without it the run has no person attached and must declare gaps")
+    ap.add_argument("--drop-verifier-clause", action="store_true",
+                    help="ablation: omit the prompt line requiring every skill to "
+                         "ship a completion verifier. The tool contract still "
+                         "requires the file; what changes is only what the prompt "
+                         "says. Recorded in run-metadata.json.")
     ap.add_argument("--interactive", action="store_true",
                     help="put the induction's questions to stdin and read the answers back; "
                          "this is the plugin's real interaction")
@@ -62,6 +67,7 @@ def main() -> int:
             episode_dir=episode_dir,
             output_dir=out_dir,
             prompt_variant=args.prompt,
+            drop_verifier_clause=args.drop_verifier_clause,
             max_iterations=args.max_iterations,
             max_wall_s=args.max_wall_s,
             ask=ask,

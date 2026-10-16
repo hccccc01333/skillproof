@@ -1,0 +1,21 @@
+{
+  "assertions": [
+    {
+      "id": "A1",
+      "type": "text_present",
+      "value": "Pending approval",
+      "description": "The target claim's status in MY CLAIMS reads Pending approval, i.e. it is in the approval queue rather than still Draft."
+    },
+    {
+      "id": "A2",
+      "type": "text_absent",
+      "value": "This claim cannot be submitted yet:",
+      "description": "No unresolved validation banner remains, so nothing still blocks the claim from submission (e.g. a missing category or a cost center required for claims over 500)."
+    },
+    {
+      "id": "A3",
+      "type": "unverifiable",
+      "description": "The Pending approval status must be re-read in a freshly opened or reloaded claim view to distinguish a saved submission from a transient one; the assertion language cannot perform that reopen, so the agent must do it and confirm the status persists with the claim read-only and the submitted-to footer shown."
+    }
+  ]
+}

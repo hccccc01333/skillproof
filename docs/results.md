@@ -1178,7 +1178,11 @@ wrote the selection rule down, and the skill carrying it scores 100/100 on the
 page where the recording scores 25. It does not support: which of the three
 changes is responsible. That is the confound Addendum 11 was written about,
 moved from the execution into the induction, and the fix is the same — change
-one variable at a time. That re-run is not in this document.
+one variable at a time.
+
+**Addendum 14, written after this one, does that.** It varies the clause and
+finds it is not what earns the rule: both of its arms wrote the rule down. The
+induction model is what remains, with the caveats named there.
 
 ### What the verifier did in those six runs: nothing
 
@@ -1274,6 +1278,74 @@ it is a different failure from the four already catalogued: nothing asserted is
 wrong. A page-state assertion cannot check which values were used, and a
 verifier that stays silent about that limit is indistinguishable from one that
 has none.
+
+## Addendum 14: the confound in Addendum 12, and what one variable controlled
+
+Addendum 12 left three variables changed at once between the 70-point skill and
+the 100-point one: the induction model, a clause in the system prompt, and
+`image_max_size`. This addendum varies the clause and holds everything else
+still.
+
+Same episode (`expense-submit-default`), same induction model
+(`longcat-2.5-preview-free`, the free one the walkthrough used), same settings —
+one prompt line different, via `--drop-verifier-clause`, which the artifact
+records verbatim in `run-metadata.json` so each induction names its own arm.
+Then three arms executed on `relayout-nostid` — the variant where the 30 points
+were lost — on one executor model, three repetitions each:
+
+| arm | induction | skill | states the rule | scores | steps | finished |
+|---|---|---|---|---|---|---|
+| run3 (history) | doubao, no clause | 2,133 B | no — the word "relevant" | 70 · 70 · 70 | 21–22 | 3 / 3 |
+| **with the clause** | longcat | 5,998 B | yes | 100 · 100 · 100 | 19–20 | **3 / 3** |
+| **without it** | longcat | 6,583 B | yes, more criteria than the other arm | 100 · 100 · 100 | 30 · 30 · 30 | **0 / 3** |
+| v3 (history's skill) | deepseek, clause | 6,839 B | yes | 100 · 100 · **85** | 18 · 21 · 30 | 2 / 3 |
+
+Three findings, and only the first was the question.
+
+**1. The clause does not earn the selection rule.** Both longcat arms wrote the
+rule down and both satisfied R5 and R6 in all six runs — the two rubric items
+the 70-point generation never passed, and the whole basis of Addendum 3's
+"judgement does not transfer". With the clause ruled out, the induction model is
+the remaining candidate for that generation's failure: the two other models both
+wrote the rule and the doubao one did not. Three caveats, because this is the
+sentence most likely to be over-read: that is N=1 against N=3; the doubao model
+is not served by this endpoint and cannot be re-run; and `image_max_size` was
+not varied here, so it stays a live alternative. What the evidence supports is
+narrower than a model ranking — **the selection rule is a property of what the
+induction model can write down, not of the pipeline.**
+
+**2. `score` says nine runs of nine are fine; `finished` says five of nine.**
+Every no-clause run used the entire 30-step budget and never declared
+completion. The verifier never ran, the agent never claimed the task, and the
+rubric — which reads end state — scored all three 100. The work was done
+correctly; it could not be finished. The same trap then caught the *stock* skill:
+its third repetition scored 85 having exhausted the budget, so the 100 · 100 ·
+100 this document published for `relayout-nostid` does not reproduce intact on a
+second executor model. That number was always a claim about a (skill, executor
+model) pair, and saying so costs nothing that was true.
+
+Why the no-clause arm never finished is visible in its skills and not separable
+from the clause with one induction per arm: it is 585 bytes longer, its
+procedure asks for more steps per phase, and 30 was not enough. Three
+repetitions measure execution variance, not induction variance — with one
+induction per arm, "the clause produces tighter skills" is a hypothesis this
+design can state and cannot test.
+
+**3. Cost tracks the skill's precision, not the task.** Same page, same rubric:
+325k tokens for v3's tightest run at 18 steps, 346–388k for the with-clause skill
+at 19–20, 814–843k for the no-clause skill at 30. A skill that says where to stop
+is the difference between a two-minute run and one that spends its budget.
+
+Operationally, the first attempt at the with-clause arm died at iteration 17 of a
+16-iteration run — 440k tokens of context — on the endpoint's capacity limit, and
+lost everything it had built. `llm.chat` now waits out a capacity limit a bounded
+number of times (`d24e44f`), which is what let the arm complete on the retry.
+
+Records: `results/ablation/exec-skill+verifier-relayout-nostid-r1-with-clause.json`
+through `-r3-with-clause.json`, the same for `-no-clause.json`, and `-r1-v3.json`
+through `-r3-v3.json`. Inductions:
+`induced/ablation/with-clause/expense-submit-default--concise/` and
+`induced/ablation/no-clause/expense-submit-default--concise/`.
 
 ## What the corrected experiment requires
 

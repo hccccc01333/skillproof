@@ -1,0 +1,318 @@
+{
+  "condition": "skill+verifier",
+  "variant": "relayout-nostid",
+  "task": "expense-submit",
+  "instruction": "Get my April 2026 travel reimbursement claim into the approval queue.",
+  "workspace": null,
+  "rep": 3,
+  "skill_root": "induced/ablation/with-clause/expense-submit-default--concise",
+  "verifier_assertions": [
+    {
+      "id": "A1",
+      "type": "text_present",
+      "description": "The target claim's status in MY CLAIMS reads Pending approval, i.e. it is in the approval queue rather than still Draft.",
+      "value": "Pending approval",
+      "count": null,
+      "role": null,
+      "expected": null
+    },
+    {
+      "id": "A2",
+      "type": "text_absent",
+      "description": "No unresolved validation banner remains, so nothing still blocks the claim from submission (e.g. a missing category or a cost center required for claims over 500).",
+      "value": "This claim cannot be submitted yet:",
+      "count": null,
+      "role": null,
+      "expected": null
+    },
+    {
+      "id": "A3",
+      "type": "unverifiable",
+      "description": "The Pending approval status must be re-read in a freshly opened or reloaded claim view to distinguish a saved submission from a transient one; the assertion language cannot perform that reopen, so the agent must do it and confirm the status persists with the claim read-only and the submitted-to footer shown.",
+      "value": null,
+      "count": null,
+      "role": null,
+      "expected": null
+    }
+  ],
+  "score": 100.0,
+  "sr": 100,
+  "passed": true,
+  "rubric_items": [
+    {
+      "id": "R1",
+      "weight": 15,
+      "requirement": "Claim reached the approval queue",
+      "satisfied": true,
+      "detail": "status='pending_approval'"
+    },
+    {
+      "id": "R2",
+      "weight": 10,
+      "requirement": "Category is a travel category",
+      "satisfied": true,
+      "detail": "category='Travel - International'"
+    },
+    {
+      "id": "R3",
+      "weight": 15,
+      "requirement": "Cost center matches the user's own cost center",
+      "satisfied": true,
+      "detail": "got 'CC-5120', expected 'CC-5120'"
+    },
+    {
+      "id": "R4",
+      "weight": 20,
+      "requirement": "All three trip receipts attached",
+      "satisfied": true,
+      "detail": "attached=['rcp_3310', 'rcp_3311', 'rcp_3312']"
+    },
+    {
+      "id": "R5",
+      "weight": 15,
+      "requirement": "No non-trip receipt attached",
+      "satisfied": true,
+      "detail": "offending=[]"
+    },
+    {
+      "id": "R6",
+      "weight": 15,
+      "requirement": "Line total equals the sum of the trip receipts",
+      "satisfied": true,
+      "detail": "got 837.90, expected 837.90"
+    },
+    {
+      "id": "R7",
+      "weight": 10,
+      "requirement": "Claim total exceeds the cost-center threshold",
+      "satisfied": true,
+      "detail": "total 837.90 vs threshold 500.00"
+    }
+  ],
+  "run": {
+    "condition": "skill+verifier",
+    "episode_id": "",
+    "variant": "relayout-nostid",
+    "model": "longcat-2.5-preview-free",
+    "finished": true,
+    "finish_note": "Submitted the April 2026 travel reimbursement claim to the approval queue. Attached the three April 2026 travel receipts (Pacific Air SFO-KIX $538.20, Kyoto Ryokan 3 nights $268.50, Airport express rail $31.20), added matching expense lines totaling $837.90, set cost center CC-5120 and category Travel - International, and confirmed submission. The claim now reads \"Pending approval\" in MY CLAIMS and is read-only, routed to approver M. Okonkwo. Verifier passed.",
+    "steps": 19,
+    "wall_ms": 162608,
+    "prompt_tokens": 347330,
+    "completion_tokens": 1963,
+    "errors": [],
+    "verifier_present": true,
+    "verifier_runs": 2,
+    "done_rejections": 0,
+    "verifier_at_finish": {
+      "passed": true,
+      "results": [
+        {
+          "id": "A1",
+          "ok": true,
+          "description": "The target claim's status in MY CLAIMS reads Pending approval, i.e. it is in the approval queue rather than still Draft.",
+          "type": "text_present",
+          "detail": "searched visible text for 'Pending approval': found"
+        },
+        {
+          "id": "A2",
+          "ok": true,
+          "description": "No unresolved validation banner remains, so nothing still blocks the claim from submission (e.g. a missing category or a cost center required for claims over 500).",
+          "type": "text_absent",
+          "detail": "'This claim cannot be submitted yet:' absent"
+        },
+        {
+          "id": "A3",
+          "ok": true,
+          "description": "The Pending approval status must be re-read in a freshly opened or reloaded claim view to distinguish a saved submission from a transient one; the assertion language cannot perform that reopen, so the agent must do it and confirm the status persists with the claim read-only and the submitted-to footer shown.",
+          "type": "unverifiable",
+          "detail": "declared gap: The Pending approval status must be re-read in a freshly opened or reloaded claim view to distinguish a saved submission from a transient one; the assertion language cannot perform that reopen, so the agent must do it and confirm the status persists with the claim read-only and the submitted-to footer shown."
+        }
+      ],
+      "gaps": [
+        "The Pending approval status must be re-read in a freshly opened or reloaded claim view to distinguish a saved submission from a transient one; the assertion language cannot perform that reopen, so the agent must do it and confirm the status persists with the claim read-only and the submitted-to footer shown."
+      ]
+    },
+    "workspace": null,
+    "downloads": [],
+    "trajectory": [
+      {
+        "step": 0,
+        "tool": "click",
+        "args": {
+          "index": 3
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 1,
+        "tool": "click",
+        "args": {
+          "index": 4
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 2,
+        "tool": "click",
+        "args": {
+          "index": 3
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 3,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "Pacific Air SFO-KIX"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 4,
+        "tool": "type",
+        "args": {
+          "index": 6,
+          "text": "538.20"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 5,
+        "tool": "click",
+        "args": {
+          "index": 7
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 6,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "Kyoto Ryokan 3 nights"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 7,
+        "tool": "type",
+        "args": {
+          "index": 6,
+          "text": "268.50"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 8,
+        "tool": "click",
+        "args": {
+          "index": 7
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 9,
+        "tool": "type",
+        "args": {
+          "index": 5,
+          "text": "Airport express rail"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 10,
+        "tool": "type",
+        "args": {
+          "index": 6,
+          "text": "31.20"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 11,
+        "tool": "click",
+        "args": {
+          "index": 7
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 12,
+        "tool": "type",
+        "args": {
+          "index": 8,
+          "text": "CC-5120"
+        },
+        "result": "typed",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 13,
+        "tool": "select_option",
+        "args": {
+          "index": 9,
+          "option": "Travel - International"
+        },
+        "result": "selected Travel - International",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 14,
+        "tool": "click",
+        "args": {
+          "index": 11
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 15,
+        "tool": "click",
+        "args": {
+          "index": 13
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 16,
+        "tool": "click",
+        "args": {
+          "index": 2
+        },
+        "result": "clicked",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 17,
+        "tool": "run_verifier",
+        "args": {},
+        "result": "VERIFIER PASSED. All completion checks hold.",
+        "url": "http://127.0.0.1:54514/"
+      },
+      {
+        "step": 18,
+        "tool": "done",
+        "args": {
+          "note": "Submitted the April 2026 travel reimbursement claim to the approval queue. Attac…"
+        },
+        "result": "declared done",
+        "url": "http://127.0.0.1:54514/"
+      }
+    ]
+  }
+}

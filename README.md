@@ -215,9 +215,18 @@ inventing one would be guessing at what you meant.
   re-running this will get different numbers. What has been checked against a
   site this project does not own is in [Beyond the benchmark](#beyond-the-benchmark),
   and it is one workflow on one site.
-- **That the verifier is mature.** It failed in four distinct ways during
+- **That the verifier is mature.** It failed in five distinct ways during
   development, two of them silently, including one that made an agent write the
   wrong file.
+- **That the skill is the only variable.** It is the product of your induction
+  model: the same episode and the same pipeline produced a skill whose
+  selection rule was the word "relevant" on one model, and explicit rules on
+  two others ([Addendum 14](docs/results.md#addendum-14-the-confound-in-addendum-12-and-what-one-variable-controlled)).
+  And a skill's score is a claim about a *(skill, executor model)* pair — the
+  100/100 this page reports for the revised page reads 100 · 100 · 85 on a
+  second executor, one run having spent its whole step budget without
+  finishing. Where a table shows a score, the `finished` column is the one that
+  says whether the run got to the end.
 - **That it saves anything.** On two of three tasks a skill costs more tokens
   than no skill, not fewer, and induction never pays for itself in tokens. See
   [What it costs](#what-it-costs).
