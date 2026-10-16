@@ -1,0 +1,91 @@
+{
+  "completed": true,
+  "steps": [
+    {
+      "step": 0,
+      "kind": "type",
+      "ok": true
+    },
+    {
+      "step": 1,
+      "kind": "type",
+      "ok": true
+    },
+    {
+      "step": 2,
+      "kind": "click",
+      "ok": true
+    },
+    {
+      "step": 3,
+      "kind": "scroll",
+      "ok": true
+    },
+    {
+      "step": 4,
+      "kind": "click",
+      "ok": true
+    },
+    {
+      "step": 5,
+      "kind": "click",
+      "ok": true
+    },
+    {
+      "step": 6,
+      "kind": "click",
+      "ok": true
+    },
+    {
+      "step": 7,
+      "kind": "type",
+      "ok": true
+    },
+    {
+      "step": 8,
+      "kind": "type",
+      "ok": true
+    },
+    {
+      "step": 9,
+      "kind": "type",
+      "ok": true
+    },
+    {
+      "step": 10,
+      "kind": "click",
+      "ok": true
+    },
+    {
+      "step": 11,
+      "kind": "click",
+      "ok": true
+    },
+    {
+      "step": 12,
+      "kind": "run_verifier",
+      "ok": true
+    },
+    {
+      "step": 13,
+      "kind": "done",
+      "ok": true
+    }
+  ],
+  "failed": [],
+  "declared_done": true,
+  "verifier_passed": true,
+  "verifier_runs": 2,
+  "done_rejections": 0,
+  "gaps": [
+    "That the single ordered line item is the lowest-priced product in the catalog, in quantity 1, cannot be checked from the confirmation page: it lists no line item, and the catalog prices are live and can change between runs. Verify the selection on the Checkout: Overview page (one row, QTY 1, unit price equal to the cheapest card price read on the Products page) before clicking Finish.",
+    "That checkout was completed with the task's supplied customer name and postal code cannot be checked from the confirmation page: it restates neither field. Verify the typed values on the Checkout: Your Information form and the shipping summary on Checkout: Overview before continuing."
+  ],
+  "finish_note": "Logged in as standard_user, identified the Sauce Labs Onesie ($7.99) as the cheapest item after reading all six product prices, added exactly one to the cart, and completed checkout with Dana Whitfield / 18503. The Checkout: Overview showed a single line item at $7.99 matching the item total, and Finish placed the order \u2014 the Checkout: Complete! page with \"Thank you for your order!\" is displayed and the cart is empty. Verifier passed.",
+  "tokens": 206366,
+  "mode": "skill",
+  "site": "https://www.saucedemo.com",
+  "perturbed": true,
+  "wall_ms": 110466,
+  "at": "2026-10-16T03:41:26.577081+00:00"
+}

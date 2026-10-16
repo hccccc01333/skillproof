@@ -1,0 +1,10 @@
+{
+  "application": "the-internet.herokuapp.com",
+  "instruction": "Log in to the-internet with the username 'tomsmith' and the password 'SuperSecretPassword!', then confirm the secure area is displayed.",
+  "task_inputs": {
+    "user": "tomsmith",
+    "password": "SuperSecretPassword!"
+  },
+  "notes": "A second third-party site, recorded with a scripted demonstration. The credentials are typed as given rather than read off the page, because the task supplies them; a skill induced from this is expected to take them from the request. No reset endpoint and no state API: the episode starts from whatever the site serves.",
+  "task_id": "theinternet"
+}

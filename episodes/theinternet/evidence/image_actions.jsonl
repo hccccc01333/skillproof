@@ -1,0 +1,7 @@
+{"image": "evidence/000001.png", "action_id": "act_theinternet_0000", "frame_time_ms": 7891, "action_delta_ms": 0, "trigger": "boundary"}
+{"image": "evidence/000002.png", "action_id": "act_theinternet_0000", "frame_time_ms": 8500, "action_delta_ms": 609, "trigger": "result"}
+{"image": "evidence/000003.png", "action_id": "act_theinternet_0001", "frame_time_ms": 8968, "action_delta_ms": 468, "trigger": "result"}
+{"image": "evidence/000005.png", "action_id": "act_theinternet_0002", "frame_time_ms": 14750, "action_delta_ms": 62, "trigger": "result"}
+{"image": "evidence/000004.png", "action_id": "act_theinternet_0002", "frame_time_ms": 14688, "action_delta_ms": 0, "trigger": "before_action"}
+{"image": "evidence/000006.png", "action_id": "act_theinternet_0003", "frame_time_ms": 15125, "action_delta_ms": 375, "trigger": "result"}
+{"image": "evidence/000007.png", "action_id": "act_theinternet_0004", "frame_time_ms": 15766, "action_delta_ms": 641, "trigger": "result"}

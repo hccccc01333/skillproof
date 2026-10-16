@@ -221,9 +221,15 @@ def case_results_have_their_evidence() -> None:
     # file is a citation to nothing, and a citation to nothing is how the drift
     # above started: the claim stayed, the evidence left.
     cited: set[str] = set()
-    for doc in (ROOT / "README.md", ROOT / "docs" / "results.md"):
-        cited.update(re.findall(r"exec-[A-Za-z0-9_+.-]*\.json", doc.read_text(encoding="utf-8")))
+    docs = [ROOT / "README.md", ROOT / "docs" / "results.md",
+            ROOT / "docs" / "walkthrough-theinternet.md"]
+    for doc in docs:
+        if doc.is_file():
+            cited.update(re.findall(r"(?:exec|external|theinternet|macro)-[A-Za-z0-9_+.-]*\.json",
+                                    doc.read_text(encoding="utf-8")))
     check("the documents cite run files at all", bool(cited), str(sorted(cited)[:3]))
+    check("and more than one kind of record",
+          len({c.split("-")[0] for c in cited}) >= 2, str(sorted(cited)[:6]))
     present = {p.name for p in (ROOT / "results").rglob("*.json")}
     absent = sorted(n for n in cited if n not in present)
     check("every run file the documents cite exists", not absent, str(absent))
@@ -398,6 +404,13 @@ def case_external_harness_numbers() -> None:
     app, and they are the ones a reader is most likely to take on faith: a
     recording that survives a mild page change and dies on a real one, against
     a skill that does not.
+
+    Re-measured once already. The first round of skill runs used a perturbation
+    that silently did nothing (the scripts died at document start --
+    `observe(null)` -- and the fault is recorded in `docs/results.md`), so the
+    skill arm had been measured against a page that never moved. Its records are
+    in `results/_invalid/` with that reason in the filename; these are the round
+    where the renaming was verified to apply before the run.
     """
     print("\n-- the third-party harness, recomputed from its runs --")
     ext = {p.name: json.loads(p.read_text(encoding="utf-8"))
@@ -417,13 +430,16 @@ def case_external_harness_numbers() -> None:
           and [f.get("step") for f in strong.get("failed") or []] == list(range(4, 12)),
           str([f.get("step") for f in strong.get("failed") or []]))
 
-    skill_runs = [v for k, v in ext.items() if k.startswith("external-skill-perturbed")]
+    skill_runs = [v for k, v in ext.items() if k.startswith("external-skill-strong")]
     check("the skill completes 3 of 3 under the strong perturbation",
           len(skill_runs) == 3 and all(v.get("completed") is True for v in skill_runs),
           str([v.get("completed") for v in skill_runs]))
     check("and declares its two gaps instead of asserting them",
           all(len(v.get("gaps") or []) == 2 for v in skill_runs),
           str([len(v.get("gaps") or []) for v in skill_runs]))
+    check("and never needed the verifier to refuse a premature done",
+          all(v.get("done_rejections") == 0 for v in skill_runs),
+          str([v.get("done_rejections") for v in skill_runs]))
 
 
 # --------------------------------------------------------------------------

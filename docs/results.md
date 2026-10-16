@@ -28,7 +28,7 @@ in place rather than edited away, because the sequence is the finding.
 
 ## What is in here
 
-Most of it is what went wrong: **eight harness faults** that produced
+Most of it is what went wrong: **ten harness faults** that produced
 plausible-looking numbers, **four verifier failure modes**, and twelve runs
 quarantined as invalid with their reasons in the filenames. Two runs scored
 100/100 while being unable to finish, because their verifier gated completion on
@@ -1205,6 +1205,75 @@ and no tokens. Where the hooks are gone and choosing the target requires
 reading the task, the macro falls to the same 25 as replaying the recording
 verbatim, and the skill is the only condition above the floor. That is the moat
 this project claimed in the abstract, with a cell to point at.
+
+## Addendum 13: a second third-party site, and the two faults it found
+
+`docs/walkthrough-theinternet.md` is the whole exercise on a page this project
+does not own — record, induce, run, and three deliberate stresses — written the
+way a reader would run it. It found two faults, one of which invalidated a
+comparison this document had already published.
+
+### The ninth fault: the executor died on the first click that navigated
+
+The first run against `the-internet.herokuapp.com` crashed:
+
+```
+[2] click({'index': 2}) -> clicked
+playwright._impl._errors.Error: Page.evaluate: Execution context was destroyed,
+most likely because of a navigation
+```
+
+The click returned, the browser began its POST and redirect, and the next page
+view called `page.evaluate` into a context being torn down. **Every page this
+project had ever run against was a single-page app**, so the once-per-run
+navigation the executor's own click handling creates had never come up. Fixed
+by retrying the view rather than dying on it, with the race made deterministic
+offline in `tests/test_executor.py` (a local form whose handler sleeps before
+redirecting).
+
+### The tenth fault: the perturbation did nothing, and looked like a pass
+
+The perturbed runs passed. They passed because the page had not moved: the
+renaming script was installed as an init script, an init script runs before the
+document exists, `document.documentElement` was null, and `observe(null)` threw
+on the script's last line. Nothing was renamed, and
+
+> a control that does nothing is indistinguishable from a skill that survives it
+
+— which is why it went unnoticed through a whole round of measurements. The
+consequence is in Addendum 1's external comparison: the replay arm injects the
+script *after* load (it worked) and the skill arm installed it as an init script
+(it did not), so **a perturbed replay had been compared against an unperturbed
+skill run**. The three skill records from that round are quarantined as
+`results/_invalid/external-skill-perturbed-r*.PERTURBATION-NOT-APPLIED.json`.
+
+Re-measured with a script that applies — verified through the executor's own
+mechanism before the runs, and enforced offline by the second case in
+`tests/test_executor.py`, which fails when the renames stop happening:
+
+| condition | site as-is | renamed | renamed + ids regenerated |
+|---|---|---|---|
+| replay (saucedemo) | completed | completed | **failed**, 8 of 14 steps |
+| skill + verifier (saucedemo, N=3) | — | — | **completed ×3**, 0 refusals, 2 gaps |
+| skill + verifier (the-internet) | completed, 5 steps | completed, 5 steps | completed, 5 steps |
+
+The direction survives; the evidence for it now exists. `external-replay-strong.json`
+reproduces the published 8-of-14 exactly, and the skill's three records are
+`results/external-skill-strong-r1.json` through `-r3.json`.
+
+### The fifth verifier failure mode: it checks what it can and says nothing about the rest
+
+The walkthrough hands the skill a wrong password on purpose. The agent reads the
+real one off the login page — the exact thing its own skill forbids — logs in,
+and declares success; the verifier passes, correctly, because the secure area is
+genuinely displayed. It declared **no gaps**, so its report is clean and the
+hole is invisible.
+
+That is Addendum 4's third requirement ("honest about its gaps") violated, and
+it is a different failure from the four already catalogued: nothing asserted is
+wrong. A page-state assertion cannot check which values were used, and a
+verifier that stays silent about that limit is indistinguishable from one that
+has none.
 
 ## What the corrected experiment requires
 

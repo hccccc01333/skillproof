@@ -1,0 +1,16 @@
+{
+  "assertions": [
+    {
+      "id": "A1",
+      "type": "text_present",
+      "value": "You logged into a secure area!",
+      "description": "After submitting the login form, the page shows the success banner confirming the secure area was reached."
+    },
+    {
+      "id": "A2",
+      "type": "text_present",
+      "value": "Secure Area",
+      "description": "The protected content panel displays the 'Secure Area' heading, confirming the login succeeded rather than being rejected on the login page."
+    }
+  ]
+}

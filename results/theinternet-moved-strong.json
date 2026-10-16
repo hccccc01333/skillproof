@@ -1,0 +1,77 @@
+{
+  "case": "moved",
+  "site": "https://the-internet.herokuapp.com/login",
+  "perturbed": true,
+  "instruction": "Log in to the-internet with the username 'tomsmith' and the password 'SuperSecretPassword!', then confirm the secure area is displayed.",
+  "declared_done": true,
+  "verifier_passed": true,
+  "verifier_checks": [
+    {
+      "id": "A1",
+      "ok": true,
+      "detail": "searched visible text for 'You logged into a secure area!': found"
+    },
+    {
+      "id": "A2",
+      "ok": true,
+      "detail": "searched visible text for 'Secure Area': found"
+    }
+  ],
+  "gaps": [],
+  "verifier_runs": 2,
+  "done_rejections": 0,
+  "steps": 5,
+  "trajectory": [
+    {
+      "step": 0,
+      "tool": "type",
+      "args": {
+        "index": 0,
+        "text": "tomsmith"
+      },
+      "result": "typed",
+      "url": "https://the-internet.herokuapp.com/login"
+    },
+    {
+      "step": 1,
+      "tool": "type",
+      "args": {
+        "index": 1,
+        "text": "SuperSecretPassword!"
+      },
+      "result": "typed",
+      "url": "https://the-internet.herokuapp.com/login"
+    },
+    {
+      "step": 2,
+      "tool": "click",
+      "args": {
+        "index": 2
+      },
+      "result": "clicked",
+      "url": "https://the-internet.herokuapp.com/login"
+    },
+    {
+      "step": 3,
+      "tool": "run_verifier",
+      "args": {},
+      "result": "VERIFIER PASSED. All completion checks hold.",
+      "url": "https://the-internet.herokuapp.com/secure"
+    },
+    {
+      "step": 4,
+      "tool": "done",
+      "args": {
+        "note": "Logged in with username 'tomsmith' and password 'SuperSecretPassword!'. The secure area is displayed with the \"You logged into a secure area!\" banner and \"Secure Area\" heading. Verifier passed."
+      },
+      "result": "declared done",
+      "url": "https://the-internet.herokuapp.com/secure"
+    }
+  ],
+  "wall_ms": 43204,
+  "prompt_tokens": 30970,
+  "completion_tokens": 432,
+  "finish_note": "Logged in with username 'tomsmith' and password 'SuperSecretPassword!'. The secure area is displayed with the \"You logged into a secure area!\" banner and \"Secure Area\" heading. Verifier passed.",
+  "final_url": null,
+  "at": "2026-10-16T03:48:59.286886+00:00"
+}

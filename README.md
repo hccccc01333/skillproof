@@ -224,10 +224,17 @@ inventing one would be guessing at what you meant.
 
 ## The part we would want you to attack
 
-[docs/results.md](docs/results.md) is mostly what went wrong: **eight harness
-faults** that produced plausible-looking numbers, **four verifier failure
-modes**, and twelve runs quarantined as invalid with their reasons in the
+[docs/results.md](docs/results.md) is mostly what went wrong: **ten harness
+faults** that produced plausible-looking numbers, **five verifier failure
+modes**, and fifteen runs quarantined as invalid with their reasons in the
 filenames.
+
+The most recent fault is the one to read if you only read one: a page-renaming
+control that silently did nothing, so a *perturbed* recording was compared
+against an *unperturbed* skill and the skill won. Nothing noticed for a round,
+because a control that does nothing looks exactly like a skill that survives
+one. It was found on a third-party page, not on this repo's own app, and it is
+why the comparison now verifies that its control applies before it runs.
 
 Two runs scored **100/100 while being unable to finish**, because their verifier
 gated completion on the confirmation toast, which is true for 3.2 seconds and
@@ -342,6 +349,23 @@ Two things a third-party site costs, neither worked around: there is no reset
 endpoint and no state API, so evaluation reads the rendered page; and nothing
 pins the site, so a real change to it breaks this harness rather than being
 absorbed.
+
+**The comparison in that table had to be re-measured, and the reason is worth
+reading.** The renaming script was installed as an init script on the skill arm
+and injected after load on the replay arm. An init script runs before the
+document exists, so the script threw on its first line and renamed nothing: the
+skill arm had been measured against a page that never moved. The numbers were
+real; the comparison was not. Both arms now use a script that applies, the
+first round of skill records is quarantined in `results/_invalid/` with the
+reason in its filename, and `tests/test_executor.py` fails if the renaming stops
+happening — which is the shape of the check that was missing.
+
+[docs/walkthrough-theinternet.md](docs/walkthrough-theinternet.md) is the same
+exercise run end to end by a stranger's route, on
+`the-internet.herokuapp.com`: one scripted demonstration, one induced skill, four
+runs, $0 of model spend. It is where the mistakes above were found, including
+one the benchmark could never have produced — the executor died on the first
+click that navigated, because every page this repo owned was a single-page app.
 
 It also found a capture defect on the second action. Every control in the
 benchmark app is a `<button>` with text, so name resolution never had to handle

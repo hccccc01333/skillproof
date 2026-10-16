@@ -1,0 +1,47 @@
+{
+  "episode_id": "theinternet",
+  "model": "longcat-2.5-preview-free",
+  "prompt_variant": "concise",
+  "ok": true,
+  "iterations": 12,
+  "tool_calls": 18,
+  "wall_ms": 193781,
+  "prompt_tokens": 113235,
+  "completion_tokens": 1844,
+  "errors": [],
+  "manifest": {
+    "episode_id": "theinternet",
+    "output_root": "D:\\Projects\\show2skill\\induced\\theinternet\\theinternet--concise",
+    "skills": [
+      {
+        "path": "theinternet-login/SKILL.md",
+        "name": "theinternet-login",
+        "bytes": 3280
+      }
+    ],
+    "skills_hashed": {
+      "theinternet-login/SKILL.md": "dbe762fc0059568e"
+    },
+    "orphaned_skill_files": [],
+    "verifiers": [
+      {
+        "path": "theinternet-login/verify.json",
+        "assertions": 2
+      }
+    ],
+    "inspected": {
+      "task_json_read": true,
+      "video_metadata": [
+        "video.mp4"
+      ],
+      "video_sampled": [
+        "video.mp4"
+      ]
+    },
+    "tool_calls": 17,
+    "warnings": [],
+    "note": "Structural validation only. This manifest confirms the agent read the task, wrote skills, read them back, and respected video ordering. It does not assert that any skill is correct."
+  },
+  "questions": [],
+  "transcript_turns": 12
+}

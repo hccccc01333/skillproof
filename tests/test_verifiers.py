@@ -83,6 +83,9 @@ WRONG_STATE = {
     "expense-period-report-json": "reports",
     "prepare-expense-report-json": "reports",
     "saucedemo-cheapest-item-checkout": None,   # third-party; needs the network
+    # The login skill from docs/walkthrough-theinternet.md. Its wrong state is
+    # the login page before anything is typed, which is a page we do not serve.
+    "theinternet-login": None,                  # third-party; needs the network
 }
 
 

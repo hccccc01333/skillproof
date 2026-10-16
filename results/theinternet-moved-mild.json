@@ -1,0 +1,77 @@
+{
+  "case": "moved",
+  "site": "https://the-internet.herokuapp.com/login",
+  "perturbed": true,
+  "instruction": "Log in to the-internet with the username 'tomsmith' and the password 'SuperSecretPassword!', then confirm the secure area is displayed.",
+  "declared_done": true,
+  "verifier_passed": true,
+  "verifier_checks": [
+    {
+      "id": "A1",
+      "ok": true,
+      "detail": "searched visible text for 'You logged into a secure area!': found"
+    },
+    {
+      "id": "A2",
+      "ok": true,
+      "detail": "searched visible text for 'Secure Area': found"
+    }
+  ],
+  "gaps": [],
+  "verifier_runs": 2,
+  "done_rejections": 0,
+  "steps": 5,
+  "trajectory": [
+    {
+      "step": 0,
+      "tool": "type",
+      "args": {
+        "index": 0,
+        "text": "tomsmith"
+      },
+      "result": "typed",
+      "url": "https://the-internet.herokuapp.com/login"
+    },
+    {
+      "step": 1,
+      "tool": "type",
+      "args": {
+        "index": 1,
+        "text": "SuperSecretPassword!"
+      },
+      "result": "typed",
+      "url": "https://the-internet.herokuapp.com/login"
+    },
+    {
+      "step": 2,
+      "tool": "click",
+      "args": {
+        "index": 2
+      },
+      "result": "clicked",
+      "url": "https://the-internet.herokuapp.com/login"
+    },
+    {
+      "step": 3,
+      "tool": "run_verifier",
+      "args": {},
+      "result": "VERIFIER PASSED. All completion checks hold.",
+      "url": "https://the-internet.herokuapp.com/secure"
+    },
+    {
+      "step": 4,
+      "tool": "done",
+      "args": {
+        "note": "Logged in to the-internet with username 'tomsmith' and password 'SuperSecretPassword!'. The secure area is confirmed by the success banner \"You logged into a secure area!\" and the \"Secure Area\" heading. The verifier passed all completion checks."
+      },
+      "result": "declared done",
+      "url": "https://the-internet.herokuapp.com/secure"
+    }
+  ],
+  "wall_ms": 44686,
+  "prompt_tokens": 30751,
+  "completion_tokens": 335,
+  "finish_note": "Logged in to the-internet with username 'tomsmith' and password 'SuperSecretPassword!'. The secure area is confirmed by the success banner \"You logged into a secure area!\" and the \"Secure Area\" heading. The verifier passed all completion checks.",
+  "final_url": null,
+  "at": "2026-10-16T03:31:34.098163+00:00"
+}

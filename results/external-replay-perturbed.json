@@ -102,6 +102,7 @@
   "mode": "replay",
   "site": "https://www.saucedemo.com",
   "perturbed": true,
-  "wall_ms": 14431,
-  "at": "2026-10-15T08:21:25.546930+00:00"
+  "strong": false,
+  "wall_ms": 15081,
+  "at": "2026-10-16T03:39:14.653822+00:00"
 }
