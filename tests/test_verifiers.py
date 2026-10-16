@@ -239,11 +239,19 @@ def case_transient_confirmation_cannot_gate() -> None:
             page.click('[data-testid="submit-claim"]')
             page.click('[data-testid="confirm-submit"]')
 
-            toast_up = ("() => { const t = document.getElementById('toast');"
-                        " return !!t && !t.hidden; }")
+            # Wait for *the confirmation* to be up, not for any toast to be up.
+            # The attach step raises its own toast 3.2 seconds earlier, and on a
+            # slower machine the two overlap: keying on "a toast is visible" made
+            # this test read the attach toast, find the assertion false, and fail
+            # on CI while passing locally. The string is what is being asserted,
+            # so the string is what to wait for.
+            confirm_up = (
+                "() => { const t = document.getElementById('toast');"
+                " return !!t && !t.hidden"
+                " && t.textContent.includes('Claim submitted for approval'); }")
             toast_gone = ("() => { const t = document.getElementById('toast');"
                           " return !t || t.hidden; }")
-            page.wait_for_function(toast_up, timeout=5000)
+            page.wait_for_function(confirm_up, timeout=8000)
 
             assertion = Assertion.from_dict({
                 "id": "T1",
