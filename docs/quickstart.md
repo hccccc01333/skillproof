@@ -178,8 +178,15 @@ ones that only mattered to the author:
 - **The page does not change.** Record it and replay it; it is free, instant,
   and scores the same. The 100/100 replay in the docs is a warning, not a
   fixture: it is worth 25 the moment the page moves.
-- **A step needs a secret you will not show a model.** The induction reads the
-  recording.
+- **A step needs a secret you will not show a model.** Password fields are
+  redacted in the recording — the field's value, the keystrokes, and the settled
+  value, all three since 2026-10-16 (before that only the value was, and a
+  hand-typed password came back out of the keylog one character at a time;
+  `tests/test_recorder.py` now fails if that regresses). Redaction covers the
+  *recording*, not the run: a credential the task supplies still travels to the
+  model in the instruction, and a page that prints a secret in plain text puts
+  it in a screenshot. If neither of those is acceptable where you work, the
+  induction is not the right tool for that task.
 - **You need pixel-level verification** (a chart is correct, a canvas rendered).
   The assertion language cannot see it, and a gap is the honest output.
 - **You need unattended trust on the first run.** Watch it work a few times

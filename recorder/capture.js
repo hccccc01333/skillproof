@@ -187,6 +187,17 @@
   S.describe = describe;
   S.push = push;
 
+  // A password field's contents are never recorded -- by any of the three
+  // events that can carry them. The first version redacted the settled value in
+  // `describe()` and the field's value in the `input` listener, and that was
+  // not enough: the keystroke payload (`data`), the key itself (`e.key`,
+  // `e.code`), and the `change` listener's settled value each reconstructed a
+  // hand-typed password on their own. Measured, not assumed.
+  const isSecret = (el) =>
+    !!el && !!el.getAttribute &&
+    (el.getAttribute("type") || "").toLowerCase() === "password";
+  const REDACTED = "[redacted]";
+
   // ------------------------------------------------------------ listeners
 
   // Capture phase so we see the event before the app re-renders the target.
@@ -231,8 +242,8 @@
       const el = e.target;
       push("input", {
         target: describe(el),
-        value: (el.getAttribute("type") || "").toLowerCase() === "password" ? "[redacted]" : String(el.value ?? "").slice(0, 300),
-        data: e.data ?? null,
+        value: isSecret(el) ? REDACTED : String(el.value ?? "").slice(0, 300),
+        data: isSecret(el) ? REDACTED : (e.data ?? null),
         input_type: e.inputType ?? null,
       });
     },
@@ -241,7 +252,10 @@
 
   document.addEventListener(
     "change",
-    (e) => push("change", { target: describe(e.target), value: String(e.target.value ?? "").slice(0, 300) }),
+    (e) => push("change", {
+      target: describe(e.target),
+      value: isSecret(e.target) ? REDACTED : String(e.target.value ?? "").slice(0, 300),
+    }),
     true
   );
 
@@ -259,8 +273,8 @@
       if (now - lastKey < 30) return; // throttle modifier/repeat noise
       lastKey = now;
       push("key", {
-        key: e.key,
-        code: e.code,
+        key: isSecret(e.target) ? REDACTED : e.key,
+        code: isSecret(e.target) ? REDACTED : e.code,
         ctrl: e.ctrlKey,
         alt: e.altKey,
         shift: e.shiftKey,

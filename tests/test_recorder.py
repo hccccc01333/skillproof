@@ -17,6 +17,7 @@ level up. These tests use a stub page so they need no browser and no network.
 
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 from pathlib import Path
@@ -25,7 +26,11 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from recorder.recorder import BEFORE_FRAME_FRESHNESS_MS, Recorder  # noqa: E402
+from recorder.recorder import (  # noqa: E402
+    BEFORE_FRAME_FRESHNESS_MS,
+    CAPTURE_JS,
+    Recorder,
+)
 from recorder.schema import Action, EpisodeWriter, Target  # noqa: E402
 
 FAILURES: list[str] = []
@@ -165,10 +170,78 @@ def case_action_links_to_its_frames() -> None:
           action.target_label == "button - Submit", repr(action.target_label))
 
 
+def case_password_never_reaches_the_keylog() -> None:
+    """A typed secret must not be recoverable from the episode.
+
+    Found by asking how an office worker would record their own intranet login.
+    `capture.js` said "Never record password field contents" and redacted the
+    field's *value* -- but three other events carried it: the keystroke payload
+    (`data`), the key itself (`e.key`, `e.code`), and the `change` listener,
+    which shipped the settled value with no redaction at all. A hand-typed
+    password came back one character at a time when this was measured.
+
+    This drives a real page with the real capture script: a username into a
+    plain field and a password into a password field, then asserts the password
+    is absent from the events *and* that the username is present -- because a
+    capture that recorded nothing would pass the first check vacuously.
+    """
+    print("\n-- a typed password does not reach the keylog --")
+    from playwright.sync_api import sync_playwright
+
+    username = "dana.whitfield"
+    password = "s3cret-please-do-not-log"
+    page_html = """<!doctype html><html><body>
+    <form><label for="user">Username</label><input id="user" name="user">
+    <label for="pass">Password</label><input id="pass" name="pass" type="password">
+    <button type="submit">Log in</button></form></body></html>"""
+
+    fixture = Path(tempfile.mkdtemp(prefix="s2s-redact-")) / "login.html"
+    fixture.write_text(page_html, encoding="utf-8")
+
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=True)
+        context = browser.new_context()
+        context.add_init_script(CAPTURE_JS)
+        page = context.new_page()
+        page.goto(fixture.as_uri(), wait_until="load")
+        page.evaluate("() => { if (window.__s2s) window.__s2s.enabled = true; }")
+
+        # A person types; a script fills. Both paths are checked, because only
+        # one of them was redacted at any point.
+        page.locator("#user").press_sequentially(username)
+        page.locator("#pass").press_sequentially(password)
+        page.locator("#pass").fill("")
+        page.locator("#pass").fill(password)
+        page.wait_for_timeout(200)
+
+        events = page.evaluate("() => window.__s2s.events")
+        browser.close()
+
+    blob = json.dumps(events)
+    check("the capture produced events at all", len(events) > 10, str(len(events)))
+    check("the password is nowhere in them", password not in blob)
+    check("nor any run long enough to matter",
+          not any(password[i:i + 8] in blob for i in range(len(password) - 7)),
+          "an 8-character run of the password survived")
+
+    # Anti-vacuity: the plain field's characters must be there, or the checks
+    # above are measuring a recorder that records nothing.
+    check("the plain field still records what was typed", username in blob,
+          "the username is missing too, so nothing was captured")
+
+    secret_events = [e for e in events if (e.get("target") or {}).get("id") == "pass"]
+    check("the password field was seen, so the silence is a redaction",
+          bool(secret_events), "no events on the password field at all")
+    check("and every value on it is marked",
+          all(e.get("value") in ("[redacted]", None) for e in secret_events),
+          str([e.get("value") for e in secret_events][:4]))
+
+
 def main() -> int:
     case_fresh_before_frame_is_reused()
     case_stale_before_frame_is_shot_and_registered()
     case_action_links_to_its_frames()
+    case_password_never_reaches_the_keylog()
     print()
     if FAILURES:
         print(f"{len(FAILURES)} FAILED: {', '.join(FAILURES)}")

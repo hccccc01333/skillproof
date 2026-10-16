@@ -253,9 +253,15 @@ class Recorder:
         self._drain_events()
         locator.fill(text)
         raw = self._drain_events()
+        # A password typed by a script is still a password. The DOM capture
+        # redacts by the field's type, and the target carries that same
+        # attribute, so the scripted path can use the same signal instead of a
+        # second round trip. What a skill might have learned from the literal is
+        # not worth a credential in a file that ships with the episode.
+        secret = bool(target and target.attrs.get("type", "").lower() == "password")
         return self._record(
-            kind="type", caption=caption, value=text, target=target,
-            url_before=url_before, raw=raw,
+            kind="type", caption=caption, value="[redacted]" if secret else text,
+            target=target, url_before=url_before, raw=raw,
         )
 
     def select(self, caption: str, locator: Locator, option: str) -> Action:

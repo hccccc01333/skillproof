@@ -48,6 +48,14 @@ recording a demonstration against https://the-internet.herokuapp.com/login
   -> episodes/theinternet
 ```
 
+The episode in this repository carries that password in its action trace,
+because it is the credential the site itself prints on the login page. A
+*re-recording* made after 2026-10-16 redacts it: the recorder now redacts a
+password field's value, its keystrokes and its settled value, and the scripted
+`fill()` path along with them (`tests/test_recorder.py`). Nothing here depended
+on the literal — the skill was told to take credentials from the request, and
+does.
+
 **The `events 0` is a real observation, not a bug.** The recorder's `fill()` uses
 Playwright's `locator.fill`, which sets a field's value without generating
 keystrokes, so a demonstration that is nothing but forms produces an empty
