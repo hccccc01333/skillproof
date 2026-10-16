@@ -261,10 +261,36 @@ def _file_tool(workspace: Path, name: str, args: dict) -> str:
 
 
 def _page_view(page: Page) -> tuple[list[dict], dict]:
-    elements = page.evaluate(ENUMERATE_JS)
-    shot = page.screenshot(type="png")
-    return elements, {"type": "image_url",
-                      "image_url": {"url": "data:image/png;base64," + base64.b64encode(shot).decode()}}
+    """The page as the agent sees it, tolerating a navigation in flight.
+
+    A click on a form's submit button returns before the browser has finished
+    POSTing and following the redirect, so the page view that follows can land
+    while the old execution context is being torn down. `page.evaluate` then
+    raises "Execution context was destroyed" and, before this loop existed, the
+    whole run died with it -- on the first run this pipeline ever made against a
+    site that navigates. Every page it had run against before was a single-page
+    app, so the case never came up.
+
+    Retries rather than a fixed sleep: a navigation that commits in 50ms costs
+    50ms here, and one that takes seconds is waited out instead of raced.
+    """
+    for attempt in range(3):
+        try:
+            elements = page.evaluate(ENUMERATE_JS)
+            shot = page.screenshot(type="png")
+            return elements, {"type": "image_url",
+                              "image_url": {"url": "data:image/png;base64," +
+                                            base64.b64encode(shot).decode()}}
+        except Exception as exc:  # noqa: BLE001
+            if "Execution context was destroyed" not in str(exc) or attempt == 2:
+                raise
+            try:
+                page.wait_for_load_state("domcontentloaded", timeout=8000)
+            except Exception:  # noqa: BLE001
+                # A navigation that never commits is not this loop's problem;
+                # the next attempt will surface it if it matters.
+                page.wait_for_timeout(250)
+    raise AssertionError("unreachable")
 
 
 def _render(elements: list[dict]) -> str:

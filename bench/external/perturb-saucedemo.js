@@ -53,12 +53,15 @@
   const STRONG = window.__S2S_PERTURB_STRONG === true;
 
   const rewriteHooks = () => {
+    // Idempotent by construction: an id that is already regenerated is skipped,
+    // so re-injecting the script (the replay arm does, after every step) or
+    // re-running it on a mutation cannot prefix a hook twice.
     let n = 0;
     for (const el of document.querySelectorAll('[id], [data-test]')) {
       const id = el.getAttribute('id');
-      if (id) el.setAttribute('id', 'x' + id);
+      if (id && !id.startsWith('x')) el.setAttribute('id', 'x' + id);
       const dt = el.getAttribute('data-test');
-      if (dt) el.setAttribute('data-test', 'x' + dt);
+      if (dt && !dt.startsWith('x')) el.setAttribute('data-test', 'x' + dt);
       if (++n > 400) break;
     }
   };
@@ -70,7 +73,13 @@
   new MutationObserver(() => {
     apply();
     if (STRONG) rewriteHooks();
-  }).observe(document.documentElement, {
+  // An init script runs before the document exists, so `document.documentElement`
+  // is null at that moment and `observe(null)` throws -- which is how this
+  // perturbation silently did nothing for a whole round of runs. `document`
+  // always exists, and observing it sees everything.
+  const root = document.documentElement || document;
+
+  }).observe(root, {
     childList: true,
     subtree: true,
   });

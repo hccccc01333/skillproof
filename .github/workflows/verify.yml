@@ -53,6 +53,14 @@ jobs:
         # only symptom is a missing image -- which no other check would notice.
         run: python tests/test_recorder.py
 
+      - name: The executor survives a click that navigates
+        # Found on a third-party page: the executor clicked a form's submit
+        # button and the next page view died with "Execution context was
+        # destroyed". Every page this repo owned was a single-page app, so the
+        # case its own click handling creates had never come up. The test builds
+        # it locally -- a form that POSTs, slowly, then redirects.
+        run: python tests/test_executor.py
+
       - name: Shipped artifacts are well-formed
         run: python tests/test_artifacts.py
 
