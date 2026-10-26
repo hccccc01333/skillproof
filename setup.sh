@@ -56,14 +56,15 @@ echo
 echo "==> checking the published result, no model and no credentials"
 "$VENV_PY" reproduce.py
 
-cat <<'EOF'
+cat <<EOF
 
-Ready.
+Ready. Interpreter: $VENV_PY
 
-  record a workflow    .venv/Scripts/python.exe record_session.py --url <page> --episode <name>
-  induce a skill       .venv/Scripts/python.exe run_induct.py --episode <name> --interactive
-  run that skill       .venv/Scripts/python.exe run_skill.py --skill <dir> --url <page>                            --instruction "<the goal>"
-  score a replay       .venv/Scripts/python.exe run_macro.py --variant default
+  record a workflow    $VENV_PY record_session.py --url <page> --episode <name>
+  induce a skill       $VENV_PY run_induct.py --episode <name> --interactive
+  run that skill       $VENV_PY run_skill.py --skill <dir> \\
+                           --url <page> --instruction "<the goal>"
+  score a replay       $VENV_PY run_macro.py --variant default
 
 Induction needs a model endpoint:
 

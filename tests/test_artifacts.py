@@ -651,7 +651,7 @@ def case_docs_match_code() -> None:
     import re
     import subprocess
 
-    docs = sorted((ROOT / "docs").glob("*.md"))
+    docs = sorted((ROOT / "docs").rglob("*.md"))
     check("there are documents to check", len(docs) >= 3, str([d.name for d in docs]))
 
     for doc in docs:

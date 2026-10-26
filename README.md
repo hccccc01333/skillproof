@@ -9,11 +9,16 @@ git clone https://github.com/hccccc01333/skillproof && cd skillproof && bash set
 ```
 
 [![verify](https://github.com/hccccc01333/skillproof/actions/workflows/verify.yml/badge.svg)](https://github.com/hccccc01333/skillproof/actions/workflows/verify.yml)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/hccccc01333/skillproof?quickstart=1)
 [![License](https://img.shields.io/badge/license-MIT-f4c430?style=flat-square)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776ab?style=flat-square&logo=python&logoColor=white)](#requirements)
 [![Verify](https://img.shields.io/badge/verify-11s%20%C2%B7%20no%20model%20%C2%B7%20no%20credentials-2f5fd0?style=flat-square)](#verify-it-yourself)
 
 [How it works](#how-it-works) · [What you need](#what-you-need) · [Why you can trust it](#why-you-can-trust-it) · [Verify it yourself](#verify-it-yourself) · [What this does not claim](#what-this-does-not-claim)
+
+**30 seconds, no install:** [open a codespace](https://codespaces.new/hccccc01333/skillproof?quickstart=1),
+then `python reproduce.py` — it checks the numbers on this page against a live
+app, with no model and no credentials.
 
 **New here?** [docs/quickstart.md](docs/quickstart.md) — ten minutes, your own
 page, and the parts that will bite you.
@@ -147,10 +152,17 @@ The step-count difference — the part that actually matters — would not chang
 
 ## Verify it yourself
 
+No local install? [Open a codespace](https://codespaces.new/hccccc01333/skillproof?quickstart=1) —
+the container runs the same `setup.sh` a clone would, then one command checks
+every deterministic number on this page.
+
 ```bash
-.venv/Scripts/python.exe reproduce.py          # 11s, four decisive cells
-.venv/Scripts/python.exe reproduce.py --all    # 21s, all twelve
+python reproduce.py          # 11s, four decisive cells
+python reproduce.py --all    # ~20s, all twelve
 ```
+
+On a local clone the interpreter is `.venv/Scripts/python.exe` (Windows) or
+`.venv/bin/python` (everything else); `setup.sh` prints the one it made.
 
 **Playwright is the only dependency it touches** — not the model client, not
 ffmpeg. The numbers are **asserted, not derived**: they were published before
