@@ -353,6 +353,71 @@ def case_previous_model_numbers() -> None:
               f"got {mean:.1f} · SR {sr}% · {tok:,.0f} tok · {stp:.1f} steps")
 
 
+def case_figures_match_their_sources() -> None:
+    """The README's figures must plot the numbers the suite asserts.
+
+    An image is the one artifact nobody diffs. The generator writes the values
+    it plotted to `docs/assets/figures.json`, and this recomputes them from the
+    same sources everything else uses -- `reproduce.py`'s deterministic cells
+    and the run records -- so a figure cannot drift away from the claim it
+    illustrates. The pixels are not checked; the data behind them is.
+    """
+    print("\n-- the README figures plot the asserted numbers --")
+    assets = ROOT / "docs" / "assets"
+    data_path = assets / "figures.json"
+    if not data_path.is_file():
+        check("the figures' data is committed", False, str(data_path.name) + " missing")
+        return
+    data = json.loads(data_path.read_text(encoding="utf-8"))
+
+    for name in ("ladder", "score-vs-finished"):
+        check(f"{name}: the image exists", (assets / f"{name}.png").is_file()
+              and (assets / f"{name}.svg").is_file(), "missing png or svg")
+
+    from reproduce import DETERMINISTIC_CELLS
+
+    groups = data.get("ladder", {}).get("groups") or []
+    check("figure 1 plots three page states", len(groups) == 3, str(len(groups)))
+    for group in groups:
+        variant = group["variant"]
+        check(f"figure 1: replay on {variant} is the asserted cell",
+              group["replay"] == DETERMINISTIC_CELLS[("replay", variant)][0],
+              f"plotted {group['replay']}, cell {DETERMINISTIC_CELLS[('replay', variant)][0]}")
+        check(f"figure 1: re-parameterized on {variant} is the asserted cell",
+              group["reparameterized"] == DETERMINISTIC_CELLS[("reparam", variant)][0],
+              f"plotted {group['reparameterized']}")
+        if group["skill"] is None:
+            check(f"figure 1: {variant} says the skill was not measured", True)
+            continue
+        runs = sorted((ROOT / "results").glob(f"exec-skill+verifier-{variant}-r*.json"))
+        scores = [json.loads(p.read_text(encoding="utf-8"))["score"] for p in runs]
+        check(f"figure 1: the skill value on {variant} is the run mean",
+              bool(scores) and group["skill"] == round(sum(scores) / len(scores), 1),
+              f"plotted {group['skill']}, records {scores}")
+
+    tags = {"with the verifier clause": "with-clause", "without it": "no-clause",
+            "the stock skill": "v3"}
+    arms = data.get("score-vs-finished", {}).get("arms") or []
+    check("figure 2 plots three arms", len(arms) == 3, str(len(arms)))
+    for arm in arms:
+        tag = tags.get(arm["arm"])
+        if tag is None:
+            check(f"figure 2: {arm['arm']} is a known arm", False, "no run tag")
+            continue
+        runs = [json.loads(p.read_text(encoding="utf-8"))
+                for p in sorted((ROOT / "results" / "ablation").glob(f"*-r*-{tag}.json"))]
+        if len(runs) != 3:
+            check(f"figure 2: {tag} has its three runs", False, str(len(runs)))
+            continue
+        score = round(sum(r["score"] for r in runs) / 3, 1)
+        finished = round(sum(1 for r in runs if r["run"]["finished"]) / 3, 3)
+        check(f"figure 2: {tag}'s score is the run mean", arm["score"] == score,
+              f"plotted {arm['score']}, records {score}")
+        check(f"figure 2: {tag}'s completion is the run share",
+              abs(arm["finished"] - finished) < 0.002,
+              f"plotted {arm['finished']}, records {finished}")
+
+
 def case_self_report_matches_truth() -> None:
     """The README's most useful sentence, recomputed.
 
@@ -660,6 +725,7 @@ def main() -> int:
     case_results_have_their_evidence()
     case_published_agent_numbers()
     case_published_cost_numbers()
+    case_figures_match_their_sources()
     case_previous_model_numbers()
     case_self_report_matches_truth()
     case_external_harness_numbers()

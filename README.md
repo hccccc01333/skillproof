@@ -71,6 +71,17 @@ recording replayed verbatim, no model involved:
 A recording is perfect until the page moves, and then it is worth 75 points
 less. That is the gap a skill has to close, and it is the only gap worth closing.
 
+![Two baselines and the skill across three page states: the replay falls from
+100 to 25 as the page moves, the re-parameterized replay falls to 25 with it,
+and the skill holds 100 where both collapse](docs/assets/ladder.png)
+
+The re-parameterized baseline is the strong version of "just script it": it
+re-reads every value from the live page, and it ties the recording where the
+values changed. It still collapses to 25 where the page stops supplying stable
+targets — the same 25 as replaying verbatim. The figure is generated from the
+same cells `reproduce.py` asserts and from the run records, and the test suite
+recomputes both.
+
 And the reason the completion check exists:
 
 > Across the 28 agent runs on the current model that declared the task
@@ -258,6 +269,17 @@ gone, so [the mechanism is demonstrated instead](tests/test_verifiers.py): the
 test submits a claim through the UI, runs that exact assertion while the toast
 is up and again after it hides, and reads the claim's status both times. The
 assertion flips. The status does not.
+
+The same trap, measured again in an experiment run as a control — the middle
+arm scores 100 three times out of three and never declares completion:
+
+![Three skills, each with its mean rubric score and the share of runs that
+declared completion: the middle arm has a full score bar and a zero completion
+bar](docs/assets/score-vs-finished.png)
+
+[Addendum 14](docs/results.md#addendum-14-the-confound-in-addendum-12-and-what-one-variable-controlled)
+has the runs, the skills and the step counts. Every figure on this page is
+generated from the data the suite recomputes; none is drawn by hand.
 
 It also records a conclusion we published and then had to correct, and why — we
 had drawn a conclusion about the mechanism from a comparison that changed two

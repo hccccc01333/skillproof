@@ -1,0 +1,52 @@
+{
+  "ladder": {
+    "figure": "ladder",
+    "groups": [
+      {
+        "page": "recorded page",
+        "variant": "default",
+        "replay": 100.0,
+        "reparameterized": 100.0,
+        "skill": 100.0
+      },
+      {
+        "page": "values changed",
+        "variant": "jitter",
+        "replay": 70.0,
+        "reparameterized": 100.0,
+        "skill": null
+      },
+      {
+        "page": "re-laid out, hooks gone",
+        "variant": "relayout-nostid",
+        "replay": 25.0,
+        "reparameterized": 25.0,
+        "skill": 100.0
+      }
+    ],
+    "floor": 15
+  },
+  "score-vs-finished": {
+    "figure": "score-vs-finished",
+    "arms": [
+      {
+        "arm": "with the verifier clause",
+        "score": 100.0,
+        "finished": 1.0,
+        "runs": 3
+      },
+      {
+        "arm": "without it",
+        "score": 100.0,
+        "finished": 0.0,
+        "runs": 3
+      },
+      {
+        "arm": "the stock skill",
+        "score": 95.0,
+        "finished": 0.6666666666666666,
+        "runs": 3
+      }
+    ]
+  }
+}
